@@ -1,0 +1,75 @@
+'use strict';
+
+const moment = require('moment');
+
+module.exports = function AccessTokenModel(sequelize, DataTypes) {
+  const AccessToken = sequelize.define('AccessToken', {
+    id: {
+      type: DataTypes.INTEGER(14),
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false,
+      unique: true,
+    },
+    accessToken: {
+      type: DataTypes.STRING(256),
+      validate: {
+        len: {
+          args: [10, 256],
+          msg: 'Maximum length for value field is 255',
+        },
+      },
+      allowNull: false,
+    },
+    expires: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: function setExpires() {
+        return moment().add(1, 'hours');
+      },
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+      allowNull: false,
+    },
+  }, {
+    tableName: 'access_tokens',
+    timestamps: false,
+    underscored: true,
+    defaultScope: {
+      where: { status: 1 },
+    },
+
+    classMethods: {
+      associate: function associate(models) {
+        //AccessToken.belongsToMany(models.Scope, {
+        //  through: {
+        //    model: models.ItemScope,
+        //    unique: false,
+        //    scope: {
+        //      scopable: 'access_token',
+        //    },
+        //  },
+        //  foreignKey: 'scopable_id',
+        //  constraints: false,
+        //});
+
+        AccessToken.belongsTo(models.App, {
+          foreignKey: 'appId',
+        });
+
+        AccessToken.belongsTo(models.User, {
+          foreignKey: 'userId',
+        });
+      },
+    },
+  });
+
+  return AccessToken;
+};
