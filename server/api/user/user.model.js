@@ -62,7 +62,7 @@ export default function (sequelize, DataTypes) {
 
     classMethods: {
       associate(db) {
-        App.belongsTo(db.Group, {
+        User.belongsTo(db.Group, {
           foreignKey: 'groupId',
         });
       },

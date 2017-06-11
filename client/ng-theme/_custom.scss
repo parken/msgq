@@ -1,0 +1,75 @@
+.hv-white:hover,
+.hv-white:focus,
+.hv-white.active,
+.badge.bg-info:hover {
+  color: #f1f1f1 !important;
+}
+
+.text-no-glow {
+  &:focus {
+    border: 1px solid #999;
+  }
+}
+
+a,
+button {
+  &:hover,
+  &:focus,
+  &:active {
+    &.b-info { color: $brand-info; }
+    &.b-danger { color: $brand-danger; }
+    &.b-success { color: $brand-success; }
+    &.b-warning { color: $brand-warning; }
+  }
+}
+
+input[type='text']::-webkit-input-placeholder {
+  color: #ddd;
+}
+
+a.text-info {
+  &:hover,
+  &:focus {
+    color: $brand-info;
+    font-weight: 700 !important
+  }
+}
+.transparent-bg {
+  background-color: transparent !important;
+}
+
+.hv-border-info{
+  &:hover {
+    outline: 1px solid $brand-info;
+    box-shadow: 2px 0px 4px 0px #bbb
+  }
+}
+.cal-slide-content {
+  background-color: #fff !important;
+  box-shadow: inset 0 0 0 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+.cal-slide-content span{
+  color: $brand-info !important;
+}
+
+.comment-box-lift {
+  bottom: 80px !important;
+}
+
+.no-padder-left {
+  padding-left: 0 !important;
+}
+.no-padder-right {
+  padding-right: 0 !important;
+}
+.no-padder-top {
+  padding-top: 0 !important;
+}
+.no-padder-bottom {
+  padding-bottom: 0 !important;
+}
+
+.th-scale-y {
+  transform: scaleY(1.3);
+}

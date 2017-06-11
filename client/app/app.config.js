@@ -1,9 +1,11 @@
-'use strict';
+/* @ngInject */
+export function routeConfig(
+  $urlRouterProvider, $locationProvider, $httpProvider
+  ) {
+  $httpProvider.interceptors.push('UrlInterceptor');
 
-export function routeConfig($urlRouterProvider, $locationProvider) {
-  'ngInject';
-
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider.when('/', '/home');
+  $urlRouterProvider.otherwise('/home');
 
   $locationProvider.html5Mode(true);
 }

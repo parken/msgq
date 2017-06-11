@@ -526,10 +526,12 @@ function flatten() {
     next();
   });
 }
+
+
 gulp.task('copy:fonts:dev', () => {
-  return gulp.src('node_modules/{bootstrap,font-awesome}/fonts/*')
+  return gulp.src('node_modules/{bootstrap,font-awesome,npm-font-source-sans-pro}/fonts/*')
         .pipe(flatten())
-        .pipe(gulp.dest(`${clientPath}/assets/fonts`));
+        .pipe(gulp.dest(`${clientPath}/assets/fonts,npm-font-source-sans-pro`));
 });
 gulp.task('copy:fonts:dist', () => {
   return gulp.src('node_modules/{bootstrap,font-awesome}/fonts/*')
