@@ -219,6 +219,6 @@ const model = {
 
     return callback(null, false);
   },
-}
+};
 
 export default model;

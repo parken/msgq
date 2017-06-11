@@ -4,7 +4,6 @@ import crypto from 'crypto';
 
 const salt = 'DYhG93b0fIxfs2guVoUubasdfajfkljasdjfaklsdjflakrfWwvniR2G0FgaC9mi';
 
-
 export default function (sequelize, DataTypes) {
   const User = sequelize.define('User', {
     id: {
@@ -68,23 +67,6 @@ export default function (sequelize, DataTypes) {
     },
 
     classMethods: {
-      associate(db) {
-        // User.hasMany(db.Msg, {
-        //   foreignKey: 'userId',
-        // });
-        //
-        // User.hasMany(db.WBranch, {
-        //   foreignKey: 'userId',
-        // });
-        //
-        // User.belongsTo(db.Obj, {
-        //   foreignKey: 'objId',
-        // });
-        //
-        // User.hasMany(db.Business, {
-        //   foreignKey: 'userId',
-        // });
-      },
       checkEmailExists(db, email) {
         return db.User.count({ where: { email } }).then(rows => {
           if (rows > 0) return Promise.resolve(true);

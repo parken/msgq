@@ -1,4 +1,4 @@
-'use strict';
+
 
 const moment = require('moment');
 
@@ -48,18 +48,6 @@ module.exports = function AccessTokenModel(sequelize, DataTypes) {
 
     classMethods: {
       associate: function associate(models) {
-        //AccessToken.belongsToMany(models.Scope, {
-        //  through: {
-        //    model: models.ItemScope,
-        //    unique: false,
-        //    scope: {
-        //      scopable: 'access_token',
-        //    },
-        //  },
-        //  foreignKey: 'scopable_id',
-        //  constraints: false,
-        //});
-
         AccessToken.belongsTo(models.App, {
           foreignKey: 'appId',
         });

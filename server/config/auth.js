@@ -1,7 +1,3 @@
-/**
- * Created by Manjesh on 11-04-2017.
- */
-
 import db, { App, RefreshToken, Session } from '../conn/sqldb';
 
 export function authorise(req, res) {

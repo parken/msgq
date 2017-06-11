@@ -1,7 +1,5 @@
 
-import _ from 'lodash';
-import url from 'url';
-const request = require('request');
+import request from 'request';
 import config from '../../config/environment';
 import logger from '../../components/logger';
 import { sms, slack } from '../../components/notify';
@@ -173,13 +171,12 @@ export function update(req, res) {
 }
 
 // Check email and phone exists
-exports.checkExists = function (req, res) {
+export function checkExists(req, res) {
   return db.User
     .checkExists(db, req.query.email, req.query.mobile)
     .then(status => res.json(status))
     .catch(err => handleError(res, 500, err));
-};
-
+}
 
 export function otpLogin(req, res) {
   User.findOrCreate({

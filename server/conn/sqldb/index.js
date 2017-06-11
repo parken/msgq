@@ -1,6 +1,3 @@
-/**
- * Sequelize initialization module
- */
 
 import Sequelize from 'sequelize';
 

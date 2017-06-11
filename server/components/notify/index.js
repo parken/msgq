@@ -14,7 +14,8 @@ const api = plivo.RestAPI({
   authToken: config.PLIVO.AUTH_TOKEN,
 });
 
-api.sendMessage = function (params) {
+api.sendMessage = (params) => {
+  log('sendMessage', params);
   return new Promise((res, rej) => {
     api.send_message(params, (status, response) => {
       if (status >= 400) return rej({ status, response });
@@ -43,7 +44,7 @@ export function sms({ from = '919844717202', to, text }) {
     slack(`rate limit: ${from}:${text}`);
     return Promise.resolve({ message: 'MSG Blocked due to rate limit' });
   }
-  if (!to && !Number(to)) return Promise.reject({ message: 'to required' })
+  if (!to && !Number(to)) return Promise.reject({ message: 'to required' });
   const params = {
     src: from,
     dst: to,
@@ -51,12 +52,12 @@ export function sms({ from = '919844717202', to, text }) {
     url: 'http://requestb.in/umecebum',
   };
   if (config.MSG === 'true') {
-    console.log('plivo', params);
+    log('plivo', params);
     return api.sendMessage(params).catch(err => {
-      logger.error('plivo', err)
+      logger.error('plivo', err);
       return err;
     });
   }
-  console.log('sms', params);
+  log('sms', params);
   return Promise.resolve({ message: 'Enable MSG in ENV' });
 }

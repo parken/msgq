@@ -2,14 +2,13 @@
  * Main application routes
  */
 
-'use strict';
 
 import errors from './components/errors';
 import path from 'path';
 
 import user from './api/user';
 
-export default function(app) {
+export default function (app) {
   // Insert routes below
   app.use('/api/users', user);
   // All undefined asset or api routes should return a 404

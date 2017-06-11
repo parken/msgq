@@ -14,7 +14,7 @@ export function auth(reqArg, res, next) {
       },
       attributes: ['id', 'mobile', 'name'],
       raw: true,
-    }).then((user) => {
+    }).then(user => {
       req.user = user;
       return next();
     });

@@ -1,19 +1,10 @@
-'use strict';
-/*eslint no-process-env:0*/
 
 import path from 'path';
 import _ from 'lodash';
 
-/*function requiredProcessEnv(name) {
-  if(!process.env[name]) {
-    throw new Error('You must set the ' + name + ' environment variable');
-  }
-  return process.env[name];
-}*/
-
 // All configurations will extend these options
 // ============================================
-var all = {
+const all = {
   env: process.env.NODE_ENV,
 
   // Root path of server
@@ -33,7 +24,7 @@ var all = {
 
   // Secret for session, you will want to change this and make it an environment variable
   secrets: {
-    session: 'msgque-secret'
+    session: 'msgque-secret',
   },
   PLIVO: {
     AUTH_ID: process.env.PLIVO_AUTH_ID || 'id',
@@ -55,4 +46,5 @@ var all = {
 module.exports = _.merge(
   all,
   require('./shared'),
+  /* eslint global-require:0 */
   require(`./${process.env.NODE_ENV}.js`) || {});

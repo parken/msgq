@@ -1,4 +1,4 @@
-'use strict';
+
 
 module.exports = function AppModel(sequelize, DataTypes) {
   const App = sequelize.define('App', {
@@ -45,18 +45,6 @@ module.exports = function AppModel(sequelize, DataTypes) {
 
     classMethods: {
       associate: function associate(models) {
-        //App.belongsToMany(models.Scope, {
-        //  through: {
-        //    model: models.ItemScope,
-        //    unique: false,
-        //    scope: {
-        //      taggable: 'app',
-        //    },
-        //  },
-        //  foreignKey: 'scopable_id',
-        //  constraints: false,
-        //});
-
         App.hasMany(models.AccessToken);
         App.hasMany(models.RefreshToken);
 

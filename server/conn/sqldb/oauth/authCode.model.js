@@ -1,4 +1,4 @@
-'use strict';
+
 
 const moment = require('moment');
 
@@ -42,18 +42,6 @@ module.exports = function AuthCodeModel(sequelize, DataTypes) {
 
     classMethods: {
       associate: function associate(models) {
-        //AuthCode.belongsToMany(models.Scope, {
-        //  through: {
-        //    model: models.ItemScope,
-        //    unique: false,
-        //    scope: {
-        //      scopable: 'auth_code',
-        //    },
-        //  },
-        //  foreignKey: 'scopable_id',
-        //  constraints: false,
-        //});
-
         AuthCode.belongsTo(models.App, {
           foreignKey: 'appId',
         });
