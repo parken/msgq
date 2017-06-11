@@ -1,4 +1,4 @@
-
+'use strict';
 
 const moment = require('moment');
 
@@ -25,21 +25,18 @@ module.exports = function RefreshTokenModel(sequelize, DataTypes) {
         return moment().add(1, 'months');
       },
     },
-    status: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
-      allowNull: false,
-    },
   }, {
     tableName: 'refresh_tokens',
-    timestamps: false,
-    underscored: true,
-    createdAt: true,
+    timestamps: true,
 
     classMethods: {
       associate(db) {
         RefreshToken.belongsTo(db.App, {
           foreignKey: 'appId',
+        });
+
+        RefreshToken.belongsTo(db.Session, {
+          foreignKey: 'sessionId',
         });
 
         RefreshToken.belongsTo(db.User, {

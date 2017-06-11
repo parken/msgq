@@ -11,14 +11,14 @@ import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import errorHandler from 'errorhandler';
 import path from 'path';
-import config from './environment';
-import oAuthorize from './../api/authorise';
-import oAuthenticate from './../components/oauthjs/auth';
 
-import routes from './../routes';
+import * as routes from './../routes';
+import config from './environment';
+import * as setup from '../components/setup';
+import oauthComponent from './../components/oauth/express';
 
 const log = debug('server/config');
-const oAuth = require('./../components/oauthjs');
+
 /* eslint consistent-return:0 */
 export default function (a) {
   const app = a;
@@ -31,7 +31,7 @@ export default function (a) {
   if (env === 'production') {
     app.use(favicon(path.join(config.root, 'client', 'favicon.ico')));
   }
-
+  setup.init(app);
   app.set('appPath', path.join(config.root, 'client'));
   app.use(express.static(app.get('appPath')));
   app.use(morgan('dev'));
@@ -43,18 +43,7 @@ export default function (a) {
   app.use(methodOverride());
   app.use(cookieParser());
 
-  app.oauth = oAuth;
-  // OAuth Token authorization_code, password, refresh_token
-  app.all('/oauth/token', app.oauth.grant());
-  app.oauth.authenticate = oAuthenticate;
-
-  // OAuth Authorise from Third party applications
-  app.use('/authorise', app.oauth.authenticate(), oAuthorize);
-  app.use('/api/authorise', app.oauth.authenticate(), oAuthorize);
-
-  // OAuth Authorise from Third party applications
-  routes(app);
-  app.use(app.oauth.errorHandler());
+  oauthComponent(app, routes);
 
   if (env === 'development') {
     /* eslint global-require:0 */

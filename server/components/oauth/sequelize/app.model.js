@@ -1,4 +1,4 @@
-
+'use strict';
 
 module.exports = function AppModel(sequelize, DataTypes) {
   const App = sequelize.define('App', {
@@ -40,11 +40,10 @@ module.exports = function AppModel(sequelize, DataTypes) {
     },
   }, {
     tableName: 'apps',
-    timestamps: false,
-    underscored: true,
+    timestamps: true,
 
     classMethods: {
-      associate: function associate(db) {
+      associate(db) {
         App.hasMany(db.AccessToken);
         App.hasMany(db.RefreshToken);
 

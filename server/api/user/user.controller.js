@@ -3,7 +3,7 @@ import request from 'request';
 import config from '../../config/environment';
 import logger from '../../components/logger';
 import { sms, slack } from '../../components/notify';
-import oAuthModel from '../../components/oauthjs/model';
+import oAuthModel from '../../components/oauth/model';
 
 import db, { User, WState, App, AuthCode, RefreshToken } from '../../conn/sqldb';
 

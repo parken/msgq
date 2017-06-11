@@ -1,6 +1,6 @@
 const express = require('express');
 const controller = require('./user.controller');
-import oauth from '../../components/oauthjs/auth';
+import oauth from '../../components/oauth/auth';
 
 const router = express.Router();
 

@@ -12,20 +12,14 @@ export default function (sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true,
     },
-    mobile: DataTypes.STRING,
     name: DataTypes.STRING,
+    mobile: DataTypes.STRING,
     email: DataTypes.STRING,
-    dob: DataTypes.STRING,
-    gender: DataTypes.STRING,
-    designation: DataTypes.STRING,
-    location: DataTypes.STRING,
-    latitude: DataTypes.STRING,
-    longitude: DataTypes.STRING,
-    pincode: DataTypes.STRING,
     groupId: DataTypes.INTEGER,
     otp: DataTypes.STRING,
     otpStatus: DataTypes.INTEGER,
     password: DataTypes.STRING,
+    active: DataTypes.BOOLEAN,
   }, {
     tableName: 'users',
     timestamps: true,
@@ -67,6 +61,11 @@ export default function (sequelize, DataTypes) {
     },
 
     classMethods: {
+      associate(db) {
+        App.belongsTo(db.Group, {
+          foreignKey: 'groupId',
+        });
+      },
       checkEmailExists(db, email) {
         return db.User.count({ where: { email } }).then(rows => {
           if (rows > 0) return Promise.resolve(true);

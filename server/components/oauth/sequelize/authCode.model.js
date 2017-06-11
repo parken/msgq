@@ -1,4 +1,4 @@
-
+'use strict';
 
 const moment = require('moment');
 
@@ -25,25 +25,18 @@ module.exports = function AuthCodeModel(sequelize, DataTypes) {
         return moment().add(30, 'seconds');
       },
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    status: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
-      allowNull: false,
-    },
   }, {
     tableName: 'auth_codes',
-    timestamps: false,
-    underscored: true,
+    timestamps: true,
 
     classMethods: {
-      associate: function associate(db) {
+      associate(db) {
         AuthCode.belongsTo(db.App, {
           foreignKey: 'appId',
+        });
+
+        AuthCode.belongsTo(db.Session, {
+          foreignKey: 'sessionId',
         });
 
         AuthCode.belongsTo(db.User, {

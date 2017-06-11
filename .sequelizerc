@@ -1,0 +1,6 @@
+module.exports = {
+    'seeders-path': './server/conn/sqldb/seeders',
+    'migrations-path': './server/conn/sqldb/migrations',
+    'models-path': './server/conn/sqldb',
+    'url': 'mysql://root:@localhost/parken_msgque'
+};

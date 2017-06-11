@@ -1,4 +1,4 @@
-
+'use strict';
 
 const moment = require('moment');
 
@@ -28,28 +28,18 @@ module.exports = function AccessTokenModel(sequelize, DataTypes) {
         return moment().add(1, 'hours');
       },
     },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    status: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
-      allowNull: false,
-    },
   }, {
     tableName: 'access_tokens',
-    timestamps: false,
-    underscored: true,
-    defaultScope: {
-      where: { status: 1 },
-    },
+    timestamps: true,
 
     classMethods: {
-      associate: function associate(db) {
+      associate(db) {
         AccessToken.belongsTo(db.App, {
           foreignKey: 'appId',
+        });
+
+        AccessToken.belongsTo(db.Session, {
+          foreignKey: 'sessionId',
         });
 
         AccessToken.belongsTo(db.User, {

@@ -23,8 +23,6 @@ module.exports = function SessionModel(sequelize, DataTypes) {
   }, {
     tableName: 'sessions',
     timestamps: true,
-    underscored: false,
-    paranoid: true,
 
     classMethods: {
       associate(db) {
@@ -43,15 +41,6 @@ module.exports = function SessionModel(sequelize, DataTypes) {
         Session.belongsTo(db.User, {
           foreignKey: 'userId',
         });
-      },
-      logout({ AccessToken, RefreshToken }, id) {
-        const where = { where: { sessionId: id } };
-        return Session
-          .destroy({ where: { id } })
-          .then(() => Promise.all([
-            RefreshToken.update({ expires: new Date() }, where),
-            AccessToken.update({ expires: new Date() }, where),
-          ]));
       },
     },
   });

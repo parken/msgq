@@ -6,6 +6,7 @@ import geohash from 'ngeohash';
 
 import { App, AccessToken, AuthCode, RefreshToken, User, Session } from '../../conn/sqldb';
 import config from '../../config/environment';
+import logger from '../../components/logger';
 
 const model = {
   revokeToken(token) {
@@ -127,7 +128,6 @@ const model = {
         };
         const { latitude, longitude } = session;
         if (latitude) options.body.location = geohash.encode(latitude, longitude);
-
         cb(null, saved.toJSON());
         return saved;
       })

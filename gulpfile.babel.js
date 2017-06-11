@@ -10,6 +10,7 @@ import through2 from 'through2';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import http from 'http';
 import open from 'open';
+import shell from 'gulp-shell';
 import lazypipe from 'lazypipe';
 import nodemon from 'nodemon';
 import {Server as KarmaServer} from 'karma';
@@ -592,3 +593,8 @@ gulp.task('buildcontrol:openshift', function(done) {
         function() {done();}
     );
 });
+
+gulp.task('db:migrate', shell.task([
+  'sequelize db:migrate',
+  'sequelize db:seed:all',
+]))
