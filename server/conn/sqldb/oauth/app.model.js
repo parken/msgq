@@ -44,11 +44,11 @@ module.exports = function AppModel(sequelize, DataTypes) {
     underscored: true,
 
     classMethods: {
-      associate: function associate(models) {
-        App.hasMany(models.AccessToken);
-        App.hasMany(models.RefreshToken);
+      associate: function associate(db) {
+        App.hasMany(db.AccessToken);
+        App.hasMany(db.RefreshToken);
 
-        App.belongsTo(models.User, {
+        App.belongsTo(db.User, {
           foreignKey: 'userId',
         });
       },

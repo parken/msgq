@@ -41,12 +41,12 @@ module.exports = function AuthCodeModel(sequelize, DataTypes) {
     underscored: true,
 
     classMethods: {
-      associate: function associate(models) {
-        AuthCode.belongsTo(models.App, {
+      associate: function associate(db) {
+        AuthCode.belongsTo(db.App, {
           foreignKey: 'appId',
         });
 
-        AuthCode.belongsTo(models.User, {
+        AuthCode.belongsTo(db.User, {
           foreignKey: 'userId',
         });
       },

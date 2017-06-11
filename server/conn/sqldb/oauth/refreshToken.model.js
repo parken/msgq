@@ -37,12 +37,12 @@ module.exports = function RefreshTokenModel(sequelize, DataTypes) {
     createdAt: true,
 
     classMethods: {
-      associate: function associate(models) {
-        RefreshToken.belongsTo(models.App, {
+      associate(db) {
+        RefreshToken.belongsTo(db.App, {
           foreignKey: 'appId',
         });
 
-        RefreshToken.belongsTo(models.User, {
+        RefreshToken.belongsTo(db.User, {
           foreignKey: 'userId',
         });
       },

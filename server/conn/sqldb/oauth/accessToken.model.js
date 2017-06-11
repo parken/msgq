@@ -47,12 +47,12 @@ module.exports = function AccessTokenModel(sequelize, DataTypes) {
     },
 
     classMethods: {
-      associate: function associate(models) {
-        AccessToken.belongsTo(models.App, {
+      associate: function associate(db) {
+        AccessToken.belongsTo(db.App, {
           foreignKey: 'appId',
         });
 
-        AccessToken.belongsTo(models.User, {
+        AccessToken.belongsTo(db.User, {
           foreignKey: 'userId',
         });
       },

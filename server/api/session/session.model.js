@@ -27,20 +27,20 @@ module.exports = function SessionModel(sequelize, DataTypes) {
     paranoid: true,
 
     classMethods: {
-      associate(models) {
-        Session.hasMany(models.AccessToken, {
+      associate(db) {
+        Session.hasMany(db.AccessToken, {
           foreignKey: 'sessionId',
         });
 
-        Session.hasMany(models.AuthCode, {
+        Session.hasMany(db.AuthCode, {
           foreignKey: 'sessionId',
         });
 
-        Session.hasMany(models.RefreshToken, {
+        Session.hasMany(db.RefreshToken, {
           foreignKey: 'sessionId',
         });
 
-        Session.belongsTo(models.User, {
+        Session.belongsTo(db.User, {
           foreignKey: 'userId',
         });
       },

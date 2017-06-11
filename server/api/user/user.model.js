@@ -44,14 +44,14 @@ export default function (sequelize, DataTypes) {
           cb(null, this.toJSON()) : cb(null, false);
       },
 
-      revokeTokens(models) {
+      revokeTokens(db) {
         const expires = new Date();
         return Promise.all([
-          models.AccessToken.update(
+          db.AccessToken.update(
             { expires },
             { where: { userId: this.id } }
           ),
-          models.RefreshToken.update(
+          db.RefreshToken.update(
             { expires },
             { where: { userId: this.id } }
           ),
