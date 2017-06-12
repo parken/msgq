@@ -3,6 +3,7 @@
  */
 
 import debug from 'debug';
+import cors from 'cors';
 import express from 'express';
 import favicon from 'serve-favicon';
 import morgan from 'morgan';
@@ -34,6 +35,7 @@ export default function (a) {
   setup.init(app);
   app.set('appPath', path.join(config.root, 'client'));
   app.use(express.static(app.get('appPath')));
+  app.use(cors());
   app.use(morgan('dev'));
 
   app.set('views', `${config.root}/server/views`);

@@ -2,7 +2,8 @@
 import authorise from './authorise';
 import oAuth from './../';
 
-export default function (app, routes) {
+export default function (a, routes) {
+  const app = a;
   app.oauth = oAuth;
   // OAuth Token authorization_code, password, refresh_token
   app.all('/oauth/token', app.oauth.grant());

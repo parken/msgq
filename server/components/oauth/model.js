@@ -4,13 +4,12 @@ import bowser from 'bowser';
 import geoip from 'geoip-lite';
 import geohash from 'ngeohash';
 
-import { App, AccessToken, AuthCode, RefreshToken, User, Session } from '../../conn/sqldb';
+import db from '../../conn/sqldb';
 import config from '../../config/environment';
-import logger from '../../components/logger';
 
 const model = {
   revokeToken(token) {
-    return AccessToken
+    return db.AccessToken
       .find({
         where: {
           accessToken: token,
@@ -23,11 +22,11 @@ const model = {
         const { userId, sessionId } = accessToken;
         const expires = new Date();
         return Promise.all([
-          AccessToken.update(
+          db.AccessToken.update(
             { expires },
             { where: { userId, sessionId } }
           ),
-          RefreshToken.update(
+          db.RefreshToken.update(
             { expires },
             { where: { userId, sessionId } }
           ),
@@ -35,13 +34,13 @@ const model = {
       });
   },
   getAccessToken(bearerToken, callback) {
-    AccessToken
+    db.AccessToken
       .findOne({
         where: { accessToken: bearerToken },
         attributes: ['accessToken', 'expires', ['sessionId', 'session_id']],
         include: [
           {
-            model: User,
+            model: db.User,
             attributes: ['id', 'name', 'groupId'],
           },
         ],
@@ -63,7 +62,7 @@ const model = {
     };
     if (clientSecret) options.where.clientSecret = clientSecret;
 
-    App
+    db.App
       .findOne(options)
       .then(client => {
         if (!client) return callback(null, false);
@@ -75,7 +74,7 @@ const model = {
   grantTypeAllowed: (clientId, grantType, callback) => callback(null, true),
 
   saveAccessToken(accessToken, client, expires, user, sessionId, callback) {
-    return AccessToken
+    return db.AccessToken
       .build({ expires })
       .set('appId', client.id)
       .set('accessToken', accessToken)
@@ -116,7 +115,7 @@ const model = {
     // - Detailed Logging
     const browser = ua ? bowser._detect(ua) : { os: 'na' };
 
-    return Session.create(session)
+    return db.Session.create(session)
       .then(saved => {
         const options = {
           index: 'oauth',
@@ -135,7 +134,7 @@ const model = {
   },
 
   getAuthCode(authCode, callback) {
-    AuthCode
+    db.AuthCode
       .findOne({
         where: { authCode },
         attributes: [['appId', 'clientId'], 'expires',
@@ -149,7 +148,7 @@ const model = {
   },
 
   saveAuthCode(authCode, client, expires, user, sessionId, callback) {
-    return AuthCode
+    return db.AuthCode
       .build({ expires })
       .set('appId', client.id)
       .set('authCode', authCode)
@@ -161,7 +160,7 @@ const model = {
   },
   // Actual Params username, password
   getUser(username, password, callback) {
-    return User
+    return db.User
       .findOne({
         where: {
           $or: {
@@ -186,7 +185,7 @@ const model = {
   },
 
   saveRefreshToken(refreshToken, client, expires, user, sessionId, callback) {
-    return RefreshToken
+    return db.RefreshToken
       .build({ expires })
       .set('appId', client.id)
       .set('refreshToken', refreshToken)
@@ -198,7 +197,7 @@ const model = {
   },
 
   getRefreshToken(refreshToken, callback) {
-    return RefreshToken
+    return db.RefreshToken
       .findOne({
         where: { refreshToken },
         attributes: [['appId', 'clientId'], ['userId', 'userId'],

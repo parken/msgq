@@ -1,11 +1,10 @@
-
 import request from 'request';
 import config from '../../config/environment';
 import logger from '../../components/logger';
 import { sms, slack } from '../../components/notify';
 import oAuthModel from '../../components/oauth/model';
 
-import db, { User, WState, App, AuthCode, RefreshToken } from '../../conn/sqldb';
+import db from '../../conn/sqldb';
 
 function handleError(res, argStatusCode, err) {
   logger.error('user.controller', err);
@@ -14,30 +13,32 @@ function handleError(res, argStatusCode, err) {
 }
 
 export function wStates(req, res) {
-  return WState
-    .findAll({ attributes: ['id', 'name'], raw: true })
+  return db.WState
+    .findAll({attributes: ['id', 'name'], raw: true})
     .then(wS => res.json(wS))
     .catch(err => handleError(res, 500, err));
 }
 
 export function me(req, res) {
-  return User
-    .findById(req.user.id, { attributes: ['mobile', 'email', 'name', 'id', 'groupId'],
-      raw: 'true' })
+  return db.User
+    .findById(req.user.id, {
+      attributes: ['mobile', 'email', 'name', 'id', 'groupId'],
+      raw: 'true',
+    })
     .then(u => res.json(u))
     .catch(err => handleError(res, 500, err));
 }
 
 
 export function index(req, res) {
-  return User
+  return db.User
     .findAll()
     .then(data => res.json(data))
     .catch(err => handleError(res, 500, err));
 }
 
 export function show(req, res) {
-  return User
+  return db.User
     .find({
       where: { id: req.params.id },
       attributes: ['id', 'name', 'email', 'mobile'],
@@ -49,7 +50,7 @@ export function show(req, res) {
 export function create(req, res) {
   const user = req.body;
   user.groupId = 2;
-  return User
+  return db.User
     .create(user)
     .then(data => res.json(data))
     .catch(err => handleError(res, 500, err));
@@ -57,21 +58,22 @@ export function create(req, res) {
 
 export function signup(req, res) {
   const { id, name, password, otp, email } = req.body;
-  User.find({
+  db.User.find({
     attributes: ['id'],
-    where: { id, otp } })
-  .then((u) => {
-    if (!u) return res.status(400).json({ error_description: 'Invalid OTP' });
-    u
-      .update({ otpStatus: 0, name, password, email })
-      .catch(err => logger.error('user.ctrl/otpVerify', err));
-    slack(`Signup: ${u.id}, ${u.name}, ${u.mobile}, ${u.email}`);
-    return res.status(201).end();
-  }).catch(err => handleError(res, 500, err));
+    where: { id, otp },
+  })
+    .then((u) => {
+      if (!u) return res.status(400).json({ error_description: 'Invalid OTP' });
+      u
+        .update({ otpStatus: 0, name, password, email })
+        .catch(err => logger.error('user.ctrl/otpVerify', err));
+      slack(`Signup: ${u.id}, ${u.name}, ${u.mobile}, ${u.email}`);
+      return res.status(201).end();
+    }).catch(err => handleError(res, 500, err));
 }
 
 function getApp(code) {
-  return AuthCode.find({ where: { auth_code: code }, include: [App] })
+  return db.AuthCode.find({ where: { auth_code: code }, include: [db.App] })
     .then(authCode => authCode.App.toJSON());
 }
 
@@ -79,7 +81,7 @@ export function login(req, res) {
   const { code } = req.body;
   return (code
     ? getApp(code)
-    : App.findById(1, { raw: true }))
+    : db.App.findById(1, { raw: true }))
     .then(app => {
       const options = {
         url: `${config.OAUTH_SERVER}${config.OAUTH_ENDPOINT}`,
@@ -105,10 +107,10 @@ export function login(req, res) {
 }
 
 export function refresh(req, res) {
-  return App
+  return db.App
     .find({
       include: [{
-        model: RefreshToken,
+        model: db.RefreshToken,
         where: { refreshToken: req.body.refresh_token },
         required: true,
       }],
@@ -147,7 +149,7 @@ export function logout(req, res, next) {
 
 export function duplicate(req, res) {
   const mobile = `91${req.query.mobile}`;
-  return User
+  return db.User
     .count({ where: { mobile } })
     .then(data => res.json({ mobile: !!data }))
     .catch(err => handleError(res, 500, err));
@@ -160,13 +162,13 @@ export function update(req, res) {
   if (req.user.id) {
     delete user.alternateMobile;
   }
-  return User
+  return db.User
     .update(user, {
       where: {
         id,
       },
     })
-    .then(() => res.json({ id }))
+    .then(() => res.json({id}))
     .catch(err => handleError(res, 500, err));
 }
 
@@ -179,33 +181,35 @@ export function checkExists(req, res) {
 }
 
 export function otpLogin(req, res) {
-  User.findOrCreate({
-    where: {
-      mobile: req.body.username || req.body.mobile,
-    },
-    attributes: ['id', 'otpStatus', 'otp', 'mobile'],
-  }).then(([user, newUser]) => {
-    if (!user) {
-      return res.status(400).json({
-        message: 'User Details not matching with our records. Please contact hello@ayyayo.com' });
-    }
+  return db.User
+    .findOrCreate({
+      where: {
+        mobile: req.body.username || req.body.mobile,
+      },
+      attributes: ['id', 'otpStatus', 'otp', 'mobile'],
+    }).then(([user, newUser]) => {
+      if (!user) {
+        return res.status(400).json({
+          message: 'User Details not matching with our records. Please contact hello@ayyayo.com'
+        });
+      }
 
-    const otp = user.otpStatus === 1 && user.otp
-      ? user.otp
-      : Math.floor(Math.random() * 90000) + 10000;
+      const otp = user.otpStatus === 1 && user.otp
+        ? user.otp
+        : Math.floor(Math.random() * 90000) + 10000;
 
-    const text = `${otp} is your OTP. Treat this as confidential. Sharing it with anyone gives` +
-      'them full access to your account. We never call you to verify OTP.';
-    if (user.mobile) sms({ to: user.mobile, text });
-    User
-      .update({ otp, otpStatus: 1 }, { where: { id: user.id } })
-      .catch(err => logger.error('user.ctrl/otp', err));
-    return res.json({ message: 'success', id: user.id, newUser });
-  }).catch(err => handleError(res, 500, err));
+      const text = `${otp} is your OTP. Treat this as confidential. Sharing it with anyone gives` +
+        'them full access to your account. We never call you to verify OTP.';
+      if (user.mobile) sms({to: user.mobile, text});
+      db.User
+        .update({otp, otpStatus: 1}, {where: {id: user.id}})
+        .catch(err => logger.error('user.ctrl/otp', err));
+      return res.json({message: 'success', id: user.id, newUser});
+    }).catch(err => handleError(res, 500, err));
 }
 
 export function otpSend(req, res) {
-  User.find({
+  db.User.find({
     where: {
       $or: {
         email: req.body.username,
@@ -216,7 +220,8 @@ export function otpSend(req, res) {
   }).then((user) => {
     if (!user) {
       return res.status(400).json({
-        message: 'User Details not matching with our records. Please contact hello@ayyayo.com' });
+        message: 'User Details not matching with our records. Please contact hello@ayyayo.com'
+      });
     }
 
     const otp = user.otpStatus === 1 && user.otp
@@ -225,31 +230,32 @@ export function otpSend(req, res) {
 
     const text = `${otp} is your OTP. Treat this as confidential. Sharing it with anyone gives` +
       'them full access to your account. We never call you to verify OTP.';
-    if (user.mobile) sms({ to: user.mobile, text });
-    User
-      .update({ otp, otpStatus: 1 }, { where: { id: user.id } })
+    if (user.mobile) sms({to: user.mobile, text});
+    db.User
+      .update({otp, otpStatus: 1}, {where: {id: user.id}})
       .catch(err => logger.error('user.ctrl/otp', err));
-    return res.json({ message: 'success', id: user.id });
+    return res.json({message: 'success', id: user.id});
   }).catch(err => handleError(res, 500, err));
 }
 
 export function otpVerify(req, res) {
   db.User.find({
     attributes: ['id'],
-    where: { id: req.body.id, otp: req.body.otp } })
-     .then((user) => {
-       if (!user) return res.status(400).json({ error_description: 'Invalid OTP' });
-       user
-         .update({ otpStatus: 0 })
-         .catch(err => logger.error('user.ctrl/otpVerify', err));
-       return res.json({ message: 'success', id: user.id });
-     }).catch(err => handleError(res, 500, err));
+    where: {id: req.body.id, otp: req.body.otp}
+  })
+    .then((user) => {
+      if (!user) return res.status(400).json({error_description: 'Invalid OTP'});
+      user
+        .update({otpStatus: 0})
+        .catch(err => logger.error('user.ctrl/otpVerify', err));
+      return res.json({message: 'success', id: user.id});
+    }).catch(err => handleError(res, 500, err));
 }
 
 
 // Creates a new User in the DB
 export function passwordChange(req, res) {
-  return User.find({
+  return db.User.find({
     where: {
       id: req.body.id,
       otp: req.body.otp,
@@ -259,16 +265,16 @@ export function passwordChange(req, res) {
     if (!u) {
       return res
         .status(400)
-        .json({ error: 'Invalid password', error_description: 'Invalid current password' });
+        .json({error: 'Invalid password', error_description: 'Invalid current password'});
     }
 
-    return u.update({ password: req.body.password })
+    return u.update({password: req.body.password})
       .then(() => {
         res.status(204).end();
         u.revokeTokens(db); // revoke all
-        const { id, name, mobile, email } = u;
+        const {id, name, mobile, email} = u;
         return slack(`Password change: ${id}, ${name}, ${mobile}, ${email}`);
       });
   })
-  .catch(err => handleError(res, 500, err));
+    .catch(err => handleError(res, 500, err));
 }

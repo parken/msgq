@@ -12,7 +12,7 @@ module.exports = {
       name: DataTypes.STRING,
     }, timestamps(3)), engine);
   },
-  down: function(queryInterface) {
+  down(queryInterface) {
     return queryInterface.dropTable('groups');
-  }
+  },
 };

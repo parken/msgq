@@ -1,7 +1,9 @@
 
 import path from 'path';
 import _ from 'lodash';
-
+import dotenv from 'dotenv';
+const root = path.normalize(`${__dirname}/../../..`);
+const env = dotenv.config({ path: path.join(root, '.env') });
 // All configurations will extend these options
 // ============================================
 const all = {
@@ -30,15 +32,11 @@ const all = {
     AUTH_ID: process.env.PLIVO_AUTH_ID || 'id',
     AUTH_TOKEN: process.env.PLIVO_AUTH_TOKEN || 'token',
   },
-  MYSQL: {
-    username: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASS,
-    database: process.env.MYSQL_DB,
-    host: process.env.MYSQL_HOST,
-    dialect: 'mysql',
-    logging: false,
-    timezone: '+05:30',
-  },
+  MYSQL_DB: process.env.MYSQL_DB,
+  MYSQL_USER: process.env.MYSQL_USER,
+  MYSQL_PASS: process.env.MYSQL_PASS,
+  MYSQL_HOST: process.env.MYSQL_HOST,
+  MYSQL_TZ: '+05:30',
 };
 
 // Export the config object based on the NODE_ENV
@@ -46,5 +44,5 @@ const all = {
 module.exports = _.merge(
   all,
   require('./shared'),
-  /* eslint global-require:0 */
+  env,
   require(`./${process.env.NODE_ENV}.js`) || {});

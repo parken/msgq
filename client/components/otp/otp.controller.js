@@ -74,7 +74,7 @@ class OTPController {
         this.data.id = id;
         return this.data;
       })
-      .catch(err => (this.error = err.data.error_description
+      .catch(err => (this.error = err.data && err.data.error_description
         || err.statusText || 'Unexpected error contact hello@ayyayo.com'));
   }
 
