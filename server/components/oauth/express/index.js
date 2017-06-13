@@ -1,4 +1,4 @@
-
+import * as auth from '../auth';
 import authorise from './authorise';
 import oAuth from './../';
 
@@ -7,6 +7,7 @@ export default function (a, routes) {
   app.oauth = oAuth;
   // OAuth Token authorization_code, password, refresh_token
   app.all('/oauth/token', app.oauth.grant());
+  app.all('/oauth/revoke', auth.logout);
   app.all('/api/oauth/token', app.oauth.grant());
 
   // app.use(app.oauth.authorise('main'));

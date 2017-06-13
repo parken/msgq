@@ -42,6 +42,15 @@ module.exports = function SessionModel(sequelize, DataTypes) {
           foreignKey: 'userId',
         });
       },
+      logout({ AccessToken, RefreshToken }, id) {
+        const where = { where: { sessionId: id } };
+        return Session
+          .destroy({ where: { id } })
+          .then(() => Promise.all([
+            RefreshToken.update({ expires: new Date() }, where),
+            AccessToken.update({ expires: new Date() }, where),
+          ]));
+      },
     },
   });
 
