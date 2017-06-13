@@ -25,6 +25,7 @@ import Footer from '../components/footer';
 import UpdateTitle from '../components/update-title';
 
 import Home from './home';
+import User from './user';
 import FourOFour from './four-o-four';
 import 'angular-oauth2';
 
@@ -35,7 +36,7 @@ angular
     'angular-oauth2',
     uiBootstrap,
     AsideMenu, Navbar, Footer,
-    constants, Auth, UpdateTitle, Home, FourOFour, OTPModule,
+    constants, Auth, UpdateTitle, Home, FourOFour, OTPModule, User,
   ])
   .component('msgqueApp', AppComponent)
   .config(routeConfig)

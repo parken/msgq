@@ -11,6 +11,7 @@ router.get('/me', oauth(), controller.me);
 router.get('/duplicate', controller.duplicate);
 router.get('/checkExists', controller.checkExists);
 router.get('/:id', oauth(), controller.show);
+router.get('/:id/sendLogin', oauth(), controller.sendLogin);
 
 router.post('/', oauth(), controller.create);
 router.post('/signup', controller.signup);

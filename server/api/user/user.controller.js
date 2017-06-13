@@ -7,6 +7,7 @@ import oAuthModel from '../../components/oauth/model';
 import db from '../../conn/sqldb';
 
 function handleError(res, argStatusCode, err) {
+  console.log(err)
   logger.error('user.controller', err);
   const statusCode = argStatusCode || 500;
   res.status(statusCode).send(err);
@@ -22,7 +23,7 @@ export function wStates(req, res) {
 export function me(req, res) {
   return db.User
     .findById(req.user.id, {
-      attributes: ['mobile', 'email', 'name', 'id', 'groupId'],
+      attributes: ['mobile', 'email', 'name', 'id', 'groupId', 'admin'],
       raw: 'true',
     })
     .then(u => res.json(u))
@@ -276,5 +277,26 @@ export function passwordChange(req, res) {
         return slack(`Password change: ${id}, ${name}, ${mobile}, ${email}`);
       });
   })
+    .catch(err => handleError(res, 500, err));
+}
+
+export function sendLogin(req, res) {
+  return db.User
+    .find({ where: { id: req.params.id } })
+    .then(user => {
+      if (!user) return res.status(404).end();
+      const otp = user.otpStatus === 1 && user.otp
+        ? user.otp
+        : Math.floor(Math.random() * 90000) + 10000;
+
+      const text = `Your account has been created click on the link to login ${
+        req.headers.origin}/home?otp=${otp}&id=${user.mobile}`;
+      console.log(text);
+      if (user.mobile) sms({to: user.mobile, text});
+      db.User
+        .update({otp, otpStatus: 1}, {where: {id: user.id}})
+        .catch(err => logger.error('user.ctrl/otp', err));
+      return res.json({message: 'success', id: user.id});
+    })
     .catch(err => handleError(res, 500, err));
 }
