@@ -10,8 +10,8 @@ const log = debug('components/notify');
 
 /* eslint new-cap:0 */
 const api = plivo.RestAPI({
-  authId: config.PLIVO.AUTH_ID,
-  authToken: config.PLIVO.AUTH_TOKEN,
+  authId: config.PLIVO_AUTH_ID,
+  authToken: config.PLIVO_AUTH_TOKEN,
 });
 
 api.sendMessage = (params) => {

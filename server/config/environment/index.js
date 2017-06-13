@@ -1,4 +1,3 @@
-
 import path from 'path';
 import _ from 'lodash';
 import dotenv from 'dotenv';
@@ -28,10 +27,9 @@ const all = {
   secrets: {
     session: 'msgque-secret',
   },
-  PLIVO: {
-    AUTH_ID: process.env.PLIVO_AUTH_ID || 'id',
-    AUTH_TOKEN: process.env.PLIVO_AUTH_TOKEN || 'token',
-  },
+  MSG: process.env.MSG,
+  PLIVO_AUTH_ID: process.env.PLIVO_AUTH_ID || 'id',
+  PLIVO_AUTH_TOKEN: process.env.PLIVO_AUTH_TOKEN || 'token',
   MYSQL_DB: process.env.MYSQL_DB,
   MYSQL_USER: process.env.MYSQL_USER,
   MYSQL_PASS: process.env.MYSQL_PASS,
