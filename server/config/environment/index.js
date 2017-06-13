@@ -15,18 +15,11 @@ const all = {
   browserSyncPort: process.env.BROWSER_SYNC_PORT || 3000,
 
   // Server port
-  port: process.env.PORT || 9000,
+  port: process.env.PORT || 5566,
 
   // Server IP
   ip: process.env.IP || '0.0.0.0',
 
-  // Should we populate the DB with sample data?
-  seedDB: false,
-
-  // Secret for session, you will want to change this and make it an environment variable
-  secrets: {
-    session: 'msgque-secret',
-  },
   MSG: process.env.MSG,
   PLIVO_AUTH_ID: process.env.PLIVO_AUTH_ID || 'id',
   PLIVO_AUTH_TOKEN: process.env.PLIVO_AUTH_TOKEN || 'token',
