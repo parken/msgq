@@ -23,8 +23,34 @@ class HomeListController {
             .then(() => this.$state.go('home.list', {id: undefined, otp: undefined}));
         });
     }
+    this.list = {
+      type: [{
+        name: 'transactional',
+        value: 0,
+      }, {
+        name: 'promotional',
+        value: 1,
+      }],
+    };
+    this.data = { type: 0, mode: 0, mobile: '9920745396', message: 'test' };
   }
 
+  sendMessage() {
+    this.message = '';
+    const { type, message } = this.data;
+    const sms = { type, message };
+    if (this.data.mode === 0) {
+      sms.mobile = this.data.mobile;
+    } else {
+      sms.mobile = this.file.content.split('\n')
+        .map(x => x.replace(new RegExp('"', 'g'), '')).filter(x => x)
+        .join(',');
+    }
+    this.$http
+      .post('/bulk/sms', sms)
+      .then(() => (this.message = 'SMS send successfully.'))
+      .catch(() => (this.message = 'Error sending message.'));
+  }
 }
 
 export default HomeListController;

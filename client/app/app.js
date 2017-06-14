@@ -23,6 +23,7 @@ import AsideMenu from '../components/aside-menu';
 import Navbar from '../components/navbar';
 import Footer from '../components/footer';
 import UpdateTitle from '../components/update-title';
+import FileReader from '../components/file-reader';
 
 import Home from './home';
 import User from './user';
@@ -35,7 +36,7 @@ angular
     ngCookies, ngAnimate, ngSanitize, uiRouter,
     'angular-oauth2',
     uiBootstrap,
-    AsideMenu, Navbar, Footer,
+    AsideMenu, Navbar, Footer, FileReader,
     constants, Auth, UpdateTitle, Home, FourOFour, OTPModule, User,
   ])
   .component('msgqueApp', AppComponent)

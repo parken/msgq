@@ -7,10 +7,12 @@ import errors from './components/errors';
 import path from 'path';
 
 import user from './api/user';
+import bulk from './api/bulk';
 
 export default function (app) {
   // Insert routes below
   app.use('/api/users', user);
+  app.use('/api/bulk', bulk);
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
    .get(errors[404]);
