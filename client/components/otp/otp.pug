@@ -15,7 +15,7 @@
         button.btn.btn-lg.btn-info.btn-block.m-t-lg(type='submit' ng-disabled="!$ctrl.otpButton || otpForm.$invalid")
           .fa.fa-phone.m-r
           | {{ $ctrl.otpSent ? 'Resend in '+$ctrl.delay+' Seconds' : 'Send OTP' }}
-      form.form-validation.m-t-lg(name="form" ng-submit='$ctrl.loginNow($ctrl.data)' ng-show="$ctrl.otpSent")
+      form.form-validation.m-t-lg(name="form" ng-submit='$ctrl.otpLogin($ctrl.data)' ng-show="$ctrl.otpSent")
         input.form-control.m-b-sm(type='password' placeholder='{{$ctrl.otpSent ? "Enter OTP" : "Your password"}}' ng-model='$ctrl.data.password' required)
         input.form-control.m-b-sm(type='text' name='name', placeholder='Name' ng-model="$ctrl.data.name" ng-if='$ctrl.ui.newUser' required)
         button.btn.btn-lg.btn-info.btn-block.m-t-xxl(type='submit' ng-disabled="form.$invalid")

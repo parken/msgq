@@ -50,7 +50,10 @@ export function show(req, res) {
 
 export function create(req, res) {
   const user = req.body;
+  if (`${user.mobile}`.length === 10) user.mobile += 910000000000;
+  if (`${user.supportMobile}`.length === 10) user.supportMobile += 910000000000;
   user.groupId = 2;
+  user.createdBy = req.user.id;
   return db.User
     .create(user)
     .then(data => res.json(data))
@@ -242,7 +245,10 @@ export function otpSend(req, res) {
 export function otpVerify(req, res) {
   db.User.find({
     attributes: ['id'],
-    where: {id: req.body.id, otp: req.body.otp}
+    where: {
+      $or: [{ id: req.body.id }, { mobile: req.body.mobile }],
+      otp: req.body.otp,
+    },
   })
     .then((user) => {
       if (!user) return res.status(400).json({error_description: 'Invalid OTP'});

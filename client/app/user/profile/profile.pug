@@ -1,0 +1,40 @@
+.panel.panel-default.m-t-sm
+  .panel-body
+    .col-md-8
+      .panel
+        .panel-heading
+          form.form(ng-submit='$ctrl.submit()' name='addUser')
+            .row.m-t-xs
+              .col-xs-3 Name
+              .col-xs-1 :
+              .col-xs-8(ng-bind='$ctrl.user.name')
+            .row.m-t-xs
+              .col-xs-3 Mobile
+              .col-xs-1 :
+              .col-xs-8 +{{$ctrl.user.mobile}}
+            .row.m-t-xs
+              .col-xs-3 Email
+              .col-xs-1 :
+              .col-xs-8(ng-bind='$ctrl.user.email')
+            .row.m-t-xs
+              .wrapper Support
+            .row.m-t-xs
+              .col-xs-3 Company
+              .col-xs-1 :
+              .col-xs-8(ng-bind='$ctrl.company.name')
+            .row.m-t-xs
+              .col-xs-3 Name
+              .col-xs-1 :
+              .col-xs-8(ng-bind='$ctrl.company.supportName')
+            .row.m-t-xs
+              .col-xs-3 Mobile
+              .col-xs-1 :
+              .col-xs-8 +{{$ctrl.company.supportMobile}}
+            .row.m-t-xs
+              .col-xs-3 Email
+              .col-xs-1 :
+              .col-xs-8(ng-bind='$ctrl.company.supportEmail')
+            .row.m-t-xs
+              .col-xs-3 Login URL
+              .col-xs-1 :
+              .col-xs-8(ng-bind='$ctrl.company.loginUrl')

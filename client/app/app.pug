@@ -14,9 +14,8 @@
         //  span.text-info.dker MSG&nbsp;
         //  span.text-white Que
         span.hidden-folded.m-l-xs
-          //img(src='/assets/images/logo.png', alt='{{$ctrl.name}}')
-          span.text-info.dker &nbsp;MSG&nbsp;
-          span.text-white &nbsp;Que
+          img(ng-src='{{$ctrl.company.logo}}', alt='{{$ctrl.company.name}}')
+          span.text-white &nbsp;{{$ctrl.company.name}}
 
       // / brand
     // / navbar header
@@ -51,8 +50,10 @@
               a(ui-sref='help')
                 span.label.bg-info.pull-right new
                 | Help
-            li
+            li(ng-if='$ctrl.user.admin === 1')
               a(ui-sref='user.add') Add User
+            li
+              a(ui-sref='user.profile') Profile
             li.hide.divider
             //li
               a(ui-sref='access.password_reset') Change Password

@@ -1,8 +1,6 @@
-'use strict';
-
 module.exports = {
   up: function (queryInterface, Sequelize) {
-    queryInterface.addColumn(
+    return queryInterface.addColumn(
       'users',
       'admin',
       {
@@ -13,7 +11,7 @@ module.exports = {
     );
   },
   down: function (queryInterface, Sequelize) {
-    queryInterface.removeColumn('users', 'admin');
+    return queryInterface.removeColumn('users', 'admin');
   },
 };
 

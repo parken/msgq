@@ -78,15 +78,24 @@ class OTPController {
         || err.statusText || 'Unexpected error contact hello@ayyayo.com'));
   }
 
-  otpVerify() {
+  otpLogin(data) {
+    return this.otpVerify({ mobile: `${this.countryCode}${data.mobile}`, otp: data.password })
+      .then(() => this.loginNow(data));
+  }
+
+  otpVerify(data) {
     this.success = this.error = '';
-    this.$http
-      .post('/users/otpVerify', this.data)
+    return this.$http
+      .post('/users/otpVerify', data || this.data)
       .then(() => {
         this.success = 'OTP Verified';
         this.$uibModalInstance.close({ otp: this.otp });
+        return Promise.resolve();
       })
-      .catch(res => (this.error = res.data.error_description));
+      .catch(res => {
+        this.error = res.data.error_description;
+        return Promise.reject();
+      });
   }
 
   cancel() {

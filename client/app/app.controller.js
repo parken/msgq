@@ -1,13 +1,15 @@
 class AppController {
   /* @ngInject */
-  constructor($rootScope, $state, urls, OAuth, $window, Session, OTP) {
+  constructor($rootScope, $state, $http, urls, OAuth, $window, Session, OTP) {
     this.$rootScope = $rootScope;
     this.$state = $state;
+    this.$http = $http;
     this.OAuth = OAuth;
     this.$window = $window;
     this.Session = Session;
     this.OTP = OTP;
-    this.user = this.Session.read('user');
+    this.user = this.Session.read('userinfo');
+    this.company = this.Session.read('company');
 
     this.app = {
       name: 'MSGQue',
@@ -47,6 +49,14 @@ class AppController {
     this.$rootScope.$on('sessionUpdated', (e, d) => {
       this.user = d;
     });
+
+    if (!this.company) {
+      this.$http.get('/company')
+        .then(({ data: company }) => {
+          this.company = company;
+          this.Session.create('company', company);
+        });
+    }
   }
 
   logout() {

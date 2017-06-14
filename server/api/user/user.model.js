@@ -20,6 +20,13 @@ export default function (sequelize, DataTypes) {
     otpStatus: DataTypes.INTEGER,
     password: DataTypes.STRING,
     active: DataTypes.BOOLEAN,
+    admin: DataTypes.INTEGER,
+    companyName: DataTypes.STRING,
+    companyLogo: DataTypes.STRING,
+    supportName: DataTypes.STRING,
+    supportMobile: DataTypes.STRING,
+    supportEmail: DataTypes.STRING,
+    loginUrl: DataTypes.STRING,
   }, {
     tableName: 'users',
     timestamps: true,
@@ -64,6 +71,10 @@ export default function (sequelize, DataTypes) {
       associate(db) {
         User.belongsTo(db.Group, {
           foreignKey: 'groupId',
+        });
+        User.belongsTo(User, {
+          foreignKey: 'createdBy',
+          allowNull: true,
         });
       },
       checkEmailExists(db, email) {

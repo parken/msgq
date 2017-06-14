@@ -1,8 +1,0 @@
-.hbox
-  form.form-control(ng-submit='$ctrl.submit()' name='addUser')
-    .row.m-t-xs
-      input.form-control(placeholder='Name' ng-model='$ctrl.data.name' required)
-    .row.m-t-xs
-      input.form-control(placeholder='Mobile' ng-model='$ctrl.data.mobile' required)
-    .row.center-block
-      button.m-t-xs.btn.btn-success(type='submit' ng-disabled='!addUser.$valid') Create User
