@@ -1,12 +1,14 @@
 class AppController {
   /* @ngInject */
-  constructor($rootScope, $state, $http, urls, OAuth, $window, Session, OTP) {
+  constructor($rootScope, $state, $http, OAuth, $window, Session, OTP, $location, AppAction) {
     this.$rootScope = $rootScope;
     this.$state = $state;
     this.$http = $http;
     this.OAuth = OAuth;
     this.$window = $window;
+    this.$location = $location;
     this.Session = Session;
+    this.AppAction = AppAction;
     this.OTP = OTP;
     this.user = this.Session.read('userinfo');
     this.company = this.Session.read('company');
@@ -56,6 +58,14 @@ class AppController {
           this.company = company;
           this.Session.create('company', company);
         });
+    }
+
+    if (this.$location.search().uid) {
+      this.AppAction
+        .loginUUID(this.$location.search().uid)
+        .then(() => this.$state.go(
+          this.$state.current.name,
+          Object.assign(this.$state.params, { uid: undefined })));
     }
   }
 

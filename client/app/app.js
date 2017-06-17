@@ -27,6 +27,7 @@ import FileReader from '../components/file-reader';
 
 import Home from './home';
 import User from './user';
+import SenderId from './sender-id';
 import FourOFour from './four-o-four';
 import 'angular-oauth2';
 
@@ -37,7 +38,7 @@ angular
     'angular-oauth2',
     uiBootstrap,
     AsideMenu, Navbar, Footer, FileReader,
-    constants, Auth, UpdateTitle, Home, FourOFour, OTPModule, User,
+    constants, Auth, UpdateTitle, Home, FourOFour, OTPModule, User, SenderId,
   ])
   .component('msgqueApp', AppComponent)
   .config(routeConfig)

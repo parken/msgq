@@ -37,6 +37,7 @@
     "socketio-jwt": "^4.2.0",
     "sprint-js": "~0.1.0",
     "useragent": "^2.1.13",
+    "uuid": "^3.0.1",
     "winston": "^2.3.1",
     "winston-daily-rotate-file": "^1.4.6"
   },

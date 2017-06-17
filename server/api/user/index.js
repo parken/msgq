@@ -10,6 +10,7 @@ router.get('/wStates', oauth(), controller.wStates);
 router.get('/me', oauth(), controller.me);
 router.get('/duplicate', controller.duplicate);
 router.get('/checkExists', controller.checkExists);
+router.get('/uuid/:uuid', controller.showUuid);
 router.get('/:id', oauth(), controller.show);
 router.get('/:id/sendLogin', oauth(), controller.sendLogin);
 

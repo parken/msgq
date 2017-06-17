@@ -1,4 +1,4 @@
-class HomeListController {
+class SenderIdListController {
   /* @ngInject */
   constructor($state, $http, OAuth, OAuthToken, Session, AddSenderId) {
     this.$state = $state;
@@ -54,4 +54,4 @@ class HomeListController {
   }
 }
 
-export default HomeListController;
+export default SenderIdListController;

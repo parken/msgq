@@ -2,6 +2,8 @@
 import debug from 'debug';
 import plivo from 'plivo';
 import request from 'request';
+import uuidV1 from 'uuid/v1';
+import db from '../../conn/sqldb';
 
 import logger from '../logger';
 import config from '../../config/environment';
@@ -24,9 +26,9 @@ api.sendMessage = (params) => {
   });
 };
 
-export function slack(text) {
+export function slack(text, uri) {
   const options = {
-    uri: config.a.URLS_SLACK,
+    uri: uri || config.a.URLS_SLACK,
     form: JSON.stringify({ text: text || 'Someone sending blank notification sharath...' }),
   };
   request.post(options, (err) => (err ? logger.error('slack', err) : 1));
@@ -60,4 +62,27 @@ export function sms({ from = '919844717202', to, text }) {
   }
   log('sms', params);
   return Promise.resolve({ message: 'Enable MSG in ENV' });
+}
+
+export function notifyOnUserChannel({ userId, text: t }) {
+  let text = t;
+  return Promise.all([
+    db.User.find({
+      attributes: ['id', 'slackUrl', 'mobile', 'slackActive', 'smsActive'],
+      where: { id: userId },
+    }),
+    db.LoginIdentifier.findOrCreate({ where: { userId }, defaults: { uuid: uuidV1() } }),
+  ])
+    .then(([user, [loginIdentifier]]) => {
+      // eslint-disable-next-line max-len
+      const url = text.match(/(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/gm);
+      if (url) {
+        const content = text.split(url);
+        text = `${content[0]}${url}${url.includes('?') ? '&' : '?'}uuid=${loginIdentifier.uuid
+        }${content[1]}`;
+      }
+      console.log(text);
+      if (user.slackActive && user.slackUrl) slack(text, user.slackUrl);
+      if (user.smsActive) sms({ to: user.mobile, text });
+    });
 }

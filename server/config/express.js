@@ -44,6 +44,11 @@ export default function (a) {
   app.use(bodyParser.json());
   app.use(methodOverride());
   app.use(cookieParser());
+  app.use((r, res, next) => {
+    const req = r;
+    if (req.headers.origin) req.origin = req.headers.origin.split('://')[1];
+    next();
+  })
 
   oauthComponent(app, routes);
 

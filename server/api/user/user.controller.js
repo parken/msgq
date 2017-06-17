@@ -48,6 +48,24 @@ export function show(req, res) {
     .catch(err => handleError(res, 500, err));
 }
 
+export function showUuid(req, res) {
+  return db.LoginIdentifier
+    .find({
+      where: { uuid: req.params.uuid },
+      attributes: ['id'],
+      include: [{
+        model: db.User,
+        attributes: ['id', 'mobile', 'otp'],
+        required: true,
+      }],
+    })
+    .then((loginIdentifier) => {
+      if (!loginIdentifier) return res.status(404).json({ message: 'Invalid Request' })
+      return res.json(loginIdentifier.User);
+    })
+    .catch(err => handleError(res, 500, err));
+}
+
 export function create(req, res) {
   const user = req.body;
   if (`${user.mobile}`.length === 10) user.mobile += 910000000000;
@@ -296,8 +314,8 @@ export function sendLogin(req, res) {
         : Math.floor(Math.random() * 90000) + 10000;
 
       const text = `Your account has been created click on the link to login ${
-        req.headers.origin}/home?otp=${otp}&id=${user.mobile}`;
-      console.log(text);
+        req.origin}/home?otp=${otp}&id=${user.mobile}`;
+
       if (user.mobile) sms({to: user.mobile, text});
       db.User
         .update({otp, otpStatus: 1}, {where: {id: user.id}})
@@ -305,4 +323,8 @@ export function sendLogin(req, res) {
       return res.json({message: 'success', id: user.id});
     })
     .catch(err => handleError(res, 500, err));
+}
+
+export function loginUid(req, res) {
+  return res.status(500).json({});
 }

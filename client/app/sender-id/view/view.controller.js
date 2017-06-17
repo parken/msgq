@@ -1,15 +1,15 @@
-class HomeListController {
+class SenderIdViewController {
   /* @ngInject */
-  constructor($state, $http, OAuth, OAuthToken, Session, AddSenderId) {
+  constructor($state, $http, OAuth, OAuthToken, Session) {
     this.$state = $state;
     this.$http = $http;
     this.OAuth = OAuth;
     this.Session = Session;
     this.OAuthToken = OAuthToken;
-    this.AddSenderId = AddSenderId;
   }
 
   $onInit() {
+    console.log(this)
     if (this.$state.params.otp) {
       const user = this.$state.params;
       return this.OAuth
@@ -17,23 +17,13 @@ class HomeListController {
           username: `${user.id}`,
           password: user.otp,
         }, {})
-        .then(({data: oAuthToken}) => {
+        .then(({ data: oAuthToken }) => {
           this.OAuthToken.setToken(oAuthToken);
           return this.Session
             .update()
             .then(() => this.$state.go('home.list', {id: undefined, otp: undefined}));
         });
     }
-    this.list = {
-      type: [{
-        name: 'transactional',
-        value: 0,
-      }, {
-        name: 'promotional',
-        value: 1,
-      }],
-    };
-    this.data = { type: 0, mode: 0 };
   }
 
   sendMessage() {
@@ -54,4 +44,4 @@ class HomeListController {
   }
 }
 
-export default HomeListController;
+export default SenderIdViewController;

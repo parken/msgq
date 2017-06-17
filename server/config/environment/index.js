@@ -20,6 +20,7 @@ const all = {
   // Server IP
   ip: process.env.IP || '0.0.0.0',
 
+  PLAY_URL: process.env.PLAY_URL,
   MSG: process.env.MSG,
   PLIVO_AUTH_ID: process.env.PLIVO_AUTH_ID || 'id',
   PLIVO_AUTH_TOKEN: process.env.PLIVO_AUTH_TOKEN || 'token',

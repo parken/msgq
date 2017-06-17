@@ -27,6 +27,9 @@ export default function (sequelize, DataTypes) {
     supportMobile: DataTypes.STRING,
     supportEmail: DataTypes.STRING,
     loginUrl: DataTypes.STRING,
+    slackUrl: DataTypes.STRING,
+    slackActive: DataTypes.BOOLEAN,
+    smsActive: DataTypes.BOOLEAN,
   }, {
     tableName: 'users',
     timestamps: true,

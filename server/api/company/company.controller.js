@@ -19,7 +19,7 @@ export function show(req, res) {
         'supportEmail',
         'loginUrl',
       ],
-      where: { loginUrl: req.headers.origin.split('://')[1] },
+      where: { loginUrl: req.origin },
     })
     .then((company) => {
       if (!company) return res.status(404).json({ message: 'Invalid Request' });

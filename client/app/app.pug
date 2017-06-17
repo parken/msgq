@@ -50,7 +50,7 @@
               a(ui-sref='help')
                 span.label.bg-info.pull-right new
                 | Help
-            li(ng-if='$ctrl.user.admin === 1')
+            li(ng-if='$ctrl.user.admin')
               a(ui-sref='user.add') Add User
             li
               a(ui-sref='user.profile') Profile
