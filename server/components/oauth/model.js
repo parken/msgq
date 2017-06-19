@@ -41,7 +41,7 @@ const model = {
         include: [
           {
             model: db.User,
-            attributes: ['id', 'name', 'groupId'],
+            attributes: ['id', 'name', 'groupId', 'admin'],
           },
         ],
       })

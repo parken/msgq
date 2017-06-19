@@ -1,46 +1,23 @@
 class SenderIdViewController {
   /* @ngInject */
-  constructor($state, $http, OAuth, OAuthToken, Session) {
+  constructor($state, $http, $stateParams, OAuth, OAuthToken, Session) {
     this.$state = $state;
     this.$http = $http;
+    this.$stateParams = $stateParams;
     this.OAuth = OAuth;
     this.Session = Session;
     this.OAuthToken = OAuthToken;
   }
 
   $onInit() {
-    console.log(this)
-    if (this.$state.params.otp) {
-      const user = this.$state.params;
-      return this.OAuth
-        .getAccessToken({
-          username: `${user.id}`,
-          password: user.otp,
-        }, {})
-        .then(({ data: oAuthToken }) => {
-          this.OAuthToken.setToken(oAuthToken);
-          return this.Session
-            .update()
-            .then(() => this.$state.go('home.list', {id: undefined, otp: undefined}));
-        });
-    }
+    this.user = this.Session.read('userinfo');
+    this.$http.get(`/senderId/${this.$stateParams.id}`)
+      .then(({ data }) => (this.senderId = data));
   }
 
-  sendMessage() {
-    this.message = '';
-    const { type, message } = this.data;
-    const sms = { type, message };
-    if (this.data.mode === 0) {
-      sms.mobile = this.data.mobile;
-    } else {
-      sms.mobile = this.file.content.split('\n')
-        .map(x => x.replace(new RegExp('"', 'g'), '')).filter(x => x)
-        .join(',');
-    }
-    this.$http
-      .post('/bulk/sms', sms)
-      .then(() => (this.message = 'SMS send successfully.'))
-      .catch(() => (this.message = 'Error sending message.'));
+  approve(status) {
+    this.$http.put(`/senderId/${this.$stateParams.id}/${status ? 'approve' : 'block'}`)
+      .then(() => (this.senderId.status = status));
   }
 }
 

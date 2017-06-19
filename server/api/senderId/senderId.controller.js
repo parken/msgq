@@ -4,6 +4,7 @@ import { notifyOnUserChannel } from '../../components/notify';
 import db from '../../conn/sqldb';
 
 function handleError(res, argStatusCode, err) {
+  console.log(err)
   logger.error('user.controller', err);
   const statusCode = argStatusCode || 500;
   res.status(statusCode).send(err);
@@ -71,4 +72,66 @@ export function deleteSenderId(req, res) {
   return db.SenderId.destroy({ where: { id: req.params.id } })
     .then((data) => res.json(data))
     .catch((err) => handleError(res, 500, err));
+}
+
+export function index(req, res) {
+  let promise;
+  if (req.user.admin === 2) {
+    promise = Promise.resolve();
+  } else if (req.user.admin) {
+    promise = db.User.findAll({ attributes: ['id'], where: { loginUrl: req.origin } });
+  } else {
+    promise = Promise.resolve([req.user]);
+  }
+  return promise
+    .then(users => {
+      const where = { id: { $not: 0 } };
+      if (users) where.createdBy = users.map(x => x.id);
+      return db.SenderId.findAll({
+        where,
+        include: [{
+          model: db.User,
+          as: 'CreatedBy',
+          attributes: ['id', 'name', 'admin'],
+        }] })
+        .then(data => res.json(data));
+    })
+    .catch(err => handleError(res, 500, err));
+}
+
+export function show(req, res) {
+  let promise;
+  if (req.user.admin === 2) {
+    promise = Promise.resolve();
+  } else if (req.user.admin) {
+    promise = db.User.findAll({ attributes: ['id'], where: { loginUrl: req.origin } });
+  } else {
+    promise = Promise.resolve([req.user]);
+  }
+  return promise
+    .then(users => {
+      const where = { id: req.params.id };
+      if (users) where.createdBy = users.map(x => x.id);
+      return db.SenderId.find({
+        where,
+        include: [{
+          model: db.User,
+          as: 'CreatedBy',
+          attributes: ['id', 'name', 'admin'],
+        }] })
+        .then(data => res.json(data));
+    })
+    .catch(err => handleError(res, 500, err));
+}
+
+export function approve(req, res) {
+  return db.SenderId.update({ status: true }, { where: { id: req.params.id } })
+    .then(() => res.status(202).end())
+    .catch(err => handleError(res, 500, err));
+}
+
+export function block(req, res) {
+  return db.SenderId.update({ status: false }, { where: { id: req.params.id } })
+    .then(() => res.status(202).end())
+    .catch(err => handleError(res, 500, err));
 }
