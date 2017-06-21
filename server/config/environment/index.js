@@ -15,7 +15,7 @@ const all = {
   browserSyncPort: process.env.BROWSER_SYNC_PORT || 3000,
 
   // Server port
-  port: process.env.PORT || 5566,
+  port: process.env.PORT || 9000,
 
   // Server IP
   ip: process.env.IP || '0.0.0.0',

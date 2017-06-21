@@ -212,7 +212,7 @@ export function otpLogin(req, res) {
     }).then(([user, newUser]) => {
       if (!user) {
         return res.status(400).json({
-          message: 'User Details not matching with our records. Please contact hello@ayyayo.com'
+          message: 'User Details not matching with our records. Please contact support'
         });
       }
 
@@ -242,7 +242,7 @@ export function otpSend(req, res) {
   }).then((user) => {
     if (!user) {
       return res.status(400).json({
-        message: 'User Details not matching with our records. Please contact hello@ayyayo.com'
+        message: 'User Details not matching with our records. Please contact support'
       });
     }
 

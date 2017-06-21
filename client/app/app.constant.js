@@ -2,11 +2,9 @@ import angular from 'angular';
 import moment from 'moment';
 
 // eslint-disable-next-line angular/window-service
-const { host, protocol } = window.location;
+const { host, protocol, origin: API_SERVER } = window.location;
 const PREFIX = `${protocol}//${host.substr(0, host.indexOf('-') + 1)}`;
 const TLD = `${host.substr(host.lastIndexOf('.') + 1)}`;
-
-const API_SERVER = `${PREFIX}api.ayyayo.${TLD}`;
 
 const constants = angular
   .module('msgQueApp.constants', [])
