@@ -1,6 +1,10 @@
+import fs from 'fs-promise';
 import winston from 'winston';
 import config from '../../config/environment';
 import DailyRotateFile from 'winston-daily-rotate-file';
+
+const dir = path.join(config.root,'logs');
+if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 
 const logger = new winston.Logger({
   transports: [
