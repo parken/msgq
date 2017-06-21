@@ -26,7 +26,6 @@ fi
 
 curl -X POST --data-urlencode "payload={\"text\": \"msgque-dev: @$USER Build Started\"}" "$SLACK_URL"
 gulp build;
-gulp bump:patch
 
 cd dist
 
@@ -34,11 +33,7 @@ npm install --production
 cp ../.env .env
 cp ../.sequelizerc .sequelizerc
 kill -HUP $(/usr/sbin/lsof -i:5566 -t);
-curl -X POST --data-urlencode "payload={\"text\": \"msgque-dev: $COMMIT_MSG - @$USER please test in https://staging-accounts.quezx.com  \"}" "$SLACK_URL"
-exit 0
-
 
 sequelize db:migrate
-sequelize db:seed:all
+curl -X POST --data-urlencode "payload={\"text\": \"msgque-dev: $COMMIT_MSG - @$USER please test in https://staging-accounts.quezx.com  \"}" "$SLACK_URL"
 
-curl -X POST --data-urlencode "payload={\"text\": \"msgque-dev: $COMMIT_MSG - @$USER please test in http://staging-play.msgque.com  \"}"  "$SLACK_URL"
