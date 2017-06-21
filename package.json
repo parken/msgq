@@ -147,7 +147,7 @@
   "scripts": {
     "test": "gulp test",
     "update-webdriver": "node node_modules/protractor/bin/webdriver-manager update",
-    "start": "gulp copy:fonts:dist && sequelize db:migrate && sequelize db:seed:all && node server",
+    "start": "sequelize db:migrate && sequelize db:seed:all",
     "dev": "chmod +x ./scripts/dev.sh && ./scripts/dev.sh",
     "validate": "npm ls",
     "lint": "gulp lint:scripts:server --fail"
