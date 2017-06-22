@@ -3,12 +3,12 @@ import Sequelize from 'sequelize';
 import config from '../../config/environment';
 import oauthComponent from '../../components/oauth/sequelize';
 
-const { MYSQL_DB, MYSQL_USER, MYSQL_PASS, MYSQL_HOST, MYSQL_TZ } = config;
+const { db: { type, host, port, user, pass, name, tz } } = config;
 
 const db = {
   sequelize: new Sequelize(
-    MYSQL_DB, MYSQL_USER,
-    MYSQL_PASS, { host: MYSQL_HOST, dialect: 'mysql', timezone: MYSQL_TZ }
+    name, user,
+    pass, { host, dialect: type, timezone: tz }
   ),
 };
 

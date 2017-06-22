@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import { exec } from 'child_process';
 
 import { setupCompleted, envFile, root } from '../../config/env';
+import { name, description } from '../../../package.json';
 
 const log = debug('components/setup');
 const IST = '+05:30';
@@ -75,13 +76,11 @@ function setup() {
       MYSQL_PASS,
       MYSQL_HOST,
       MYSQL_TZ,
-      SERVER_IDENTIFIER = 'api',
-      SERVER_NAME = 'MSGQUE',
-      SERVER_USER = 'yog27ray',
-      SERVER_USER_PASSWORD = 'admin@2020',
-      SERVER_GROUP = 'yog27ray',
+      WEBSERVERUSER = 'root',
+      WEBSERVERGROUP = 'wheel',
+      WEBSERVERPASS = 'password',
     } = req.body;
-    const SYSTEMD_FILE_NAME = `${req.body.SYSTEMD_FILE_NAME || 'api'}.service`;
+
     const conn = new Sequelize(
       MYSQL_DB, MYSQL_USER,
       MYSQL_PASS, { host: MYSQL_HOST, dialect: 'mysql', timezone: MYSQL_TZ }
@@ -91,9 +90,9 @@ function setup() {
       MYSQL_TZ: IST,
     };
 
-    const systemdFileData = `
+    const systemdFile = `
 [Unit]
-Description=${SERVER_NAME}
+Description=${description}
 After=syslog.target
 
 [Service]
@@ -103,9 +102,9 @@ ExecReload=/usr/bin/kill -HUP $MAINPID
 Restart=always
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=${SERVER_IDENTIFIER}
-User=${SERVER_USER}
-Group=${SERVER_GROUP}
+SyslogIdentifier=${name}
+User=${WEBSERVERUSER}
+Group=${WEBSERVERGROUP}
 EnvironmentFile=${root}/.env
 
 [Install]
@@ -120,12 +119,12 @@ WantedBy=multi-user.target`;
       .authenticate()
       .then(() => new Promise(resolve => {
         fs.writeFileSync(envFile, env);
-        fs.writeFileSync(`${root}/${SYSTEMD_FILE_NAME}`, systemdFileData);
+        fs.writeFileSync(`${root}/${SYSTEMD_FILE_NAME}`, systemdFile);
         exec(`chmod u+x ${root}/setup.sh`);
-        exec(`echo ${SERVER_USER_PASSWORD} | sudo -S ${root}/setup.sh ${
-          SYSTEMD_FILE_NAME} ${SERVER_IDENTIFIER}`, () => resolve());
+        exec(`echo ${WEBSERVERPASS} | sudo -S ${root}/setup.sh ${name}.service ${name}`, () => resolve());
       }))
       .then(() => {
+        // Todo: on redirect follow server url and port. not current url
         res.end(`
         <html>
           <head><meta http-equiv="refresh" content="10;url=/"></head>
@@ -137,7 +136,7 @@ WantedBy=multi-user.target`;
             If you not using Systemd or PM2. Please start manually</p>
             </p>
 
-            <p> <a href="https://github.com/msgque/msgque" target="_blank">Learn more</a></p>
+            <p> <a href="https://github.com/parken/msgque" target="_blank">Learn more</a></p>
           </body>
         </html>`);
         return process.exit(0);

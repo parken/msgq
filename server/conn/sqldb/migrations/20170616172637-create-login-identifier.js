@@ -1,4 +1,5 @@
 const { engine, timestamps } = require('../helper.js');
+const { db } = require('../../../config/environment');
 
 module.exports = {
   up(queryInterface, DataTypes) {
@@ -13,7 +14,7 @@ module.exports = {
       userId: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'users',
+          model: `${db.pref}_tblUser`,
           key: 'id',
         },
         allowNull: false,

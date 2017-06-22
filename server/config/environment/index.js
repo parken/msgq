@@ -1,6 +1,11 @@
-import path from 'path';
-import _ from 'lodash';
-import dotenv from 'dotenv';
+/***
+ * https://github.com/manjeshpv/playSMS/blob/master/install-playsms.sh
+ * https://github.com/antonraharja/playSMS/blob/fb2c20a5fed84cd1d189b5ac595f2ef87b365984/web/config-dist.php
+ */
+
+const path = require('path');
+const _ = require('lodash');
+const dotenv = require('dotenv');
 const root = path.normalize(`${__dirname}/../../..`);
 const env = dotenv.config({ path: path.join(root, '.env') });
 // All configurations will extend these options
@@ -24,11 +29,19 @@ const all = {
   MSG: process.env.MSG,
   PLIVO_AUTH_ID: process.env.PLIVO_AUTH_ID || 'id',
   PLIVO_AUTH_TOKEN: process.env.PLIVO_AUTH_TOKEN || 'token',
-  MYSQL_DB: process.env.MYSQL_DB,
-  MYSQL_USER: process.env.MYSQL_USER,
-  MYSQL_PASS: process.env.MYSQL_PASS,
-  MYSQL_HOST: process.env.MYSQL_HOST,
-  MYSQL_TZ: '+05:30',
+
+  db: {
+    type: process.env.DBTYPE || 'mysql',
+    host: process.env.DBHOST || 'localhost',
+    port: process.env.DBPORT || 3306,
+    user: process.env.DBUSER || 'root',
+    pass: process.env.DBPASS || '',
+    name: process.env.DBNAME || 'playsms',
+    tz: process.env.TZ || process.env.DBTZ || '+05:30',
+    pref: process.env.DBPREF || 'playsms',
+  },
+
+  HTTP_HOST: process.env.HTTP_HOST,
 };
 
 // Export the config object based on the NODE_ENV

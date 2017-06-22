@@ -1,5 +1,6 @@
 {
   "name": "msgque",
+  "description": "MSGQue - Seamless UI & API for PlaySMS",
   "version": "0.0.0",
   "main": "server/index.js",
   "dependencies": {
