@@ -20,7 +20,7 @@ db.AuthCode = db.sequelize.import('../../components/oauth/sequelize/authCode.mod
 db.Session = db.sequelize.import('../../components/oauth/sequelize/session.model');
 
 [
-  'Group', 'SenderId', 'SmsType', 'Upstream', 'LoginIdentifier',
+  'Group', 'SenderId', 'SmsType', 'Upstream', 'LoginIdentifier', 'Contact',
 ].forEach(model =>
   (db[model] = db.sequelize.import(`../../api/${_.camelCase(model)}/${_.camelCase(model)}.model`)));
 

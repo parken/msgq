@@ -10,6 +10,7 @@ import user from './api/user';
 import bulk from './api/bulk';
 import senderId from './api/senderId';
 import company from './api/company';
+import contact from './api/contact';
 
 export default function (app) {
   // Insert routes below
@@ -17,6 +18,7 @@ export default function (app) {
   app.use('/api/bulk', bulk);
   app.use('/api/senderId', senderId);
   app.use('/api/company', company);
+  app.use('/api/contacts', contact);
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
    .get(errors[404]);
