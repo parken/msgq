@@ -1,4 +1,5 @@
 import fs from 'fs-promise';
+import path from 'path';
 import winston from 'winston';
 import config from '../../config/environment';
 import DailyRotateFile from 'winston-daily-rotate-file';
