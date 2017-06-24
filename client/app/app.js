@@ -38,8 +38,8 @@ angular
     ngCookies, ngAnimate, ngSanitize, uiRouter,
     'angular-oauth2',
     uiBootstrap,
-    AsideMenu, Navbar, Footer,
-    constants, Auth, UpdateTitle, Home, FourOFour, OTPModule, User, SenderId, Navigation,
+    AsideMenu, Navbar, Footer, constants, Auth, UpdateTitle, FileReader,
+    Home, FourOFour, OTPModule, User, SenderId, Navigation,
   ])
   .component('msgqueApp', AppComponent)
   .config(routeConfig)
