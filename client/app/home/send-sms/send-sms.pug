@@ -1,0 +1,56 @@
+.row
+  .col-xs-12
+    .wrapper-xs
+      a.btn.w.padder.b-a(
+        ng-repeat='tab in $ctrl.tabs track by $index'
+        ng-click='$ctrl.tabIndex = $index'
+        ng-bind='tab'
+      )
+
+    .col-xs-7.m-t-xs.m-b-xs
+      a.text-u-l.pull-right Load Previous Message
+  .col-xs-12
+    .col-xs-7.b-r
+      form.validate-form(name='sendSmsForm' ng-submit='$ctrl.sendSms()')
+        .form-group(ng-if='$ctrl.tabIndex === 0')
+          select.form-control(
+            ng-model='$ctrl.data.senderId'
+            required
+          )
+        .form-group(ng-if='$ctrl.tabIndex === 1')
+          input.form-control(
+            type='text'
+            maxlength='6'
+            ng-model='$ctrl.data.senderId'
+            placeholder='Sender ID'
+            ng-pattern='/[A-Z0-9]{6}/i'
+            ng-focus='$ctrl.showGroups()'
+            required
+          )
+        .form-group
+          textarea.form-control(
+            rows='5'
+            ng-model='$ctrl.numbers'
+            placeholder='Enter Comma separated Mobile Numbers here 9876543210, 8898765432, .., ...'
+            ng-blur='$ctrl.validateNumbers()'
+            ng-focus='$ctrl.showGroups()'
+            required
+          )
+        .text-danger(ng-if='$ctrl.error.numberError' ng-bind='this.error.numberError')
+        .form-group
+          textarea.form-control(
+            rows='5'
+            ng-model='$ctrl.data.message'
+            placeholder='Enter your message here...'
+            required
+          )
+        .form-group
+          input.form-control(type='text' ng-model='$ctrl.data.campaignName' placeholder='Campaign Name')
+        div
+          button.col-xs-4.btn.btn-info(type='submit') Send SMS Now
+          span.col-xs-1.padder-xs Or
+          a.col-xs-6.padder-xs Schedule SMS
+          a.col-xs-1.pull-right.padder-xs
+            i.fa.fa-cog
+    .col-xs-7
+
