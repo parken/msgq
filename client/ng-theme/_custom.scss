@@ -41,7 +41,7 @@ a.text-info {
 .hv-border-info{
   &:hover {
     outline: 1px solid $brand-info;
-    box-shadow: 2px 0px 4px 0px #bbb
+    box-shadow: 2px 0 4px 0 #bbb
   }
 }
 .cal-slide-content {
@@ -68,6 +68,14 @@ a.text-info {
 }
 .no-padder-bottom {
   padding-bottom: 0 !important;
+}
+
+.padder-xs {
+  padding: 5px;
+}
+
+.padder {
+  padding: 15px;
 }
 
 .th-scale-y {
