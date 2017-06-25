@@ -11,6 +11,7 @@ class SendSmsController {
     this.user = this.Session.read('userinfo');
     this.data = {
       numbersList: [],
+
       message: '',
     }; //body of Api
 

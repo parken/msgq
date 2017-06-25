@@ -14,9 +14,9 @@
       form.validate-form(name='sendSmsForm' ng-submit='$ctrl.sendSms()')
         .form-group(ng-if='$ctrl.routeIndex === 2')
           select.form-control(
-            ng-options='sender.name as sender.name for sender in $ctrl.senderIds track by sender.name'
-            ng-model='$ctrl.data.senderId'
-            required
+          ng-options='sender.name as sender.name for sender in $ctrl.senderIds track by sender.name'
+          ng-model='$ctrl.data.senderId'
+          required
           )
         .form-group(ng-if='$ctrl.routeIndex === 1')
           .input-group
@@ -38,9 +38,7 @@
             placeholder='Enter mobile numbers here 1234567890, 0123456789, 9012345678 8901234567 7890123456'
             ng-blur='$ctrl.validateNumbers()'
             ng-focus='$ctrl.loadGroups()'
-            required
           )
-        .text-danger(ng-if='$ctrl.error.numberError' ng-bind='this.error.numberError')
         .form-group
           div
             span.pull-right(ng-bind='($ctrl.data.message.length || 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.message.length || 0)/160)')
@@ -69,5 +67,4 @@
         ul.list-group
           a.list-group-item(ng-repeat='item in $ctrl.list' ng-bind='item.name' ng-click='$ctrl.bindData(item.name, $ctrl.field)')
       .col-xs-4.b-a
-        span Rest details here
-
+        span Rest details here to be
