@@ -2,55 +2,69 @@
   .col-xs-12
     .wrapper-xs
       a.btn.w.padder.b-a(
-        ng-repeat='tab in $ctrl.tabs track by $index'
-        ng-click='$ctrl.tabIndex = $index'
-        ng-bind='tab'
+        ng-repeat='route in $ctrl.routes track by $index'
+        ng-click='$ctrl.setRoute(route.id)'
+        ng-bind='route.name'
       )
 
     .col-xs-7.m-t-xs.m-b-xs
       a.text-u-l.pull-right Load Previous Message
   .col-xs-12
-    .col-xs-7.b-r
+    .col-xs-6.b-r
       form.validate-form(name='sendSmsForm' ng-submit='$ctrl.sendSms()')
-        .form-group(ng-if='$ctrl.tabIndex === 0')
+        .form-group(ng-if='$ctrl.routeIndex === 2')
           select.form-control(
-            ng-model='$ctrl.data.senderId'
-            required
+          ng-options='sender.name as sender.name for sender in $ctrl.senderIds track by sender.name'
+          ng-model='$ctrl.data.senderId'
+          required
           )
-        .form-group(ng-if='$ctrl.tabIndex === 1')
-          input.form-control(
-            type='text'
-            maxlength='6'
-            ng-model='$ctrl.data.senderId'
-            placeholder='Sender ID'
-            ng-pattern='/[A-Z0-9]{6}/i'
-            ng-focus='$ctrl.showGroups()'
-            required
-          )
+        .form-group(ng-if='$ctrl.routeIndex === 1')
+          .input-group
+            input.form-control(
+              type='text'
+              maxlength='6'
+              ng-model='$ctrl.data.senderId'
+              placeholder='Sender ID'
+              ng-pattern='/[A-Z0-9]{6}/i'
+              ng-focus='$ctrl.loadSenderIds()'
+              required
+            )
+            .input-group-addon(ng-bind='$ctrl.data.senderId.lenght + "/6-6"')
         .form-group
+          label(ng-if='')
           textarea.form-control(
             rows='5'
             ng-model='$ctrl.numbers'
-            placeholder='Enter Comma separated Mobile Numbers here 9876543210, 8898765432, .., ...'
+            placeholder='Enter mobile numbers here 1234567890, 0123456789, 9012345678 8901234567 7890123456'
             ng-blur='$ctrl.validateNumbers()'
-            ng-focus='$ctrl.showGroups()'
-            required
+            ng-focus='$ctrl.loadGroups()'
           )
-        .text-danger(ng-if='$ctrl.error.numberError' ng-bind='this.error.numberError')
         .form-group
+          div
+            span.pull-right(ng-bind='($ctrl.data.message.length || 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.message.length || 0)/160)')
           textarea.form-control(
             rows='5'
             ng-model='$ctrl.data.message'
-            placeholder='Enter your message here...'
+            placeholder='You are delivering crucial information. Keep it to-the-point.'
+            ng-focus='$ctrl.loadTemplates()'
             required
           )
         .form-group
-          input.form-control(type='text' ng-model='$ctrl.data.campaignName' placeholder='Campaign Name')
+          input.form-control(
+            type='text'
+            ng-model='$ctrl.data.campaignName'
+            placeholder='Campaign Name'
+            ng-focus='$ctrl.loadCampaigns()'
+          )
         div
           button.col-xs-4.btn.btn-info(type='submit') Send SMS Now
           span.col-xs-1.padder-xs Or
           a.col-xs-6.padder-xs Schedule SMS
           a.col-xs-1.pull-right.padder-xs
             i.fa.fa-cog
-    .col-xs-7
-
+    .col-xs-6
+      .col-xs-8
+        ul.list-group
+          a.list-group-item(ng-repeat='item in $ctrl.list' ng-bind='item.name' ng-click='$ctrl.bindData(item.name, $ctrl.field)')
+      .col-xs-4.b-a
+        span Rest details here to be
