@@ -4,8 +4,7 @@
       a.btn.w.padder.b-a(
         ng-repeat='route in $ctrl.routes track by $index'
         ng-click='$ctrl.setRoute(route.id)'
-        ng-bind='route.name'
-      )
+      ) {{route.name}} ({{route.balance}})
 
     .col-xs-7.m-t-xs.m-b-xs
       a.text-u-l.pull-right Load Previous Message
@@ -65,6 +64,6 @@
     .col-xs-6
       .col-xs-8
         ul.list-group
-          a.list-group-item(ng-repeat='item in $ctrl.list' ng-bind='item.name' ng-click='$ctrl.bindData(item.name, $ctrl.field)')
+          a.list-group-item(ng-repeat='item in $ctrl.list' ng-click='$ctrl.bindData(item.name, $ctrl.field)') {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
       .col-xs-4.b-a
         span Rest details here to be

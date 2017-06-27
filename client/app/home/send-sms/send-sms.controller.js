@@ -14,19 +14,18 @@ class SendSmsController {
 
       message: '',
     }; //body of Api
-
     this.error = {};
     this.routeIndex = 1;
     this.numberPattern = /[987]{1}\d{9}/;
     this.routes = [];
 
-    //load initial routes on top
+    // load initial routes on top
     this
       .$http
       .get('/routes')
-      .then(({ data: { sender_id = '', routes } }) => {
-        this.data.senderId = sender_id;
-        this.routes = routes
+      .then(({ data: { senderId = '', routes } }) => {
+        this.data.senderId = senderId;
+        this.routes = routes;
       });
   }
 
@@ -57,7 +56,7 @@ class SendSmsController {
     this.field = 'senderId';
     this
       .$http
-      .get(`/routes/${this.routeIndex}/senderIds`)
+      .get('/senderId', { params: { fl: 'id,name' } })
       .then(({ data: senderIds }) => {
         this.list = this.senderIds = senderIds;
         this.data.senderId = this.senderIds[0].name;
