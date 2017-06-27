@@ -11,8 +11,8 @@ export default function (sequelize, DataTypes) {
     company: DataTypes.STRING,
     message: DataTypes.STRING,
     status: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: 0,
+      type: DataTypes.INTEGER,
+      defaultValue: 1,
     },
   }, {
     tableName: 'senderId',

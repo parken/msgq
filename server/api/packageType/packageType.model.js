@@ -1,5 +1,5 @@
 export default function (sequelize, DataTypes) {
-  const UserPackageType = sequelize.define('UserPackageType', {
+  const PackageType = sequelize.define('PackageType', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -8,10 +8,15 @@ export default function (sequelize, DataTypes) {
     },
     name: DataTypes.STRING,
   }, {
-    tableName: 'user_package_type',
+    tableName: 'package_type',
     timestamps: true,
     paranoid: true,
+    classMethods: {
+      associate(db) {
+        PackageType.hasMany(db.UserPackage);
+      },
+    },
   });
 
-  return UserPackageType;
+  return PackageType;
 }

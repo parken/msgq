@@ -1,9 +1,13 @@
 import db from '../../conn/sqldb';
 
 const PackageManager = {
-  activePackages(userId, userPackageTypeId) {
+  activePackages(userId, packageTypeId) {
     return db.UserPackage
-      .findAll({ where: { userPackageTypeId, userId }, order: [['createdAt', 'DESC']] });
+      .findAll({
+        attributes: ['allocated', 'id', 'packageTypeId'],
+        where: { packageTypeId, userId },
+        order: [['createdAt', 'DESC']],
+      });
   },
   packageUsage(userPackageId, userId) {
     return db.Transaction.findAll({
@@ -22,8 +26,8 @@ const PackageManager = {
       return result;
     });
   },
-  availableLimit(userId, userPackageTypeId) {
-    return PackageManager.activePackages(userId, userPackageTypeId)
+  availableLimit(userId, packageTypeId) {
+    return PackageManager.activePackages(userId, packageTypeId)
       .then(activePackages => {
         if (!activePackages.length) return Promise.reject({ message: 'No Package Available.' });
         return PackageManager.packageUsage(activePackages.map(x => x.id), userId)

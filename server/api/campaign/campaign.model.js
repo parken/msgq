@@ -1,6 +1,5 @@
-
 export default function (sequelize, DataTypes) {
-  const Group = sequelize.define('Group', {
+  const Campaign = sequelize.define('Campaign', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -9,19 +8,18 @@ export default function (sequelize, DataTypes) {
     },
     name: DataTypes.STRING,
   }, {
-    tableName: 'groups',
+    tableName: 'campaigns',
     timestamps: true,
     paranoid: true,
     classMethods: {
       associate(db) {
-        Group.belongsTo(db.User, {
+        Campaign.belongsTo(db.User, {
           foreignKey: 'userId',
           allowNull: false,
         });
-        Group.hasMany(db.GroupContact);
       },
     },
   });
 
-  return Group;
+  return Campaign;
 }

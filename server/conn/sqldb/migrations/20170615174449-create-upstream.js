@@ -1,4 +1,4 @@
-const { engine, timestamps } = require('../helper.js');
+const { engine, timestamps, keys } = require('../helper.js');
 
 module.exports = {
   up(queryInterface, DataTypes) {
@@ -14,38 +14,13 @@ module.exports = {
       link: DataTypes.STRING,
       comment: DataTypes.STRING,
       active: DataTypes.BOOLEAN,
-      createdBy: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
-      },
-      updatedBy: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
-      },
-      smsTypeId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'smsTypes',
-          key: 'id',
-        },
-        allowNull: false,
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
-      },
+      createdBy: keys('users'),
+      updatedBy: keys('users'),
+      smsTypeId: keys('smsTypes'),
     }, timestamps(3)), engine);
   },
 
-  down(queryInterface, Sequelize) {
+  down(queryInterface) {
     return queryInterface.dropTable('upstreams');
   },
 };

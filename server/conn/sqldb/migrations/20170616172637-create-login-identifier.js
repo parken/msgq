@@ -1,4 +1,4 @@
-const { engine, timestamps } = require('../helper.js');
+const { engine, timestamps, keys } = require('../helper.js');
 
 module.exports = {
   up(queryInterface, DataTypes) {
@@ -10,20 +10,11 @@ module.exports = {
         autoIncrement: true,
       },
       uuid: DataTypes.STRING,
-      userId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-        allowNull: false,
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
-      },
+      userId: keys('users'),
     }, timestamps(3)), engine);
   },
 
-  down(queryInterface, Sequelize) {
+  down(queryInterface) {
     return queryInterface.dropTable('loginIdentifier');
   },
 };

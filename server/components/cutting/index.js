@@ -2,12 +2,12 @@ import db from '../../conn/sqldb';
 import PackageManager from '../packageManager';
 
 const Cutting = {
-  selectNumbers(list, userId, userPackageTypeId) {
-    return db.UserPackageType.find({ where: { id: userPackageTypeId } })
+  selectNumbers(list, userId, packageTypeId) {
+    return db.PackageType.find({ where: { id: packageTypeId } })
       .then(userPackageType => {
         if (!userPackageType) return Promise.reject({ message: 'Invalid Package Type' });
         return Promise.all([
-          PackageManager.availableLimit(userId, userPackageTypeId),
+          PackageManager.availableLimit(userId, packageTypeId),
           db.User.find({
             attributes: ['id',
               [`${userPackageType.name}StartFrom`, 'startFrom'],

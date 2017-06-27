@@ -6,12 +6,12 @@ module.exports = {
     engine: 'InnoDB',
     charset: 'utf8mb4',
   },
-  keys(model){
+  keys(model) {
     return {
       type: DataTypes.INTEGER,
       references: {
         model,
-        key: 'id'
+        key: 'id',
       },
       onUpdate: 'cascade',
       onDelete: 'cascade',

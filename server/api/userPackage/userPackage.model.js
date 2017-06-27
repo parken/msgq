@@ -19,8 +19,8 @@ export default function (sequelize, DataTypes) {
           foreignKey: 'userId',
           allowNull: false,
         });
-        UserPackage.belongsTo(db.UserPackageType, {
-          foreignKey: 'userPackageTypeId',
+        UserPackage.belongsTo(db.PackageType, {
+          foreignKey: 'packageTypeId',
           allowNull: false,
         });
       },
