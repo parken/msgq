@@ -1,4 +1,4 @@
-const { engine, timestamps } = require('../helper.js');
+const { engine, timestamps, keys } = require('../helper.js');
 
 module.exports = {
   up(queryInterface, DataTypes) {
@@ -12,24 +12,8 @@ module.exports = {
       allocated: DataTypes.INTEGER,
       salesPrice: DataTypes.STRING,
       comment: DataTypes.STRING,
-      userId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
-      },
-      userPackageTypeId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'user_package_type',
-          key: 'id',
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
-      },
+      userId: keys('users'),
+      packageTypeId: keys('user_package_type'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {

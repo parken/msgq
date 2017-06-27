@@ -1,6 +1,5 @@
-
 export default function (sequelize, DataTypes) {
-  const Group = sequelize.define('Group', {
+  const Template = sequelize.define('Template', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -8,20 +7,20 @@ export default function (sequelize, DataTypes) {
       autoIncrement: true,
     },
     name: DataTypes.STRING,
+    content: DataTypes.STRING,
   }, {
-    tableName: 'groups',
+    tableName: 'templates',
     timestamps: true,
     paranoid: true,
     classMethods: {
       associate(db) {
-        Group.belongsTo(db.User, {
+        Template.belongsTo(db.User, {
           foreignKey: 'userId',
           allowNull: false,
         });
-        Group.hasMany(db.GroupContact);
       },
     },
   });
 
-  return Group;
+  return Template;
 }

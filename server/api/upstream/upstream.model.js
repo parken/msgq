@@ -11,6 +11,7 @@ export default function (sequelize, DataTypes) {
     link: DataTypes.STRING,
     comment: DataTypes.STRING,
     active: DataTypes.BOOLEAN,
+    support: DataTypes.STRING,
   }, {
     tableName: 'upstreams',
     timestamps: true,

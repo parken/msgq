@@ -1,4 +1,4 @@
-const { engine, timestamps } = require('../helper.js');
+const { engine, timestamps, keys } = require('../helper.js');
 
 module.exports = {
   up(queryInterface, DataTypes) {
@@ -9,33 +9,9 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      userId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
-      },
-      messageId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'messages',
-          key: 'id',
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
-      },
-      userPackageId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'user_packages',
-          key: 'id',
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade',
-      },
+      userId: keys('users'),
+      messageId: keys('messages'),
+      userPackageId: keys('user_packages'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {

@@ -88,6 +88,7 @@ export function index(req, res) {
       const where = { id: { $not: 0 } };
       if (users) where.createdBy = users.map(x => x.id);
       return db.SenderId.findAll({
+        attributes: req.query.fl ? req.query.fl.split(',') : ['id', 'name'],
         where,
         include: [{
           model: db.User,

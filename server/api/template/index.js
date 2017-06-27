@@ -1,8 +1,8 @@
 const express = require('express');
-const controller = require('./bulk.controller');
+const controller = require('./template.controller');
 import oauth from '../../components/oauth/auth';
 
 const router = express.Router();
 
-router.post('/sms', oauth(), controller.bulkSms);
+router.get('/', oauth(), controller.index);
 module.exports = router;

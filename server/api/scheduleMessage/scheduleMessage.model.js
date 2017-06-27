@@ -1,5 +1,5 @@
 export default function (sequelize, DataTypes) {
-  const Message = sequelize.define('Message', {
+  const ScheduleMessage = sequelize.define('ScheduleMessage', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -8,33 +8,37 @@ export default function (sequelize, DataTypes) {
     },
     number: DataTypes.STRING,
     text: DataTypes.STRING,
+    comment: DataTypes.STRING,
+    statusId: DataTypes.INTEGER,
+    scheduledOn: DataTypes.DATE,
+    messageTypeId: DataTypes.INTEGER,
   }, {
-    tableName: 'messages',
+    tableName: 'schedule_messages',
     timestamps: true,
     paranoid: true,
     classMethods: {
       associate(db) {
-        Message.belongsTo(db.User, {
+        ScheduleMessage.belongsTo(db.User, {
           foreignKey: 'userId',
           allowNull: false,
         });
-        Message.belongsTo(db.MessageStatus, {
+        ScheduleMessage.belongsTo(db.MessageStatus, {
           foreignKey: 'messageStatusId',
           defaultValue: 0,
           allowNull: false,
         });
-        Message.belongsTo(db.SenderId, {
+        ScheduleMessage.belongsTo(db.SenderId, {
           foreignKey: 'senderId',
         });
-        Message.belongsTo(db.PackageType, {
+        ScheduleMessage.belongsTo(db.PackageType, {
           foreignKey: 'packageTypeId',
         });
-        Message.belongsTo(db.Campaign, {
+        ScheduleMessage.belongsTo(db.Campaign, {
           foreignKey: 'campaignId',
         });
       },
     },
   });
 
-  return Message;
+  return ScheduleMessage;
 }

@@ -1,27 +1,29 @@
 
 export default function (sequelize, DataTypes) {
-  const Group = sequelize.define('Group', {
+  const GroupContact = sequelize.define('GroupContact', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
-    name: DataTypes.STRING,
   }, {
-    tableName: 'groups',
+    tableName: 'group_contacts',
     timestamps: true,
     paranoid: true,
     classMethods: {
       associate(db) {
-        Group.belongsTo(db.User, {
-          foreignKey: 'userId',
+        GroupContact.belongsTo(db.Contact, {
+          foreignKey: 'contactId',
           allowNull: false,
         });
-        Group.hasMany(db.GroupContact);
+        GroupContact.belongsTo(db.Group, {
+          foreignKey: 'groupId',
+          allowNull: false,
+        });
       },
     },
   });
 
-  return Group;
+  return GroupContact;
 }

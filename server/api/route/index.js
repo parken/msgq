@@ -1,6 +1,10 @@
 const express = require('express');
 
 const router = express.Router();
+const controller = require('./routes.controller');
+import oauth from '../../components/oauth/auth';
+
+router.get('/', oauth(), controller.index);
 
 // senderid 6/6 message
 
@@ -68,7 +72,7 @@ router.post('/users/signStatus', (req, res, next) => {
  * Signature will affect your message credits by adding extra characters and space between SMS and signature.
  */
 
-router.post('/sms', (req, res, next) => {
+router.post('/sms1', (req, res, next) => {
   const SOURCES = {
     WEB: 1,
     MOBILE: 2,
@@ -102,11 +106,6 @@ router.post('/sms', (req, res, next) => {
 
   res.status(400).json({message: 'Your Sender Id blacklisted. Please use a different sender id'})
   return res.json({})
-});
-
-router.get('/groups', (req, res, next) => {
-  return res.json([{ id: 1, name: 'tech team' },
-    { id: 2, name: 'salaes team' },])
 });
 
 router.get('/groups/exportall', (req, res, next) => {
