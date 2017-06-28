@@ -19,6 +19,7 @@ module.exports = {
       packageTypeId: keys('package_type'),
       userId: keys('users'),
       campaignId: keys('campaigns'),
+      messageTextId: keys('message_texts'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {

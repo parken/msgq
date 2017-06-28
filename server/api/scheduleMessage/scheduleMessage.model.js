@@ -36,6 +36,9 @@ export default function (sequelize, DataTypes) {
         ScheduleMessage.belongsTo(db.Campaign, {
           foreignKey: 'campaignId',
         });
+        ScheduleMessage.belongsTo(db.MessageText, {
+          foreignKey: 'messageTextId',
+        });
       },
     },
   });

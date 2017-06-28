@@ -7,7 +7,6 @@ export default function (sequelize, DataTypes) {
       autoIncrement: true,
     },
     number: DataTypes.STRING,
-    text: DataTypes.STRING,
   }, {
     tableName: 'messages',
     timestamps: true,
@@ -31,6 +30,9 @@ export default function (sequelize, DataTypes) {
         });
         Message.belongsTo(db.Campaign, {
           foreignKey: 'campaignId',
+        });
+        Message.belongsTo(db.MessageText, {
+          foreignKey: 'messageTextId',
         });
       },
     },
