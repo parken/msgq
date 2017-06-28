@@ -12,6 +12,7 @@ module.exports = {
       name: DataTypes.STRING,
       provider: DataTypes.STRING,
       link: DataTypes.STRING,
+      support: DataTypes.STRING,
       comment: DataTypes.STRING,
       active: DataTypes.BOOLEAN,
       createdBy: keys('users'),

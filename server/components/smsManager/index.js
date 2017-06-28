@@ -1,31 +1,51 @@
 import db from '../../conn/sqldb';
 
 const SmsManager = {
-  addToSmsQueue(messages) {
-    console.log('Add messages to queue', messages.map(x => x.id));
+  queue: [],
+  processing: false,
+  processItem() {
+    const [messageId, userId, packageTypeId] = (SmsManager.queue.shift() || '').split(':');
+    if (messageId) {
+      SmsManager.processing = true;
+      console.log(messageId, userId, packageTypeId);
+      SmsManager.processing = false;
+      return SmsManager.processItem();
+    }
+    return Promise.resolve();
   },
-  createBulkMessages({ list, text, userId, senderId, packageTypeId, campaignId }) {
+  startQueue() {
+    if (!SmsManager.processing) SmsManager.processItem();
+    return Promise.resolve();
+  },
+  addToSmsQueue(messages) {
+    if (!SmsManager.queue) SmsManager.queue = [];
+    messages.forEach(x => (SmsManager.queue.includes(`${x.id}:${x.userId}:${x.packageTypeId}`)
+      ? ''
+      : SmsManager.queue.push(`${x.id}:${x.userId}:${x.packageTypeId}`)));
+    SmsManager.startQueue();
+  },
+  createBulkMessages({ list, messageTextId, userId, senderId, packageTypeId, campaignId }) {
     return db.Message.bulkCreate(list.map(number => ({
       number,
-      text,
+      messageTextId,
       messageStatusId: 1,
       userId,
       senderId,
       packageTypeId,
       campaignId,
-    }))).then(() => db.Message.findAll({ where: { messageStatusId: 0 } }))
+    }))).then(() => db.Message.findAll({ where: { messageStatusId: 1 } }))
       .then(messages => SmsManager.addToSmsQueue(messages));
   },
   /**
    * @param statusId : created(0)
    * @returns {Promise.<Array.<Instance>>}
    */
-  addToScheduler({ list, text, userId, senderId, packageTypeId, messageTypeId, scheduledOn,
+  addToScheduler({ list, messageTextId, userId, senderId, packageTypeId, messageTypeId, scheduledOn,
                    campaignId }) {
     return db.ScheduleMessage.bulkCreate(list.map(number => ({
       userId,
       number,
-      text,
+      messageTextId,
       packageTypeId,
       senderId,
       messageTypeId,
@@ -49,12 +69,16 @@ const SmsManager = {
             senderId: { id, status = 0 } = {}, scheduledOn } = {}) {
     if (!list || !text || !userId) return Promise.reject({ message: 'Invalid request.' });
     if (status === 3) return Promise.reject({ message: 'SenderId is blocked' });
-    if (status === 2 && messageTypeId === 1) {
-      return SmsManager
-        .createBulkMessages({ list, text, userId, senderId: id, packageTypeId, campaignId });
-    }
-    return SmsManager.addToScheduler({
-      list, text, userId, senderId: id, packageTypeId, messageTypeId, scheduledOn, campaignId });
+    return db.MessageText.create({ text })
+      .then(messageText => {
+        if (status === 2 && messageTypeId === 1) {
+          return SmsManager
+            .createBulkMessages({ list, messageTextId: messageText.id, userId,
+              senderId: id, packageTypeId, campaignId });
+        }
+        return SmsManager.addToScheduler({ list, messageTextId: messageText.id,
+          userId, senderId: id, packageTypeId, messageTypeId, scheduledOn, campaignId });
+      });
   },
 };
 
