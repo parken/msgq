@@ -10,9 +10,12 @@ module.exports = {
         autoIncrement: true,
       },
       number: DataTypes.STRING,
-      text: DataTypes.STRING,
       userId: keys('users'),
       messageStatusId: keys('message_status'),
+      senderId: keys('senderId'),
+      campaignId: keys('campaigns'),
+      packageTypeId: keys('package_type'),
+      messageTextId: keys('message_texts'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {

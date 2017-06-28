@@ -22,7 +22,7 @@ db.Session = db.sequelize.import('../../components/oauth/sequelize/session.model
 [
   'Group', 'SenderId', 'SmsType', 'Upstream', 'LoginIdentifier', 'Contact', 'MessageStatus',
   'Message', 'PackageType', 'UserPackage', 'Transaction', 'PriorityNumber', 'Group',
-  'GroupContact', 'Campaign', 'Template', 'ScheduleMessage',
+  'GroupContact', 'Campaign', 'Template', 'ScheduleMessage', 'MessageText',
 ].forEach(model =>
   (db[model] = db.sequelize.import(`../../api/${_.camelCase(model)}/${_.camelCase(model)}.model`)));
 
