@@ -25,9 +25,12 @@ import Footer from '../components/footer';
 import UpdateTitle from '../components/update-title';
 import FileReader from '../components/file-reader';
 import Navigation from '../components/navigation';
+import Report from '../components/report';
+
 
 import Home from './home';
 import User from './user';
+import DeliveryReport from './home/delivery-report';
 import SenderId from './sender-id';
 import FourOFour from './four-o-four';
 import 'angular-oauth2';
@@ -39,7 +42,8 @@ angular
     'angular-oauth2',
     uiBootstrap,
     AsideMenu, Navbar, Footer, constants, Auth, UpdateTitle, FileReader,
-    Home, FourOFour, OTPModule, User, SenderId, Navigation,
+    Home, FourOFour, OTPModule, User, SenderId, Navigation, DeliveryReport,
+    Report,
   ])
   .component('msgqueApp', AppComponent)
   .config(routeConfig)
