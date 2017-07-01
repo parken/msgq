@@ -15,6 +15,7 @@ class NavigationController {
       {name: 'Send OTP', state: 'otp', icon: 'fa fa-chat'},
       {name: 'Campaign', state: 'campaign', icon: 'fa fa-chat'},
       {name: 'Virtual Number', state: 'virtualNumber', icon: 'fa fa-chat'},
+      {name: 'Admin', state: 'admin.dashboard', icon: 'fa fa-chat'},
     ];
   }
 

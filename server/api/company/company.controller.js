@@ -19,7 +19,7 @@ export function show(req, res) {
         'supportEmail',
         'loginUrl',
       ],
-      where: { loginUrl: req.origin },
+      where: { loginUrl: req.origin || 'msgque.com' },
     })
     .then((company) => {
       if (!company) return res.status(404).json({ message: 'Invalid Request' });

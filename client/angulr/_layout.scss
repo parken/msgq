@@ -201,25 +201,21 @@ body{
 }
 
 .navbar-brand{
-  float: none;
-  font-size: 20px;
-  font-weight: 400;
-  height: $app-header-height;
-  line-height: $app-header-height;
   display: inline-block;
-  user-select: none;
+  float: none;
+  height: auto;
+  padding: 0 20px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 50px;
+  text-align: center;
   &:hover{
     text-decoration: none;
   }
   img{
-    width: 38px;
-    height: 38px;
-    margin: 0 8px;
-  }
-  img, span {
+    max-height: 30px;
+    margin-top: -4px;
     vertical-align: middle;
-    margin-top: -5px;
-    display: inline-block;
   }
 }
 
@@ -276,7 +272,6 @@ body{
     .app-header{
       .navbar-brand{
         display: block;
-        padding: 0 0 5px 6px;
       }
     }
 

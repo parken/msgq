@@ -5,4 +5,5 @@ import oauth from '../../components/oauth/auth';
 const router = express.Router();
 
 router.get('/', controller.show);
+
 module.exports = router;

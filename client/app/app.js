@@ -27,7 +27,7 @@ import FileReader from '../components/file-reader';
 import Navigation from '../components/navigation';
 import Report from '../components/report';
 
-
+import Admin from './admin';
 import Home from './home';
 import User from './user';
 import DeliveryReport from './home/delivery-report';
@@ -43,7 +43,7 @@ angular
     uiBootstrap,
     AsideMenu, Navbar, Footer, constants, Auth, UpdateTitle, FileReader,
     Home, FourOFour, OTPModule, User, SenderId, Navigation, DeliveryReport,
-    Report,
+    Report, Admin
   ])
   .component('msgqueApp', AppComponent)
   .config(routeConfig)

@@ -5,8 +5,6 @@ import HomeList from './home-list';
 import SendSms from './send-sms';
 import DeliveryReport from './delivery-report';
 
-
-
 export default angular
   .module('msgQueApp.home', [
     uiRouter, HomeList, SendSms, DeliveryReport,
