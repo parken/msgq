@@ -1,5 +1,7 @@
+import _ from 'lodash';
 import debug from 'debug';
 import fs from 'fs-promise';
+import moment from 'moment';
 import Sequelize from 'sequelize';
 import bodyParser from 'body-parser';
 import { exec } from 'child_process';
@@ -9,6 +11,9 @@ import { setupCompleted, envFile, root } from '../../config/env';
 const log = debug('components/setup');
 const IST = '+05:30';
 
+const offset = moment().utcOffset();
+const TZ = ''.concat(offset < 0 ? "-" : "+",moment(''.concat(Math.abs(offset/60),Math.abs(offset%60) < 10 ? "0" : "",Math.abs(offset%60)),"hmm").format("HH:mm"));
+
 function serveForm({ values = {}, err = '' } = {}) {
   return (req, res) => {
     const captions = {
@@ -16,8 +21,12 @@ function serveForm({ values = {}, err = '' } = {}) {
       MYSQL_USER: 'Database Username',
       MYSQL_PASS: 'Database Password',
       MYSQL_HOST: 'Database Host',
+      MYSQL_PORT: 'Database Port',
       MYSQL_TZ: 'Timezone',
       PORT: 'Application Port',
+      SERVER_USER: 'SSH User',
+      SERVER_USER_PASSWORD: 'SSH Password',
+      SERVER_GROUP: 'SSH User Group',
     };
     const numuricFields = ['PORT'];
     const timezones = [IST];
@@ -27,7 +36,7 @@ function serveForm({ values = {}, err = '' } = {}) {
           method="post"
           style="text-align: center; margin: auto; margin-top: 10%; width: 500px;">
         <h2>MSGQue</h2>
-        <p><a href="https://github.com/parken/msgque">Setup Instructions</a></p>
+        <p><a href="https://github.com/parken/msgque" target="_blank">Setup Instructions</a></p>
         <p style="color:red">${err.toString()}</p>
          <br><br>
           ${
@@ -43,7 +52,7 @@ function serveForm({ values = {}, err = '' } = {}) {
                     <option value="">Select</option>
                     ${
               timezones.map(t =>
-                `<option ${process.env.TZ === t ? 'selected="true"' : ''}">${t}</option>`)
+                `<option ${TZ === t ? 'selected="true"' : ''}">${t}</option>`)
               }
                     </select>
                 `;
@@ -75,13 +84,14 @@ function setup() {
       MYSQL_PASS,
       MYSQL_HOST,
       MYSQL_TZ,
-      SERVER_IDENTIFIER = 'api',
+      PORT = 3000,
+      SERVER_IDENTIFIER = 'msgque',
       SERVER_NAME = 'MSGQUE',
-      SERVER_USER = 'yog27ray',
-      SERVER_USER_PASSWORD = 'admin@2020',
-      SERVER_GROUP = 'yog27ray',
+      SERVER_USER = 'root',
+      SERVER_USER_PASSWORD = 'password',
+      SERVER_GROUP = 'wheel',
     } = req.body;
-    const SYSTEMD_FILE_NAME = `${req.body.SYSTEMD_FILE_NAME || 'api'}.service`;
+    const SYSTEMD_FILE_NAME = 'msgque.service';
     const conn = new Sequelize(
       MYSQL_DB, MYSQL_USER,
       MYSQL_PASS, { host: MYSQL_HOST, dialect: 'mysql', timezone: MYSQL_TZ }
@@ -91,7 +101,7 @@ function setup() {
       MYSQL_TZ: IST,
     };
 
-    const systemdFileData = `
+    const systemdFile = `
 [Unit]
 Description=${SERVER_NAME}
 After=syslog.target
@@ -112,18 +122,17 @@ EnvironmentFile=${root}/.env
 WantedBy=multi-user.target`;
 
     const env = Object
-      .keys(Object.assign(defaults, req.body))
+      .keys(Object.assign(defaults, _.omit(req.body, ['SERVER_USER_PASSWORD'])))
       .reduce((nxt, key) => `${nxt}${key}=${req.body[key]}\r\n`, '');
 
-    console.log(envFile, 'env', env, envFile);
     return conn
       .authenticate()
       .then(() => new Promise(resolve => {
         fs.writeFileSync(envFile, env);
-        fs.writeFileSync(`${root}/${SYSTEMD_FILE_NAME}`, systemdFileData);
-        exec(`chmod u+x ${root}/setup.sh`);
-        exec(`echo ${SERVER_USER_PASSWORD} | sudo -S ${root}/setup.sh ${
-          SYSTEMD_FILE_NAME} ${SERVER_IDENTIFIER}`, () => resolve());
+        fs.writeFileSync(`${root}/${SYSTEMD_FILE_NAME}`, systemdFile);
+        exec(`chmod u+x ${root}/after-setup.sh`);
+        exec(`echo ${SERVER_USER_PASSWORD} | sudo -S ${root}/scripts/setup.sh ${
+          SYSTEMD_FILE_NAME} ${SERVER_IDENTIFIER} ${SERVER_IDENTIFIER} ${PORT}`, () => resolve());
       }))
       .then(() => {
         res.end(`
@@ -133,14 +142,13 @@ WantedBy=multi-user.target`;
             <h3> MSGQue Getting Ready for you...</h3>
             <p> writing <span style="color:red">.env</span> file with database settings</p>
             <p> Restarting server.
-            <p>for successful restart, PM2 or Systemd Process Management required.
-            If you not using Systemd or PM2. Please start manually</p>
+              <p>for successful restart, Systemd, Upstart Process Management required.
+              If you not using Systemd or PM2. Please start manually</p>
             </p>
 
-            <p> <a href="https://github.com/msgque/msgque" target="_blank">Learn more</a></p>
+            <p> <a href="https://github.com/parken/msgque" target="_blank">Learn more</a></p>
           </body>
         </html>`);
-        return process.exit(0);
       })
       .catch(err => serveForm({ values: req.body, err })(req, res, next));
   };
