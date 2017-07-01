@@ -13,7 +13,7 @@ module.exports = {
       salesPrice: DataTypes.STRING,
       comment: DataTypes.STRING,
       userId: keys('users'),
-      packageTypeId: keys('user_package_type'),
+      packageTypeId: keys('package_type'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {
