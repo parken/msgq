@@ -14,6 +14,7 @@ class SendSmsController {
 
       message: '',
     }; //body of Api
+
     this.error = {};
     this.routeIndex = 1;
     this.numberPattern = /[987]{1}\d{9}/;
