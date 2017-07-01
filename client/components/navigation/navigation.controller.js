@@ -10,7 +10,7 @@ class NavigationController {
     this.menus = [
       {name: 'Send SMS', state: 'home.sendSms', icon: 'fa fa-chat'},
       {name: 'Send Custom SMS', state: 'home.customSMS', icon: 'fa fa-chat'},
-      {name: 'Delivery Report', state: 'deliveryReport', icon: 'fa fa-chat'},
+      {name: 'Delivery Report', state: 'home.deliveryReports', icon: 'fa fa-chat'},
       {name: 'API', state: 'api', icon: 'fa fa-chat'},
       {name: 'Send OTP', state: 'otp', icon: 'fa fa-chat'},
       {name: 'Campaign', state: 'campaign', icon: 'fa fa-chat'},
