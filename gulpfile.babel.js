@@ -522,7 +522,7 @@ function flatten() {
 
 
 gulp.task('copy:fonts:dev', () => {
-  return gulp.src('node_modules/{bootstrap,font-awesome,npm-font-source-sans-pro}/fonts/*')
+  return gulp.src('node_modules/{bootstrap,font-awesome,npm-font-source-sans-pro}/fonts/**/*')
         .pipe(flatten())
         .pipe(gulp.dest(`${clientPath}/assets/fonts`));
 });

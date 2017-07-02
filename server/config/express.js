@@ -13,10 +13,12 @@ import cookieParser from 'cookie-parser';
 import errorHandler from 'errorhandler';
 import path from 'path';
 
-import * as routes from './../routes';
 import config from './environment';
+import * as routes from './../routes';
+import logger from '../components/logger';
 import * as setup from '../components/setup';
 import oauthComponent from './../components/oauth/express';
+
 
 const log = debug('server/config');
 
@@ -51,6 +53,20 @@ export default function (a) {
   })
 
   oauthComponent(app, routes);
+  // errors passed using next(err)
+  app.use((e, req, res, next) => {
+    const err = e;
+    const { body, headers, user } = req;
+
+    logger.error(err.message, err, {
+      url: req.originalUrl,
+      body,
+      headers,
+      user,
+    });
+
+    return res.status(500).json({ message: err.message, stack: err.stack });
+  });
 
   if (env === 'development') {
     /* eslint global-require:0 */

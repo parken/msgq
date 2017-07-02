@@ -5,7 +5,6 @@
 import path from 'path';
 
 import errors from './components/errors';
-import logger from './components/logger';
 
 import user from './api/user';
 import sms from './api/sms';
@@ -29,21 +28,6 @@ export default function (app) {
   app.use('/api/templates', template);
   app.use('/api/campaigns', campaign);
   app.use('/api', route);
-
-  // errors passed using next(err)
-  app.use((e, req, res, next) => {
-    const err = e;
-    const { body, headers, user } = req;
-
-    logger.error(err.message, err, {
-      url: req.originalUrl,
-      body,
-      headers,
-      user,
-    });
-
-    return res.status(500).json({ message: err.message, stack: err.stack });
-  });
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
