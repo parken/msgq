@@ -2,9 +2,8 @@
 export default function routes($stateProvider) {
   $stateProvider
     .state('admin', {
-      abstract: true,
       url: '/admin',
-      template: '<admin></admin>',
+      template: '<div ui-view=""></div>',
     })
     .state('admin.dashboard', {
       url: '/dashboard',

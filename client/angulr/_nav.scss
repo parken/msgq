@@ -171,12 +171,11 @@
         > li {
           > a {
             span {
-              display: block;
-              padding: 0 18px 0 18px;
+              display: none;
             }
 
             i {
-              display: none;
+              display: block;
             }
           }
         }

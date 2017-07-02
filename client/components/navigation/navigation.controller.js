@@ -7,15 +7,42 @@ class NavigationController {
 
   $onInit() {
     this.user = this.Session.read('userinfo');
+
+    // - admin
     this.menus = [
       {name: 'Send SMS', state: 'home.sendSms', icon: 'fa fa-chat'},
-      {name: 'Send Custom SMS', state: 'home.customSMS', icon: 'fa fa-chat'},
-      {name: 'Delivery Report', state: 'home.deliveryReports', icon: 'fa fa-chat'},
-      {name: 'API', state: 'api', icon: 'fa fa-chat'},
-      {name: 'Send OTP', state: 'otp', icon: 'fa fa-chat'},
-      {name: 'Campaign', state: 'campaign', icon: 'fa fa-chat'},
-      {name: 'Virtual Number', state: 'virtualNumber', icon: 'fa fa-chat'},
-      {name: 'Admin', state: 'admin.dashboard', icon: 'fa fa-chat'},
+    ];
+
+    // - resller level fetures
+    this.rmenus = [
+      {name: 'SenderID Approval', state: 'home.sendSms', icon: 'fa fa-chat'},
+      {name: 'Actual Consumption', state: 'home.sendSms', icon: 'fa fa-chat'},
+      {name: 'Sales Consumption', state: 'home.sendSms', icon: 'fa fa-chat'},
+      {name: 'Transaction IN', state: 'home.sendSms', icon: 'fa fa-chat'},
+      {name: 'Transaction OUT', state: 'home.sendSms', icon: 'fa fa-chat'},
+      {name: 'Sales Consumption', state: 'home.sendSms', icon: 'fa fa-chat'},
+      {name: 'Add new User', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'My user credits', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'My users', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'User Reports', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'My Profile', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'Web Settings -> Site Settings', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'Web Settings -> Site Credits', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'Group Add', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'Group List', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'Dynamic SMS', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'Sent SMS', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'Scheduled SMS', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'Error Code', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'Templates', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'HTTP API', state: 'admin.users.list', icon: 'fa fa-user'},
+      // user level features
+      {name: '----- User', state: 'home.sendSms', icon: 'fa fa-chat'},
+      {name: 'Send SMS', state: 'home.sendSms', icon: 'fa fa-chat'},
+    ];
+
+    this.menus = [
+      {name: 'Send SMS', state: 'home.sendSms', icon: 'fa fa-chat'},
     ];
   }
 

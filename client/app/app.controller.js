@@ -24,7 +24,7 @@ class AppController {
         headerFixed: true,
         asideFixed: true,
         asideFolded: false,
-        asideDock: true,
+        asideDock: false,
         container: false,
         offScreen: false, // flag for show of sidebar for mobile view
         mobileHeader: false, // flag to show header Nav and Search in mobile view
@@ -34,14 +34,6 @@ class AppController {
 
   $onInit() {
     // keeps track of state change and hides sidebar view for mobile
-    /* eslint angular/on-watch: 0 */
-    this.appClass = {
-      'app-header-fixed': this.app.settings.headerFixed,
-      'app-aside-fixed': this.app.settings.asideFixed,
-      'app-aside-folded': this.app.settings.asideFolded,
-      'app-aside-dock': this.app.settings.asideDock,
-      container: this.app.settings.container,
-    };
 
     this.$rootScope.$on('$stateChangeStart', () => {
       this.app.settings.offScreen = false;

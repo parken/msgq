@@ -4,8 +4,8 @@ export function routeConfig(
   ) {
   $httpProvider.interceptors.push('UrlInterceptor');
 
-  $urlRouterProvider.when('/', '/home');
-  $urlRouterProvider.otherwise('/home');
+  $urlRouterProvider.when('/', '/admin/dashboard');
+  $urlRouterProvider.otherwise('/admin/dashboard');
 
   $locationProvider.html5Mode(true);
 }

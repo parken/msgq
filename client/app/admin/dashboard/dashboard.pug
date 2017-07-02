@@ -1,5 +1,303 @@
-.bg-white-only.w-full(style='padding: 18px 15px 0 0;position: absolute;height: 92%;')
-  .col-sm-3
-    nav
-  .col-sm-9.bg-white-only(ui-view='')
+.hbox.hbox-auto-xs.hbox-auto-sm
+  .col
+    // main header
+    .bg-light.lter.b-b.wrapper-md
+      .row
+        .col-sm-6.col-xs-12
+          h1.m-n.font-thin.h3.text-black Dashboard
+          small.text-muted Welcome to cloud messaging application.
+        .col-sm-6.text-right.hidden-xs
+          .inline.m-r.text-left
+            .m-b-xs
+              | 1290
+              span.text-muted items
+            .sparkline.inline(ng-init='data1=[ 106,108,110,105,110,109,105,104,107,109,105,100,105,102,101,99,98 ]', ui-jq='sparkline', ui-options="[106,108,110,105,110,109,105,104,107,109,105,100,105,102,101,99,98], {type:'bar', height:20, barWidth:5, barSpacing:1, barColor:'#dce5ec'}")
+              canvas(width='101', height='20', style='display: inline-block; width: 101px; height: 20px; vertical-align: top;')
+          .inline.text-left
+            .m-b-xs
+              | $30,000
+              span.text-muted revenue
+            .sparkline.inline(ng-init='data2=[ 105,102,106,107,105,104,101,99,98,109,105,100,108,110,105,110,109 ]', ui-jq='sparkline', ui-options="[105,102,106,107,105,104,101,99,98,109,105,100,108,110,105,110,109], {type:'bar', height:20, barWidth:5, barSpacing:1, barColor:'#dce5ec'}")
+              canvas(width='101', height='20', style='display: inline-block; width: 101px; height: 20px; vertical-align: top;')
+    // / main header
+    .wrapper-md.ng-scope(ng-controller='FlotChartDemoCtrl')
+      // stats
+      .row
+        .col-md-5
+          .row.row-sm.text-center
+            .col-xs-6
+              .panel.padder-v.item
+                .h1.text-info.font-thin.h1 521
+                span.text-muted.text-xs New items
+                .top.text-right.w-full
+                  i.fa.fa-caret-down.text-warning.m-r-sm
+            .col-xs-6
+              a.block.panel.padder-v.bg-primary.item(href='')
+                span.text-white.font-thin.h1.block 930
+                span.text-muted.text-xs Uploads
+                span.bottom.text-right.w-full
+                  i.fa.fa-cloud-upload.text-muted.m-r-sm
+            .col-xs-6
+              a.block.panel.padder-v.bg-info.item(href='')
+                span.text-white.font-thin.h1.block 432
+                span.text-muted.text-xs Comments
+                span.top.text-left
+                  i.fa.fa-caret-up.text-warning.m-l-sm
+            .col-xs-6
+              .panel.padder-v.item
+                .font-thin.h1 129
+                span.text-muted.text-xs Feeds
+                .bottom.text-left
+                  i.fa.fa-caret-up.text-warning.m-l-sm
+            .col-xs-12.m-b-md
+              .r.bg-light.dker.item.hbox.no-border
+                .col.w-xs.v-middle.hidden-md
+                  .sparkline.inline(ng-init='data1=[60,40]', ui-jq='sparkline', ui-options="[60,40], {type:'pie', height:40, sliceColors:['#fad733','#fff']}")
+                    canvas(width='40', height='40', style='display: inline-block; width: 40px; height: 40px; vertical-align: top;')
+                .col.dk.padder-v.r-r
+                  .text-primary-dk.font-thin.h1
+                    span $12,670
+                  span.text-muted.text-xs Revenue, 60% of the goal
+        .col-md-7
+          .panel.wrapper
+            label.i-switch.bg-warning.pull-right(ng-init='showSpline=true')
+              input.ng-pristine.ng-untouched.ng-valid(type='checkbox', ng-model='showSpline')
+              i
+            h4.font-thin.m-t-none.m-b.text-muted Latest Campaign
+            div(ui-jq='plot', ui-refresh='showSpline', ui-options="[\
+            { data: [[0,7],[1,6.5],[2,12.5],[3,7],[4,9],[5,6],[6,11],[7,6.5],[8,8],[9,7]], label:'TV', points: { show: true, radius: 1}, splines: { show: showSpline, tension: 0.4, lineWidth: 1, fill: 0.8 } },\
+            { data: [[0,4],[1,4.5],[2,7],[3,4.5],[4,3],[5,3.5],[6,6],[7,3],[8,4],[9,3]], label:'Mag', points: { show: true, radius: 1}, splines: { show: showSpline, tension: 0.4, lineWidth: 1, fill: 0.8 } }\
+            ], \
+            {\
+            colors: ['#23b7e5', '#7266ba'],\
+            series: { shadowSize: 3 },\
+            xaxis:{ font: { color: '#a1a7ac' } },\
+            yaxis:{ font: { color: '#a1a7ac' }, max:20 },\
+            grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#dce5ec' },\
+            tooltip: true,\
+            tooltipOpts: { content: 'Visits of %x.1 is %y.4',  defaultTheme: false, shifts: { x: 10, y: -25 } }\
+            }", style='height: 246px; padding: 0px; position: relative;')
+              canvas.flot-base(width='490', height='246', style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 490px; height: 246px;')
+              .flot-text(style='position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; font-size: smaller; color: rgb(84, 84, 84);')
+                .flot-x-axis.flot-x1-axis.xAxis.x1Axis(style='position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;')
+                  div(style='position: absolute; max-width: 78px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 14px; text-align: center;') 0
+                  div(style='position: absolute; max-width: 47px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 66px; text-align: center;') 1
+                  div(style='position: absolute; max-width: 78px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 118px; text-align: center;') 2
+                  div(style='position: absolute; max-width: 47px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 170px; text-align: center;') 3
+                  div(style='position: absolute; max-width: 78px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 222px; text-align: center;') 4
+                  div(style='position: absolute; max-width: 47px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 275px; text-align: center;') 5
+                  div(style='position: absolute; max-width: 78px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 327px; text-align: center;') 6
+                  div(style='position: absolute; max-width: 47px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 379px; text-align: center;') 7
+                  div(style='position: absolute; max-width: 78px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 431px; text-align: center;') 8
+                  div(style='position: absolute; max-width: 47px; top: 234px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 484px; text-align: center;') 9
+                .flot-y-axis.flot-y1-axis.yAxis.y1Axis(style='position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;')
+                  div(style='position: absolute; top: 223px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 6px; text-align: right;') 0
+                  div(style='position: absolute; top: 167px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 6px; text-align: right;') 5
+                  div(style='position: absolute; top: 112px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;') 10
+                  div(style='position: absolute; top: 56px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;') 15
+                  div(style='position: absolute; top: 0px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;') 20
+              canvas.flot-overlay(width='490', height='246', style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 490px; height: 246px;')
+              .legend
+                div(style='position: absolute; width: 43px; height: 44px; top: 11px; right: 9px; background-color: rgb(255, 255, 255); opacity: 0.85;')
+                table(style='position:absolute;top:11px;right:9px;;font-size:smaller;color:#dce5ec')
+                  tbody
+                    tr
+                      td.legendColorBox
+                        div(style='border:1px solid #ccc;padding:1px')
+                          div(style='width:4px;height:0;border:5px solid rgb(35,183,229);overflow:hidden')
+                      td.legendLabel TV
+                    tr
+                      td.legendColorBox
+                        div(style='border:1px solid #ccc;padding:1px')
+                          div(style='width:4px;height:0;border:5px solid rgb(114,102,186);overflow:hidden')
+                      td.legendLabel Mag
+      // / stats
+      // service
+      .panel.hbox.hbox-auto-xs.no-border
+        .col.wrapper
+          i.fa.fa-circle-o.text-info.m-r-sm.pull-right
+          h4.font-thin.m-t-none.m-b-none.text-primary-lt Managed Services
+          span.m-b.block.text-sm.text-muted Service report of this year (updated 1 hour ago)
+          div(ui-jq='plot', ui-options="[\
+          { data: [[0,46.41784570440677],[1,50.65103501897306],[2,55.29397969133777],[3,50.521372790474636],[4,52.21450997893374],[5,51.536608369018296],[6,52.425794407621524],[7,53.89044454623367],[8,51.25844922720995],[9,50.71853496384736],[10,50.90980234467747],[11,54.09075588498061],[12,56.30197551226911],[13,52.40195992978375],[14,56.92479069555279],[15,54.1761193932459],[16,58.733553366493354],[17,59.72240262935421],[18,61.28084235797033],[19,61.101177483162274],[20,65.58057010280339],[21,63.31514282026771],[22,59.571391417517574],[23,63.80556107739211],[24,62.82710095036201],[25,58.42189281930433],[26,55.61368858744573],[27,50.899805045972315],[28,53.953974466368074],[29,58.07218110488426],[30,62.60193036397715],[31,62.78843152791808],[32,67.31443109950577],[33,65.3015438487602],[34,61.304013821330145],[35,61.075358094099],[36,60.54979748636475],[37,58.295642264124716],[38,56.518648337753476],[39,54.74762426964538],[40,54.58857226413144],[41,58.997976343537175],[42,60.47922591955073],[43,64.90426014396826],[44,68.68428602722815],[45,68.84066203611252],[46,71.66678389971639],[47,72.83955339058252],[48,77.67067451737942],[49,78.20520441229971],[50,81.7605270250879],[51,78.5644525156928],[52,74.03041856035694],[53,71.47675099120441],[54,68.63813938145513],[55,66.04622699568793],[56,69.38790384174096],[57,69.4731121709481],[58,69.26767068078051],[59,69.97797024713817],[60,67.34497961530982],[61,66.04557204934896],[62,70.43153982694956],[63,68.14147488544891],[64,69.46216636302822],[65,69.23089422879814],[66,70.28389876954373],[67,68.08239386889736],[68,68.6103680674417],[69,66.56167539941055],[70,66.91993959763],[71,68.33691113211036],[72,72.5322358072541],[73,72.80314397904084],[74,76.67393850773428],[75,78.27509444360514],[76,78.69232424169326],[77,79.44017794188913],[78,80.401847121296],[79,83.94825120334164],[80,88.18716509793842],[81,86.76245283114731],[82,87.10116238054334],[83,83.96775682213747],[84,88.69757531213826],[85,93.28834997744136],[86,96.15112745305473],[87,92.35324246435364],[88,90.34607963005126],[89,88.13558210040311],[90,86.81817823511793],[91,90.07413234495334],[92,94.67793969850612],[93,95.55275882857127],[94,93.82987132298703],[95,98.14221617453617],[96,98.17798011919663],[97,96.88262598965717],[98,100],[99,96.01925981752584],[100,95.99866906414258],[101,95.92539815447489],[102,100],[103,99.43881165211494],[104,94.59535799946207],[105,95.48313223526357],[106,91.25693344471074],[107,86.89188334296927],[108,91.45844542649608],[109,87.53670028035064],[110,91.33647289116794],[111,95.79911714470852],[112,92.66877167079262],[113,95.00565688542066],[114,92.03711983931915],[115,96.16608311959911],[116,91.60703537126419],[117,95.53021395545619],[118,94.03774879968097],[119,94.4024842967118],[120,96.78981307708212],[121,98.15841820493286],[122,97.45149293208932],[123,100],[124,100],[125,96.97575940935906],[126,94.19049451230508],[127,98.10004379974266],[128,94.09275597879815],[129,98.29156012969247],[130,95.96131631195826],[131,92.02806155174135],[132,91.55838318004064],[133,93.43895581128191],[134,92.94513285684319],[135,97.8902999810236],[136,97.58817485577696],[137,99.02820990510257],[138,96.00506833408288],[139,96.79871969835162],[140,99.67201480781172],[141,94.84891147291249],[142,94.72169341862893],[143,93.37620813271225],[144,95.8372330945931],[145,91.3917551775663],[146,90.45105281033342],[147,90.32287054007736],[148,92.03065497096274],[149,93.10590302775242]], lines: { show: true, lineWidth: 1, fill:true, fillColor: { colors: [{opacity: 0.2}, {opacity: 0.8}] } } }\
+          ], \
+          {\
+          colors: ['#e8eff0'],\
+          series: { shadowSize: 3 },\
+          xaxis:{ show:false },\
+          yaxis:{ font: { color: '#a1a7ac' } },\
+          grid: { hoverable: true, clickable: true, borderWidth: 0, color: '#dce5ec' },\
+          tooltip: true,\
+          tooltipOpts: { content: '%s of %x.1 is %y.4',  defaultTheme: false, shifts: { x: 10, y: -25 } }\
+          }", style='height: 240px; padding: 0px; position: relative;')
+            canvas.flot-base(width='607', height='240', style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 607px; height: 240px;')
+            .flot-text(style='position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; font-size: smaller; color: rgb(84, 84, 84);')
+              .flot-y-axis.flot-y1-axis.yAxis.y1Axis(style='position: absolute; top: 0px; left: 0px; bottom: 0px; right: 0px; display: block;')
+                div(style='position: absolute; top: 226px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 11px; text-align: right;') 0
+                div(style='position: absolute; top: 189px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 5px; text-align: right;') 20
+                div(style='position: absolute; top: 151px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 5px; text-align: right;') 40
+                div(style='position: absolute; top: 114px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 5px; text-align: right;') 60
+                div(style='position: absolute; top: 77px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 5px; text-align: right;') 80
+                div(style='position: absolute; top: 39px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;') 100
+                div(style='position: absolute; top: 2px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;') 120
+            canvas.flot-overlay(width='607', height='240', style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 607px; height: 240px;')
+        .col.wrapper-lg.w-lg.bg-light.dk.r-r
+          h4.font-thin.m-t-none.m-b Reports
+          div
+            div
+              span.pull-right.text-primary 60%
+              span Consulting
+            .progress-xs.m-t-sm.bg-white.progress.ng-isolate-scope(value='60', animate='true', type='primary')
+              .progress-bar.progress-bar-primary(ng-class="type && 'progress-bar-' + type", role='progressbar', aria-valuenow='60', aria-valuemin='0', aria-valuemax='100', ng-style="{width: percent + '%'}", aria-valuetext='60%', ng-transclude='', style='width: 60%;')
+            div
+              span.pull-right.text-info 35%
+              span Online tutorials
+            .progress-xs.m-t-sm.bg-white.progress.ng-isolate-scope(value='35', animate='true', type='info')
+              .progress-bar.progress-bar-info(ng-class="type && 'progress-bar-' + type", role='progressbar', aria-valuenow='35', aria-valuemin='0', aria-valuemax='100', ng-style="{width: percent + '%'}", aria-valuetext='35%', ng-transclude='', style='width: 35%;')
+            div
+              span.pull-right.text-warning 25%
+              span EDU management
+            .progress-xs.m-t-sm.bg-white.progress.ng-isolate-scope(value='25', animate='true', type='warning')
+              .progress-bar.progress-bar-warning(ng-class="type && 'progress-bar-' + type", role='progressbar', aria-valuenow='25', aria-valuemin='0', aria-valuemax='100', ng-style="{width: percent + '%'}", aria-valuetext='25%', ng-transclude='', style='width: 25%;')
+          p.text-muted
+            | Dales nisi nec adipiscing elit. Morbi id neque quam. Aliquam sollicitudin venenatis
+      // / service
+      // tasks
+      .panel.wrapper
+        .row
+          .col-md-6.b-r.b-light.no-border-xs
+            a.text-muted.pull-right.text-lg(href='')
+              i.icon-arrow-right
+            h4.font-thin.m-t-none.m-b-md.text-muted My Tasks
+            .m-b
+              .m-b
+                span.label.text-base.bg-warning.pos-rlt.m-r
+                  i.arrow.right.arrow-warning
+                  |  19:30
+                a(href='') Feed cat
+              .m-b
+                span.label.text-base.bg-info.pos-rlt.m-r
+                  i.arrow.right.arrow-info
+                  |  12:30
+                a(href='') Fishing Time
+              .m-b
+                span.label.text-base.bg-primary.pos-rlt.m-r
+                  i.arrow.right.arrow-primary
+                  |  10:30
+                a(href='') Kick-off meeting
+              .m-b
+                span.label.text-base.bg-light.pos-rlt.m-r
+                  i.arrow.right.arrow-light
+                  |  07:30
+                a(href='') Morning running
+          .col-md-6
+            .row.row-sm
+              .col-xs-6.text-center
+                .inline.m-t.easyPieChart(ui-jq='easyPieChart', ui-options="{\
+                percent: 75,\
+                lineWidth: 4,\
+                trackColor: '#e8eff0',\
+                barColor: '#7266ba',\
+                scaleColor: false,\
+                size: 115,\
+                rotate: 90,\
+                lineCap: 'butt'\
+                }", style='width: 115px; height: 115px; line-height: 115px;')
+                  div
+                    span.text-primary.h4 75%
+                  canvas(width='115', height='115')
+                .text-muted.font-bold.text-xs.m-t.m-b Work Done
+              .col-xs-6.text-center
+                .inline.m-t.easyPieChart(ui-jq='easyPieChart', ui-options="{\
+                percent: 50,\
+                lineWidth: 4,\
+                trackColor: '#e8eff0',\
+                barColor: '#23b7e5',\
+                scaleColor: false,\
+                size: 115,\
+                rotate: 180,\
+                lineCap: 'butt'\
+                }", style='width: 115px; height: 115px; line-height: 115px;')
+                  div
+                    span.text-info.h4 50%
+                  canvas(width='115', height='115')
+                .text-muted.font-bold.text-xs.m-t.m-b Started
+      // / tasks
+      // tasks
+      .row
+        .col-md-6
+          .panel.no-border
+            .panel-heading.wrapper.b-b.b-light
+              span.text-xs.text-muted.pull-right
+                i.fa.fa-circle.text-primary.m-r-xs
+                |  12
+                i.fa.fa-circle.text-info.m-r-xs.m-l-sm
+                |  30
+                i.fa.fa-circle.text-warning.m-r-xs.m-l-sm
+                |  98
+              h4.font-thin.m-t-none.m-b-none.text-muted Teammates
+            ul.list-group.list-group-lg.m-b-none
+              li.list-group-item
+                a.thumb-sm.m-r(href='')
+                  img.r.r-2x(src='img/a1.jpg')
+                span.pull-right.label.bg-primary.inline.m-t-sm Admin
+                a(href='') Damon Parker
+              li.list-group-item
+                a.thumb-sm.m-r(href='')
+                  img.r.r-2x(src='img/a2.jpg')
+                span.pull-right.label.bg-info.inline.m-t-sm Member
+                a(href='') Joe Waston
+              li.list-group-item
+                a.thumb-sm.m-r(href='')
+                  img.r.r-2x(src='img/a3.jpg')
+                span.pull-right.label.bg-warning.inline.m-t-sm Editor
+                a(href='') Jannie Dvis
+              li.list-group-item
+                a.thumb-sm.m-r(href='')
+                  img.r.r-2x(src='img/a4.jpg')
+                span.pull-right.label.bg-warning.inline.m-t-sm Editor
+                a(href='') Emma Welson
+            .panel-footer
+              span.pull-right.badge.badge-bg.m-t-xs 32
+              button.btn.btn-primary.btn-addon.btn-sm
+                i.fa.fa-plus
+                | Add Teammate
+        .col-md-6
+          .list-group.list-group-lg.list-group-sp
+            a.list-group-item.clearfix(herf='')
+              span.pull-left.thumb-sm.avatar.m-r
+                img(src='img/a4.jpg', alt='...')
+                i.on.b-white.right
+              span.clear
+                span Chris Fox
+                small.text-muted.clear.text-ellipsis What's up, buddy
+            a.list-group-item.clearfix(herf='')
+              span.pull-left.thumb-sm.avatar.m-r
+                img(src='img/a5.jpg', alt='...')
+                i.on.b-white.right
+              span.clear
+                span Amanda Conlan
+                small.text-muted.clear.text-ellipsis Come online and we need talk about the plans that we have discussed
+            a.list-group-item.clearfix(herf='')
+              span.pull-left.thumb-sm.avatar.m-r
+                img(src='img/a6.jpg', alt='...')
+                i.busy.b-white.right
+              span.clear
+                span Dan Doorack
+                small.text-muted.clear.text-ellipsis Hey, Some good news
+            a.list-group-item.clearfix(herf='')
+              span.pull-left.thumb-sm.avatar.m-r
+                img(src='img/a7.jpg', alt='...')
+                i.busy.b-white.right
+              span.clear
+                span Lauren Taylor
+                small.text-muted.clear.text-ellipsis Nice to talk with you.
+            a.list-group-item.clearfix(herf='')
+              span.pull-left.thumb-sm.avatar.m-r
+                img(src='img/a8.jpg', alt='...')
+                i.away.b-white.right
+              span.clear
+                span Mike Jackson
+                small.text-muted.clear.text-ellipsis This is nice
+      // / tasks
 
