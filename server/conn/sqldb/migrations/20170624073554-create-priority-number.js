@@ -2,7 +2,7 @@ const { engine, timestamps, keys } = require('../helper.js');
 
 module.exports = {
   up(queryInterface, DataTypes) {
-    return queryInterface.createTable('priority_number', Object.assign({
+    return queryInterface.createTable('priorityNumber', Object.assign({
       id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -14,6 +14,6 @@ module.exports = {
     }, timestamps(3)), engine);
   },
   down(queryInterface) {
-    return queryInterface.dropTable('priority_number');
+    return queryInterface.dropTable('priorityNumber');
   },
 };

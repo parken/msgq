@@ -7,7 +7,7 @@ const root = path.normalize(__dirname + '/..');
 const envFile = path.join(root, '.env');
 let config = {};
 
-if(fs.existsSync(envFile)) {
+if (fs.existsSync(envFile)) {
   const env = dotenv.config({ path: envFile });
   config = env.parsed || env;
 } else {
@@ -23,8 +23,9 @@ const settings = {
   username: config.MYSQL_USER || 'root',
   password: config.MYSQL_PASS || '',
   dialect: 'mysql',
-  host: config.MYSQL_HOST ||  'localhost',
+  host: config.MYSQL_HOST || 'localhost',
   port: config.MYSQL_PORT || 3306,
+  seederStorage: 'sequelize',
 };
 
 module.exports = {

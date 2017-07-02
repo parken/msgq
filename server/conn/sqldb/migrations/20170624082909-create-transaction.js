@@ -9,9 +9,12 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
+      count: DataTypes.INTEGER,
+      comment: DataTypes.STRING,
       userId: keys('users'),
-      messageId: keys('messages'),
-      userPackageId: keys('user_packages'),
+      messageFlyId: keys('messageFly'),
+      upstreamPlanId: keys('upstreamPlans'),
+      transactionStatusId: keys('transactionStatus'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {

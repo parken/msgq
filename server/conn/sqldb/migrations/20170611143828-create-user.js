@@ -9,7 +9,6 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      groupId: keys('groups'),
       name: DataTypes.STRING,
       mobile: {
         type: DataTypes.STRING(15),
@@ -46,6 +45,7 @@ module.exports = {
       slackActive: { type: DataTypes.BOOLEAN, defaultValue: 0 },
       smsActive: { type: DataTypes.BOOLEAN, defaultValue: 1 },
       active: { type: DataTypes.BOOLEAN, defaultValue: 1 },
+      roleId: keys('roles'),
     }, timestamps(3)), engine)
       .then(() => queryInterface
         .addColumn('users', 'createdBy', {
@@ -54,8 +54,7 @@ module.exports = {
           key: 'id',
           allowNull: true,
           defaultValue: null,
-        }))
-      .then(() => queryInterface.addColumn('groups', 'userId', keys('users')));
+        }));
   },
   down(queryInterface) {
     return queryInterface.dropTable('users');

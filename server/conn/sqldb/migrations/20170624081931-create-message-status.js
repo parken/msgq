@@ -2,7 +2,7 @@ const { engine, timestamps } = require('../helper.js');
 
 module.exports = {
   up(queryInterface, DataTypes) {
-    return queryInterface.createTable('smsTypes', Object.assign({
+    return queryInterface.createTable('messageStatus', Object.assign({
       id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -10,11 +10,9 @@ module.exports = {
         autoIncrement: true,
       },
       name: DataTypes.STRING,
-      active: DataTypes.BOOLEAN,
     }, timestamps(3)), engine);
   },
-
-  down(queryInterface, Sequelize) {
-    return queryInterface.dropTable('smsTypes');
+  down(queryInterface) {
+    return queryInterface.dropTable('messageStatus');
   },
 };

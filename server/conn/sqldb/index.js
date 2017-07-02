@@ -7,8 +7,8 @@ const { MYSQL_DB, MYSQL_USER, MYSQL_PASS, MYSQL_HOST, MYSQL_TZ } = config;
 
 const db = {
   sequelize: new Sequelize(
-    MYSQL_DB, MYSQL_USER,
-    MYSQL_PASS, { host: MYSQL_HOST, dialect: 'mysql', timezone: MYSQL_TZ }
+    MYSQL_DB, MYSQL_USER, MYSQL_PASS,
+    { host: MYSQL_HOST, dialect: 'mysql', timezone: MYSQL_TZ, seederStorage: 'sequelize' }
   ),
 };
 
