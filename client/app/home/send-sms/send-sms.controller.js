@@ -1,19 +1,27 @@
 class SendSmsController {
   /* @ngInject */
-  constructor($http, $state, Session) {
+  constructor($http, $state, Session, $scope) {
     this.$http = $http;
     this.$state = $state;
     this.Session = Session;
     this.Math = Math;
+    this.$scope = $scope;
   }
 
   $onInit() {
     this.user = this.Session.read('userinfo');
     this.data = {
       numbersList: [],
-
+      senderId: '',
       message: '',
+      unicode: 'true',
     }; //body of Api
+
+    this.senderIdLength = 0;
+    this.change = () => {
+      this.senderIdLength = document.querySelector('#senderId').value.length;
+    };
+
     this.error = {};
     this.routeIndex = 1;
     this.numberPattern = /[987]{1}\d{9}/;
@@ -23,16 +31,27 @@ class SendSmsController {
     this
       .$http
       .get('/routes')
-      .then(({ data: { senderId = '', routes } }) => {
-        this.data.senderId = senderId;
-        this.routes = routes;
+      .then(({ data: { senderId, routes } }) => {
+        if (senderId) {
+          this.data.senderId = senderId;
+          this.senderIdLength = senderId.length;
+        }
+        this.routes = routes.length ? routes : [{ id: 1, name: 'Promotional', balance: 50 }];
       });
+    this.translation('true');
   }
 
   setRoute(routeId) {
       this.routeIndex = routeId;
       if (routeId === 1) return this.loadSenderIds();
       return this.senderId = '';
+  }
+
+  translation(unicode) {
+    if(unicode === 'true') {
+      // Load the Google Transliterate API
+
+    }
   }
 
   validateNumbers() {
@@ -59,7 +78,7 @@ class SendSmsController {
       .get('/senderId', { params: { fl: 'id,name' } })
       .then(({ data: senderIds }) => {
         this.list = this.senderIds = senderIds;
-        this.data.senderId = this.senderIds[0].name;
+        if (!this.data.senderId && this.senderIds.length) this.data.senderId = this.senderIds[0].name;
         console.log(this.data.senderId )
       });
   }

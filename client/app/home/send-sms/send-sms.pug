@@ -6,10 +6,11 @@
         ng-click='$ctrl.setRoute(route.id)'
       ) {{route.name}} ({{route.balance}})
 
-    .col-xs-7.m-t-xs.m-b-xs
-      a.text-u-l.pull-right Load Previous Message
+
   .col-xs-12
     .col-xs-6.b-r
+      .m-b-lg: a.text-u-l.pull-right Load Previous Message
+      .clearfix
       form.validate-form(name='sendSmsForm' ng-submit='$ctrl.sendSms()')
         .form-group(ng-if='$ctrl.routeIndex === 2')
           select.form-control(
@@ -19,16 +20,17 @@
           )
         .form-group(ng-if='$ctrl.routeIndex === 1')
           .input-group
-            input.form-control(
+            input#senderId.form-control(
               type='text'
               maxlength='6'
               ng-model='$ctrl.data.senderId'
               placeholder='Sender ID'
               ng-pattern='/[A-Z0-9]{6}/i'
+              watch-change='$ctrl.change()'
               ng-focus='$ctrl.loadSenderIds()'
               required
             )
-            .input-group-addon(ng-bind='$ctrl.data.senderId.lenght + "/6-6"')
+            .input-group-addon(ng-bind='($ctrl.senderIdLength || 0) + "/6"')
         .form-group
           label(ng-if='')
           textarea.form-control(
@@ -40,8 +42,14 @@
           )
         .form-group
           div
+            .col-md-3.col-sm-4.no-padder
+              select.form-control(ng-change='$ctrl.translation($ctrl.data.unicode)' ng-model='$ctrl.data.unicode')
+                option(value='false') English
+                option(value='true') Unicode
+            span#translControl(style="float:right; margin-right:2px; margin-top:2px;" ng-if='$ctrl.data.unicode ==="true"')
             span.pull-right(ng-bind='($ctrl.data.message.length || 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.message.length || 0)/160)')
-          textarea.form-control(
+          textarea#transliterateTextarea.form-control(
+
             rows='5'
             ng-model='$ctrl.data.message'
             placeholder='You are delivering crucial information. Keep it to-the-point.'

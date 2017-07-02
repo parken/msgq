@@ -47,7 +47,21 @@ angular
   ])
   .component('msgqueApp', AppComponent)
   .config(routeConfig)
-  .run(events);
+  .run(events)
+  .directive('watchChange', function() {
+    return {
+      scope: {
+        onchange: '&watchChange'
+      },
+      link: function(scope, element, attrs) {
+        element.on('input', function() {
+          scope.$apply(function () {
+            scope.onchange();
+          });
+        });
+      }
+    };
+  });;
 
 angular
   .element(document)
