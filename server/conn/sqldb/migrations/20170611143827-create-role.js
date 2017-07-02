@@ -1,8 +1,8 @@
-const { engine, timestamps, keys } = require('../helper.js');
+const { engine, timestamps } = require('../helper.js');
 
 module.exports = {
-  up: function(queryInterface, DataTypes) {
-    return queryInterface.createTable('groups', Object.assign({
+  up(queryInterface, DataTypes) {
+    return queryInterface.createTable('roles', Object.assign({
       id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -10,10 +10,9 @@ module.exports = {
         autoIncrement: true,
       },
       name: DataTypes.STRING,
-      userId: keys('users'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {
-    return queryInterface.dropTable('groups');
+    return queryInterface.dropTable('roles');
   },
 };

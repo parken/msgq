@@ -13,10 +13,7 @@ module.exports = {
       blockReason: DataTypes.STRING,
       company: DataTypes.STRING,
       message: DataTypes.STRING,
-      status: {
-        type: DataTypes.INTEGER,
-        defaultValue: 1,
-      },
+      senderIdStatusId: keys('senderIdStatus'),
       createdBy: keys('users'),
       updatedBy: keys('users'),
       upstreamId: keys('upstreams'),

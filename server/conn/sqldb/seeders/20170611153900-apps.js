@@ -1,8 +1,7 @@
-'use strict';
-
 module.exports = {
-  up: function (queryInterface, Sequelize) {
+  up(queryInterface) {
     return queryInterface.bulkInsert('apps', [{
+      id: 1,
       name: 'X Client',
       clientId: 'xclientid',
       clientSecret: 'xclientsecret',
@@ -11,7 +10,7 @@ module.exports = {
     }], {});
   },
 
-  down: function (queryInterface, Sequelize) {
-
-  }
+  down(queryInterface) {
+    return queryInterface.bulkDelete('apps', { id: [1] });
+  },
 };

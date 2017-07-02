@@ -2,21 +2,25 @@ const { engine, timestamps, keys } = require('../helper.js');
 
 module.exports = {
   up(queryInterface, DataTypes) {
-    return queryInterface.createTable('user_packages', Object.assign({
+    return queryInterface.createTable('sending', Object.assign({
       id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
       },
-      allocated: DataTypes.INTEGER,
-      salesPrice: DataTypes.STRING,
-      comment: DataTypes.STRING,
       userId: keys('users'),
-      packageTypeId: keys('package_type'),
+      createdBy: keys('users'),
+      updatedBy: keys('users'),
+      routeId: keys('routes'),
+      limit: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+        allowNull: false,
+      },
     }, timestamps(3)), engine);
   },
   down(queryInterface) {
-    return queryInterface.dropTable('user_packages');
+    return queryInterface.dropTable('sending');
   },
 };

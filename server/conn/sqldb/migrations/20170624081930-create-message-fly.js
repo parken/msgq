@@ -2,29 +2,28 @@ const { engine, timestamps, keys } = require('../helper.js');
 
 module.exports = {
   up(queryInterface, DataTypes) {
-    return queryInterface.createTable('messages', Object.assign({
+    return queryInterface.createTable('messageFly', Object.assign({
       id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
       },
-      number: DataTypes.STRING,
+      text: DataTypes.STRING,
+      numbers: DataTypes.STRING,
+      groupIds: DataTypes.STRING,
+      total: DataTypes.INTEGER,
+      success: DataTypes.INTEGER,
+      fail: DataTypes.INTEGER,
       unicode: DataTypes.INTEGER,
       flash: DataTypes.INTEGER,
-      comment: DataTypes.STRING,
       scheduledOn: DataTypes.DATE,
-      operatorOn: DataTypes.DATE,
-      deliveredOn: DataTypes.DATE,
       userId: keys('users'),
-      messageStatusId: keys('messageStatus'),
-      senderId: keys('senderId'),
-      campaignId: keys('campaigns'),
       routeId: keys('routes'),
-      messageFlyId: keys('messageFly'),
+      senderId: keys('senderId'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {
-    return queryInterface.dropTable('messages');
+    return queryInterface.dropTable('messageFly');
   },
 };
