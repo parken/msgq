@@ -155,7 +155,6 @@ WantedBy=multi-user.target`;
 }
 
 export function init(app) {
-  console.log('.env file not created ? : ', setupCompleted, envFile);
   if (!setupCompleted) {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());

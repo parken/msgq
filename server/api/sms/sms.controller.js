@@ -1,14 +1,19 @@
-import db from '../../conn/sqldb';
-import SenderId from '../../components/senderId';
-import logger from '../../components/logger';
-import SmsManager from '../../components/smsManager';
-import { sms } from '../../components/notify';
+import Ajv from 'ajv';
 
-function handleError(res, argStatusCode, err) {
-  logger.error('user.controller', err);
-  const statusCode = argStatusCode || 500;
-  res.status(statusCode).send(err);
-}
+import db from '../../conn/sqldb';
+
+import logger from '../../components/logger';
+import { sms } from '../../components/notify';
+import SenderId from '../../components/senderId';
+import SmsManager from '../../components/smsManager';
+
+import constants from '../../config/constants'
+
+import * as schema from './sms.schema';
+
+const { sms_types, routes } = constants;
+const { PLAIN, UNICODE } = sms_types;
+const { PROMOTIONAL, TRASACTIONAL, SENDER_ID, OTP } = routes;
 
 function sendSms(text, list) {
   const to = list.shift();
@@ -20,23 +25,35 @@ function sendSms(text, list) {
   return Promise.resolve();
 }
 
-/**
- * req.body.route
- * sender_id_
- * mobile numbers(including csv file, group_id, mobilenumbers) (placeholder: Enter mobile numbers here
- 1234567890, 0123456789, 9012345678
- 8901234567
- 7890123456)
- * unicode: false
- * flash: false
- * text: (placeholder: You are delivering crucial information. Keep it to-the-point.)
- * campaingn_id || campaign_name
- * sign: true
- * duplicate:true if lastmessage == current message
- * scheduled_on:  if route === promotional and 9 < currenttime > 9 throw error
- *
- */
-export function bulkSms(req, res) {
+export function show(req, res) {
+  return res.json({ id: 1 });
+}
+
+export function create(req, res, next) {
+  const { body } = req;
+  if (!body.route_id || !body.message) {
+    return res.status(400).status({ message: 'arguements missing. (route_id or message)' });
+  }
+
+  const validate = () => {
+    const ajv = new Ajv();
+    let current;
+    if(body.route_id === PROMOTIONAL) {
+      current = schema.promotionalSMS;
+    } else {
+      current = schema.anySMS;
+    }
+
+    ajv.addSchema(current, 'CurrentSchema');
+    ajv.validate('CurrentSchema', req.body);
+    return ajv.errorsText();
+  };
+
+  const err = validate(req.body);
+
+  if (!err) return res.status(400).json({ message: err });
+  return res.status(201).json({ id: 1 });
+
   const {
     groupId,
     numbers,
@@ -46,7 +63,14 @@ export function bulkSms(req, res) {
     senderId,
     packageTypeId,
     scheduledOn,
-  } = req.body;
+    } = req.body;
+
+  const sendingTime = (schedueledOn ? new Date(schedueledOn) : new Date()).getHours();
+
+  if (req.body.route_id === PROMOTIONAL &&  sendingTime >= 9 && sendingTime < 21) {
+    return res.status(400).json({ message: 'Promotional SMS is allowed from 9AM to 9PM' });
+  }
+
   return Promise.all([
     (groupId
       ? db.GroupContact.findAll({
@@ -75,6 +99,6 @@ export function bulkSms(req, res) {
       });
       return res.json({ message: 'success' });
     })
-    .catch(err => handleError(res, 500, err));
+    .catch(next);
   // sendSms(req.body.message, req.body.mobile.split(','));
 }

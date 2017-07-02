@@ -591,5 +591,8 @@ gulp.task('buildcontrol:openshift', function(done) {
 
 gulp.task('db:migrate', shell.task([
   'sequelize db:migrate',
+]));
+
+gulp.task('db:migrate', shell.task([
   'sequelize db:seed:all',
 ]));

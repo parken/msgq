@@ -4,5 +4,7 @@ import oauth from '../../components/oauth/auth';
 
 const router = express.Router();
 
-router.post('/', oauth(), controller.bulkSms);
+router.get('/:id', controller.show);
+router.post('/', controller.create);
+
 module.exports = router;

@@ -1,10 +1,13 @@
-/**
- * Created by yogendrasingh on 12/06/17.
- */
 
 export default {
-  promotional: 'http://routesms.smsgupsup.com/promotional?text,from', // filter dnd | 500 - 300 voda
-  transactional: 'http://solution.smsgupsup.com/promotional?text', // no block
-  otp: 'http://enterprise.smsgupsup.com/promotional?text', // no block priority line
-  senderid: 'http://enterprise.smsgupsup.com/promotional?text', // alias of promo | filter dnd but transcational route
+  routes: {
+    PROMOTIONAL: 1,
+    TRASACTIONAL: 2,
+    SENDER_ID: 3,
+    OTP: 4
+  },
+  sms_types: {
+    PLAIN: 1,
+    UNICODE: 2,
+  },
 }

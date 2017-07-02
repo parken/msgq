@@ -1,5 +1,5 @@
 import fs from 'fs';
-import path from 'canonical-path';
+import path from 'path';
 import debug from 'debug';
 import dotenv from 'dotenv';
 
@@ -10,6 +10,6 @@ const setupCompleted = fs.existsSync(envFile);
 const variables = setupCompleted ? dotenv.config({ path: envFile }) : {};
 const env = Object.assign({ setupCompleted, envFile, root }, variables.parsed || variables);
 
-console.log('env', env);
+log('Enviroment Variables:', env);
 
 module.exports = env;
