@@ -1,11 +1,11 @@
 module.exports = {
   up(queryInterface) {
-    return queryInterface.bulkInsert('messageStatus', [
+    return queryInterface.bulkInsert('message_status', [
         { id: 1, name: 'CREATED' },
         { id: 2, name: 'PROCESSED' }],
       {});
   },
   down(queryInterface) {
-    return queryInterface.bulkDelete('senderIdStatus', { id: [1, 2] });
+    return queryInterface.bulkDelete('message_status', { id: [1, 2] });
   },
 };

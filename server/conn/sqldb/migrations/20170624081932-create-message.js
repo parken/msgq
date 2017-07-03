@@ -17,11 +17,11 @@ module.exports = {
       operatorOn: DataTypes.DATE,
       deliveredOn: DataTypes.DATE,
       userId: keys('users'),
-      messageStatusId: keys('messageStatus'),
-      senderId: keys('senderId'),
+      messageStatusId: keys('message_status'),
+      senderId: keys('sender_ids'),
       campaignId: keys('campaigns'),
       routeId: keys('routes'),
-      messageFlyId: keys('messageFly'),
+      messageFlyId: keys('message_fly'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {
