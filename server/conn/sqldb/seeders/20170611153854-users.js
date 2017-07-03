@@ -8,13 +8,6 @@ module.exports = {
       password: 'b66d23a547540570278a532f4718f7ae', // admin1234
       roleId: 1,
     }, {
-      id: 3,
-      name: 'Yogendra Singh',
-      email: 'yog27ray@gmail.com',
-      mobile: '917066435888',
-      password: 'b66d23a547540570278a532f4718f7ae',
-      roleId: 3,
-    },{
       id: 2,
       name: 'Manjesh V',
       email: 'manjeshpv@gmail.com',
@@ -22,6 +15,14 @@ module.exports = {
       password: 'b66d23a547540570278a532f4718f7ae',
       roleId: 2,
       loginUrl: 'msgque.com',
+    }, {
+      id: 3,
+      name: 'Yogendra Singh',
+      email: 'yog27ray@gmail.com',
+      mobile: '917066435888',
+      password: 'b66d23a547540570278a532f4718f7ae',
+      roleId: 3,
+      resellerId: 2,
     }], {});
   },
 

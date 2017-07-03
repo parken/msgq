@@ -49,14 +49,8 @@ module.exports = {
       active: { type: DataTypes.BOOLEAN, defaultValue: 1 },
       roleId: keys('roles'),
     }, timestamps(3)), engine)
-      .then(() => queryInterface
-        .addColumn('users', 'createdBy', {
-          type: DataTypes.INTEGER,
-          model: 'users',
-          key: 'id',
-          allowNull: true,
-          defaultValue: null,
-        }));
+      .then(() => queryInterface.addColumn('users', 'createdBy', keys('users')))
+      .then(() => queryInterface.addColumn('users', 'resellerId', keys('users')));
   },
   down(queryInterface) {
     return queryInterface.dropTable('users');
