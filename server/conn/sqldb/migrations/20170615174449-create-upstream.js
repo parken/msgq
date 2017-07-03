@@ -15,6 +15,7 @@ module.exports = {
       support: DataTypes.STRING,
       comment: DataTypes.STRING,
       active: DataTypes.BOOLEAN,
+      balance: DataTypes.INTEGER,
       createdBy: keys('users'),
       updatedBy: keys('users'),
       routeId: keys('routes'),

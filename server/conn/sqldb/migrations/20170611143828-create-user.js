@@ -42,6 +42,8 @@ module.exports = {
       otpStatus: DataTypes.INTEGER,
       password: DataTypes.STRING,
       slackUrl: DataTypes.STRING,
+      sellingBalance: DataTypes.INTEGER,
+      sendingBalance: DataTypes.INTEGER,
       slackActive: { type: DataTypes.BOOLEAN, defaultValue: 0 },
       smsActive: { type: DataTypes.BOOLEAN, defaultValue: 1 },
       active: { type: DataTypes.BOOLEAN, defaultValue: 1 },
