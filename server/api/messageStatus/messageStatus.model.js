@@ -8,7 +8,7 @@ export default function (sequelize, DataTypes) {
     },
     name: DataTypes.STRING,
   }, {
-    tableName: 'message_status',
+    tableName: 'messageStatus',
     timestamps: true,
     paranoid: true,
   });

@@ -2,7 +2,7 @@ const { engine, timestamps, keys } = require('../helper.js');
 
 module.exports = {
   up(queryInterface, DataTypes) {
-    return queryInterface.createTable('loginIdentifier', Object.assign({
+    return queryInterface.createTable('login_identifier', Object.assign({
       id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -15,6 +15,6 @@ module.exports = {
   },
 
   down(queryInterface) {
-    return queryInterface.dropTable('loginIdentifier');
+    return queryInterface.dropTable('login_identifier');
   },
 };

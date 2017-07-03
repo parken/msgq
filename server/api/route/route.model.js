@@ -1,17 +1,21 @@
 export default function (sequelize, DataTypes) {
-  const MessageText = sequelize.define('MessageText', {
+  const Route = sequelize.define('Route', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
-    text: DataTypes.STRING,
+    name: DataTypes.STRING,
+    active: DataTypes.BOOLEAN,
   }, {
-    tableName: 'message_texts',
+    tableName: 'routes',
     timestamps: true,
     paranoid: true,
+    classMethods: {
+      associate() {},
+    },
   });
 
-  return MessageText;
+  return Route;
 }

@@ -11,10 +11,9 @@ module.exports = {
       },
       count: DataTypes.INTEGER,
       comment: DataTypes.STRING,
-      userId: keys('users'),
-      messageFlyId: keys('messageFly'),
-      upstreamPlanId: keys('upstreamPlans'),
-      transactionStatusId: keys('transactionStatus'),
+      messageFlyId: keys('message_fly'),
+      upstreamId: keys('upstreams'),
+      transactionStatusId: keys('transaction_status'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {
