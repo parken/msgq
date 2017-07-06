@@ -41,7 +41,12 @@ const model = {
         include: [
           {
             model: db.User,
-            attributes: ['id', 'name', 'groupId', 'admin'],
+            attributes: ['id', 'name', 'roleId', 'admin', 'resellerId',
+              'sellingBalanceTransactional', 'sendingBalanceTransactional',
+              'sellingBalancePromotional', 'sendingBalancePromotional',
+              'sellingBalanceSenderId', 'sendingBalanceSenderId', 'sellingBalanceOTP',
+              'sendingBalanceOTP',
+            ],
           },
         ],
       })
@@ -89,8 +94,8 @@ const model = {
     const ua = req.headers['user-agent'];
 
     const agent = useragent.parse(ua);
-    const { id: userId, groupId } = req.user;
-    const session = { userId, groupId };
+    const { id: userId, roleId } = req.user;
+    const session = { userId, roleId };
 
     if (agent) {
       Object.assign(session, {
@@ -168,7 +173,7 @@ const model = {
             email: username,
           },
         },
-        attributes: ['id', 'name', 'groupId', 'email', 'password', 'otp'],
+        attributes: ['id', 'name', 'roleId', 'email', 'password', 'otp'],
       })
       .then(user => {
         if (!user) return callback(null, false);

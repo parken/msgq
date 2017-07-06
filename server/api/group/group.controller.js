@@ -17,7 +17,7 @@ export function index(req, res) {
     .then(groups => db.GroupContact
       .findAll({
         attributes: ['groupId', [db.sequelize.fn('COUNT', 'contactId'), 'count']],
-        where: { id: groups.map(x => x.id) },
+        where: { groupId: groups.map(x => x.id) },
         group: 'groupId',
       }).then((groupsContactCount) => res.json(groups.map(x => {
         const group = x.toJSON();

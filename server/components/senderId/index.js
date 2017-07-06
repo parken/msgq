@@ -37,13 +37,12 @@ const SenderId = {
   },
   getSenderId(senderId, userId) {
     return db.SenderId.find({
-      attributes: ['id', 'name', 'status'],
+      attributes: ['id', 'name', 'senderIdStatusId'],
       where: { name: senderId, createdBy: userId },
     }).then(userSenderId => {
       if (!userSenderId) return SenderId.createSenderId(senderId, userId);
       return Promise.resolve(userSenderId);
-    })
-      .catch(err => console.log(err));
+    });
   },
 };
 

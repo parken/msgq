@@ -3,6 +3,7 @@ import config from '../../config/environment';
 import logger from '../../components/logger';
 import { sms, slack } from '../../components/notify';
 import oAuthModel from '../../components/oauth/model';
+import { getRouteType } from '../../conn/sqldb/helper';
 
 import db from '../../conn/sqldb';
 
@@ -23,7 +24,7 @@ export function wStates(req, res) {
 export function me(req, res) {
   return db.User
     .findById(req.user.id, {
-      attributes: ['mobile', 'email', 'name', 'id', 'groupId', 'admin'],
+      attributes: ['mobile', 'email', 'name', 'id', 'roleId', 'admin'],
       raw: 'true',
     })
     .then(u => res.json(u))
@@ -327,4 +328,29 @@ export function sendLogin(req, res) {
 
 export function loginUid(req, res) {
   return res.status(500).json({});
+}
+
+export function addSellingRootUser(req, res) {
+  const { userId, routeId, limit } = req.body;
+  if (!userId || !routeId || !limit || req.user.roleId !== 1) {
+    return res.status(404).json({ message: 'Invalid Request.' });
+  }
+  return db.Selling.create({ userId, routeId, limit, createdBy: req.user.id,
+    updatedBy: req.user.id })
+    .then(() => res.status(202).end())
+    .catch(err => handleError(res, 500, err));
+}
+
+export function addSelling(req, res) {
+  const { userId, sendingUserId, routeId, limit, fromUserId } = req.body;
+  if (!userId || !sendingUserId || !routeId || !limit) {
+    return res.status(404).json({ message: 'Invalid Request.' });
+  }
+  if (req.user[`sellingBalance${getRouteType(routeId)}`] < limit) {
+    return res.status(404).json({ message: 'Limit Exceeded.' });
+  }
+  return db.Selling.create({ userId, sendingUserId, routeId, limit,
+    fromUserId: fromUserId || req.user.id, createdBy: req.user.id, updatedBy: req.user.id })
+    .then(() => res.status(202).end())
+    .catch(err => handleError(res, 500, err));
 }

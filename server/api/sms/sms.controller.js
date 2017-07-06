@@ -30,8 +30,19 @@ export function show(req, res) {
 }
 
 export function create(req, res, next) {
-  const { body } = req;
-  if (!body.route_id || !body.message) {
+  const {
+    groupId,
+    numbers,
+    text,
+    campaign,
+    routeId,
+    unicode = false,
+    flash = false,
+    senderId,
+    scheduledOn,
+  } = req.body;
+
+  if (!routeId || !text) {
     return res.status(400).status({ message: 'arguements missing. (route_id or message)' });
   }
 
@@ -54,53 +65,14 @@ export function create(req, res, next) {
   // if (!err) return res.status(400).json({ message: err });
   // return res.status(201).json({ id: 1 });
 
-  const {
-    groupId,
-    numbers,
-    text,
-    campaign,
-    routeId,
-    unicode = 0,
-    flash = 0,
-    senderId,
-    packageTypeId,
-    scheduledOn,
-    } = req.body;
-
   const sendingTime = (scheduledOn ? new Date(scheduledOn) : new Date()).getHours();
 
-  if (req.body.route_id === PROMOTIONAL &&  sendingTime >= 9 && sendingTime < 21) {
+  if (req.body.route_id === PROMOTIONAL && sendingTime >= 9 && sendingTime < 21) {
     return res.status(400).json({ message: 'Promotional SMS is allowed from 9AM to 9PM' });
   }
 
-  return Promise.all([
-    (groupId
-      ? db.GroupContact.findAll({
-        where: { groupId: groupId.split(',').map(Number) },
-        include: [{ attributes: ['number'], model: db.Contact }],
-      }).then(data => data.map(x => x.Contact.number.substring(x.Contact.number.length - 10)))
-      : Promise.resolve([])),
-    (campaign
-      ? db.Campaign.findOrCreate({ where: { name: campaign, userId: req.user.id } })
-        .then(([x]) => x.id)
-      : Promise.resolve()),
-    SenderId.getSenderId(senderId, req.user.id),
-  ])
-    .then(([list, campaignId, senderIdObj]) => {
-      if (numbers) list.push(...numbers.split(','));
-      if (senderIdObj.status === 3) return res.status(404).json({ message: 'SenderId is blocked' });
-      SmsManager.sendSms({
-        list,
-        text,
-        userId: req.user.id,
-        packageTypeId,
-        senderId: senderIdObj.toJSON(),
-        campaignId,
-        smsTypeId,
-        scheduledOn,
-      });
-      return res.json({ message: 'success' });
-    })
-    .catch(next);
-  // sendSms(req.body.message, req.body.mobile.split(','));
+  return SmsManager.sendSms({ text, user: req.user, routeId, senderId, campaign, unicode,
+    flash, scheduledOn, numbers, groupIds: groupId })
+    .then(() => res.json({ message: 'Messages Sent.' }))
+    .catch(err => {console.log(err);next(err)});
 }

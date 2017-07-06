@@ -26,8 +26,8 @@ export default function (sequelize, DataTypes) {
           foreignKey: 'updatedBy',
           allowNull: false,
         });
-        Upstream.belongsTo(db.SmsType, {
-          foreignKey: 'smsTypeId',
+        Upstream.belongsTo(db.Route, {
+          foreignKey: 'routeId',
           allowNull: false,
         });
       },

@@ -7,17 +7,18 @@ export default function (sequelize, DataTypes) {
       autoIncrement: true,
     },
     text: DataTypes.STRING,
-    numbers: DataTypes.STRING,
     groupIds: DataTypes.STRING,
+    numbers: DataTypes.STRING,
     total: DataTypes.INTEGER,
     success: DataTypes.INTEGER,
     fail: DataTypes.INTEGER,
     cutting: DataTypes.INTEGER,
-    unicode: DataTypes.INTEGER,
-    flash: DataTypes.INTEGER,
+    unicode: DataTypes.BOOLEAN,
+    flash: DataTypes.BOOLEAN,
     scheduledOn: DataTypes.DATE,
+    send: DataTypes.BOOLEAN,
   }, {
-    tableName: 'messageFly',
+    tableName: 'message_fly',
     timestamps: true,
     paranoid: true,
     classMethods: {
@@ -32,6 +33,9 @@ export default function (sequelize, DataTypes) {
         });
         MessageFly.belongsTo(db.SenderId, {
           foreignKey: 'senderId',
+        });
+        MessageFly.belongsTo(db.Campaign, {
+          foreignKey: 'campaignId',
         });
       },
     },

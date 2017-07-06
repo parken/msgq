@@ -75,7 +75,7 @@ class SendSmsController {
     this.field = 'senderId';
     this
       .$http
-      .get('/senderId', { params: { fl: 'id,name' } })
+      .get('/senderId', { params: { fl: 'id,name,senderIdStatusId', status: '1,2' } })
       .then(({ data: senderIds }) => {
         this.list = this.senderIds = senderIds;
         if (!this.data.senderId && this.senderIds.length) this.data.senderId = this.senderIds[0].name;

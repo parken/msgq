@@ -10,6 +10,7 @@ module.exports = {
         autoIncrement: true,
       },
       userId: keys('users'),
+      fromUserId: keys('users'),
       createdBy: keys('users'),
       updatedBy: keys('users'),
       routeId: keys('routes'),

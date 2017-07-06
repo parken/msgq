@@ -15,7 +15,6 @@ export default function (sequelize, DataTypes) {
     name: DataTypes.STRING,
     mobile: DataTypes.STRING,
     email: DataTypes.STRING,
-    groupId: DataTypes.INTEGER,
     otp: DataTypes.STRING,
     otpStatus: DataTypes.INTEGER,
     password: DataTypes.STRING,
@@ -39,6 +38,14 @@ export default function (sequelize, DataTypes) {
     senderIdStartFrom: DataTypes.INTEGER,
     senderIdPercent: DataTypes.INTEGER,
     expiresAt: DataTypes.DATE,
+    sellingBalanceTransactional: DataTypes.INTEGER,
+    sendingBalanceTransactional: DataTypes.INTEGER,
+    sellingBalancePromotional: DataTypes.INTEGER,
+    sendingBalancePromotional: DataTypes.INTEGER,
+    sellingBalanceSenderId: DataTypes.INTEGER,
+    sendingBalanceSenderId: DataTypes.INTEGER,
+    sellingBalanceOTP: DataTypes.INTEGER,
+    sendingBalanceOTP: DataTypes.INTEGER,
   }, {
     tableName: 'users',
     timestamps: true,
@@ -82,11 +89,17 @@ export default function (sequelize, DataTypes) {
     classMethods: {
       associate(db) {
         User.belongsTo(db.Group, {
-          foreignKey: 'groupId',
+          foreignKey: 'roleId',
         });
         User.belongsTo(User, {
           foreignKey: 'createdBy',
           allowNull: true,
+          as: 'CreatedBy',
+        });
+        User.belongsTo(User, {
+          foreignKey: 'resellerId',
+          allowNull: true,
+          as: 'ResellerId',
         });
       },
       checkEmailExists(db, email) {
