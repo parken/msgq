@@ -10,12 +10,8 @@ export default function (sequelize, DataTypes) {
     blockReason: DataTypes.STRING,
     company: DataTypes.STRING,
     message: DataTypes.STRING,
-    status: {
-      type: DataTypes.INTEGER,
-      defaultValue: 1,
-    },
   }, {
-    tableName: 'senderId',
+    tableName: 'sender_ids',
     timestamps: true,
     paranoid: true,
     classMethods: {
@@ -33,6 +29,11 @@ export default function (sequelize, DataTypes) {
         SenderId.belongsTo(db.Upstream, {
           foreignKey: 'upstreamId',
           allowNull: false,
+        });
+        SenderId.belongsTo(db.SenderIdStatus, {
+          foreignKey: 'senderIdStatusId',
+          allowNull: false,
+          defaultValue: 1,
         });
       },
     },

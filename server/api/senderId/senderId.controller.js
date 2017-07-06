@@ -75,6 +75,7 @@ export function deleteSenderId(req, res) {
 }
 
 export function index(req, res) {
+  const { status, fl } = req.query;
   let promise;
   if (req.user.admin === 2) {
     promise = Promise.resolve();
@@ -85,10 +86,11 @@ export function index(req, res) {
   }
   return promise
     .then(users => {
-      const where = { id: { $not: 0 } };
+      const where = { senderIdStatusId: { $not: 3 } };
       if (users) where.createdBy = users.map(x => x.id);
+      if (status) where.$and = { senderIdStatusId: status.split(',') };
       return db.SenderId.findAll({
-        attributes: req.query.fl ? req.query.fl.split(',') : ['id', 'name'],
+        attributes: fl ? fl.split(',') : ['id', 'name'],
         where,
         include: [{
           model: db.User,

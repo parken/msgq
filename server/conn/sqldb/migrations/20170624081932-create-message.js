@@ -16,6 +16,7 @@ module.exports = {
       scheduledOn: DataTypes.DATE,
       operatorOn: DataTypes.DATE,
       deliveredOn: DataTypes.DATE,
+      send: { type: DataTypes.BOOLEAN, defaultValue: true },
       userId: keys('users'),
       messageStatusId: keys('message_status'),
       senderId: keys('sender_ids'),

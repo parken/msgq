@@ -11,6 +11,7 @@ module.exports = {
       },
       userId: keys('users'),
       sendingUserId: keys('users'),
+      fromUserId: keys('users'),
       createdBy: keys('users'),
       updatedBy: keys('users'),
       routeId: keys('routes'),

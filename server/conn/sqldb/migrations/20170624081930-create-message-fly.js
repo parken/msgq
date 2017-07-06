@@ -16,12 +16,14 @@ module.exports = {
       success: DataTypes.INTEGER,
       fail: DataTypes.INTEGER,
       cutting: DataTypes.INTEGER,
-      unicode: DataTypes.INTEGER,
-      flash: DataTypes.INTEGER,
+      unicode: DataTypes.BOOLEAN,
+      flash: DataTypes.BOOLEAN,
       scheduledOn: DataTypes.DATE,
+      send: DataTypes.BOOLEAN,
       userId: keys('users'),
       routeId: keys('routes'),
       senderId: keys('sender_ids'),
+      campaignId: keys('campaigns'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {

@@ -40,5 +40,13 @@ module.exports = {
     }
 
     return options;
-  }
+  },
+  getRouteType(routeId) {
+    switch (routeId) {
+      case 1: return 'Promotional';
+      case 2: return 'Transactional';
+      case 3: return 'SenderId';
+      default: return 'OTP';
+    }
+  },
 }
