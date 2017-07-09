@@ -48,7 +48,6 @@ export default function (sequelize, DataTypes) {
     },
     hooks: {
       afterBulkCreate(instances) {
-        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', instances.length);
         const { userId, routeId } = instances[0] || {};
         if (!userId || !routeId) return;
         Message.db.User.find({
