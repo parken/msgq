@@ -18,6 +18,14 @@ export default function (sequelize, DataTypes) {
           foreignKey: 'userId',
           allowNull: false,
         });
+        Group.belongsTo(db.Route, {
+          foreignKey: 'routeId',
+          allowNull: true,
+        });
+        Group.belongsTo(db.SenderId, {
+          foreignKey: 'senderId',
+          allowNull: true,
+        });
         Group.hasMany(db.GroupContact);
       },
     },
