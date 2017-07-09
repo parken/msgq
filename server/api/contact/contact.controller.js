@@ -7,22 +7,28 @@ function handleError(res, argStatusCode, err) {
   res.status(statusCode).send(err);
 }
 
-function updateContacts(contacts, userId) {
+function updateContacts({ contacts, userId, groupId}) {
   const contact = contacts.shift();
   if (contact) {
     const { name, number } = contact;
     return db.Contact.find({ where: { number, userId } })
       .then(item => (item
-        ? item.update({ name })
+        ? item.update({ name }).then(() => Promise.resolve(item))
         : db.Contact.create({ name, number, userId })))
-      .then(() => updateContacts(contacts, userId))
-      .catch(() => updateContacts(contacts, userId));
+      .then(({ id: contactId }) => db.GroupContact
+        .findOrCreate({ where: { groupId, contactId } }))
+      .then(() => updateContacts({ contacts, userId, groupId }))
+      .catch(() => updateContacts({ contacts, userId, groupId }));
   }
   return Promise.resolve();
 }
 
 export function syncContact(req, res) {
-  return updateContacts(req.body.contacts, req.user.id)
+  const { name, contacts } = req.body;
+  if (!name || !contacts) return res.status(500).json({ message: 'Invalid Request' });
+  return db.Group
+    .findOrCreate({ where: { name, userId: req.user.id } })
+    .then(([group]) => updateContacts({ contacts, userId: req.user.id, groupId: group.id }))
     .then(() => res.end())
     .catch(err => handleError(res, 500, err));
 }

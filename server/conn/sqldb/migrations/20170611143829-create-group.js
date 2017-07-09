@@ -11,6 +11,8 @@ module.exports = {
       },
       name: DataTypes.STRING,
       userId: keys('users'),
+      senderId: keys('senderId'),
+      routeId: keys('routeId'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {
