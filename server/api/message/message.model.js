@@ -44,6 +44,9 @@ export default function (sequelize, DataTypes) {
         Message.belongsTo(db.Route, {
           foreignKey: 'routeId',
         });
+        Message.belongsTo(db.Upstream, {
+          foreignKey: 'upstreamId',
+        });
       },
     },
     hooks: {
@@ -57,16 +60,10 @@ export default function (sequelize, DataTypes) {
           attributes: ['id', 'roleId', `sellingBalance${getRouteType(routeId)}`,
             `sendingBalance${getRouteType(routeId)}`],
           where: { id: [userId, resellerId] },
-        })).then(users => {
-          const currentUser = users.filter(x => (x.id === userId))[0];
-          const resellerUser = users.filter(x => (x.id !== userId))[0];
-          currentUser.decrement({ [`${currentUser.roleId === 4 ? 'selling' : 'sending'
-          }Balance${getRouteType(routeId)}`]: instances.length });
-          if (resellerUser) {
-            resellerUser.decrement({ [`${resellerUser.roleId === 4 ? 'selling' : 'sending'
-              }Balance${getRouteType(routeId)}`]: instances.length });
-          }
-        })
+        })).then(users => Promise.all([
+          users.map(user => user.decrement({ [`${user.roleId === 4 ? 'selling' : 'sending'
+            }Balance${getRouteType(routeId)}`]: instances.length })),
+        ]))
           .catch(err => console.log(err));
       },
     },

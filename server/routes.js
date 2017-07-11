@@ -14,6 +14,7 @@ import contact from './api/contact';
 import group from './api/group';
 import template from './api/template';
 import campaign from './api/campaign';
+import upstream from './api/upstream';
 import route from './api/route';
 
 export default function (app) {
@@ -27,6 +28,7 @@ export default function (app) {
   app.use('/api/groups', group);
   app.use('/api/templates', template);
   app.use('/api/campaigns', campaign);
+  app.use('/api/upstreams', upstream);
   app.use('/api', route);
 
   // All undefined asset or api routes should return a 404
