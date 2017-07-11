@@ -7,4 +7,6 @@ const SendSsmComponent = {
   bindings: { settings: '=' },
 };
 
+
+
 export default SendSsmComponent;
