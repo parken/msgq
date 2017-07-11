@@ -9,9 +9,10 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      availableCount: DataTypes.INTEGER,
-      initialCount: DataTypes.INTEGER,
+      count: DataTypes.INTEGER,
       upstreamId: keys('upstreams'),
+      createdBy: keys('users'),
+      updatedBy: keys('users'),
     }, timestamps(3)), engine);
   },
 

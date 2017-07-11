@@ -6,22 +6,24 @@ export default function (sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true,
     },
+    count: DataTypes.INTEGER,
+    comment: DataTypes.STRING,
   }, {
     tableName: 'transactions',
     timestamps: true,
     paranoid: true,
     classMethods: {
       associate(db) {
-        Transaction.belongsTo(db.User, {
-          foreignKey: 'userId',
+        Transaction.belongsTo(db.MessageFly, {
+          foreignKey: 'messageFlyId',
           allowNull: false,
         });
-        Transaction.belongsTo(db.UserPackage, {
-          foreignKey: 'userPackageId',
+        Transaction.belongsTo(db.Upstream, {
+          foreignKey: 'upstreamId',
           allowNull: false,
         });
-        Transaction.belongsTo(db.Message, {
-          foreignKey: 'messageId',
+        Transaction.belongsTo(db.TransactionStatus, {
+          foreignKey: 'transactionStatusId',
           allowNull: false,
         });
       },

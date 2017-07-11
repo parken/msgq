@@ -23,6 +23,7 @@ module.exports = {
       campaignId: keys('campaigns'),
       routeId: keys('routes'),
       messageFlyId: keys('message_fly'),
+      upstreamId: keys('upstreams'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {

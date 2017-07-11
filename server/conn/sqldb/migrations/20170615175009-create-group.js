@@ -1,7 +1,7 @@
 const { engine, timestamps, keys } = require('../helper.js');
 
 module.exports = {
-  up: function(queryInterface, DataTypes) {
+  up(queryInterface, DataTypes) {
     return queryInterface.createTable('groups', Object.assign({
       id: {
         type: DataTypes.INTEGER,
@@ -11,8 +11,8 @@ module.exports = {
       },
       name: DataTypes.STRING,
       userId: keys('users'),
-      senderId: keys('senderId'),
-      routeId: keys('routeId'),
+      senderId: keys('sender_ids'),
+      routeId: keys('routes'),
     }, timestamps(3)), engine);
   },
   down(queryInterface) {

@@ -11,6 +11,7 @@ import socket from 'socket.io';
 import socketIOConfig from './config/socketio';
 import expressConfig from './config/express';
 import routes from './routes';
+import SmsManager from './components/smsManager';
 
 /* eslint no-console:0 */
 const log = console.log;
@@ -32,7 +33,13 @@ function startServer() {
   });
 }
 
-startServer();
+SmsManager
+  .addPendingMessagesToQueue()
+  // .then(() => startServer())
+  .catch(err => {
+    console.log(err);
+    return startServer();
+  });
 
 // Expose app
 exports = module.exports = app;

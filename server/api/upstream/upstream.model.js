@@ -6,6 +6,7 @@ export default function (sequelize, DataTypes) {
       primaryKey: true,
       autoIncrement: true,
     },
+    balance: DataTypes.INTEGER,
     name: DataTypes.STRING,
     provider: DataTypes.STRING,
     link: DataTypes.STRING,
