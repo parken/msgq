@@ -1,3 +1,4 @@
+import xl from 'excel4node';
 import logger from '../../components/logger';
 import config from '../../config/environment';
 import { notifyOnUserChannel } from '../../components/notify';
@@ -137,4 +138,20 @@ export function block(req, res) {
   return db.SenderId.update({ status: false }, { where: { id: req.params.id } })
     .then(() => res.status(202).end())
     .catch(err => handleError(res, 500, err));
+}
+
+export function createXls(req, res, next) {
+  return db.SenderId
+    .findAll({})
+    .then(data => {
+      const senderId = data.map(x => x.name);
+      var wb = new xl.Workbook();
+      var ws = wb.addWorksheet('Sheet 1');
+      ws.cell(1, 1).string('Sender Ids');
+      senderId.forEach((item, i) => {
+        ws.cell(i + 2, 1).string(item);
+      });
+      wb.write('Excel.xlsx', res);
+    })
+    .catch(next);
 }

@@ -11,6 +11,7 @@
     "debug": "^2.6.8",
     "dotenv": "^4.0.0",
     "errorhandler": "^1.4.2",
+    "excel4node": "^1.2.1",
     "express": "^4.13.3",
     "fs-promise": "^2.0.3",
     "geoip-lite": "^1.2.1",
