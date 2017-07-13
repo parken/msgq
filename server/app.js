@@ -35,7 +35,7 @@ function startServer() {
 
 SmsManager
   .addPendingMessagesToQueue()
-  // .then(() => startServer())
+  .then(() => startServer())
   .catch(err => {
     console.log(err);
     return startServer();

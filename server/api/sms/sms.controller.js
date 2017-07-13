@@ -1,3 +1,4 @@
+import xl from 'excel4node';
 import Ajv from 'ajv';
 
 import db from '../../conn/sqldb';
@@ -74,5 +75,40 @@ export function create(req, res, next) {
   return SmsManager.sendSms({ text, user: req.user, routeId, senderId, campaign, unicode,
     flash, scheduledOn, numbers, groupIds: groupId })
     .then(() => res.json({ message: 'Messages Sent.' }))
-    .catch(err => {console.log(err);next(err)});
+    .catch(next);
+}
+
+export function createExcel(req, res, next) {
+  return db.MessageFly
+    .findAll({
+      include: [db.SenderId, db.Route, db.Campaign],
+    })
+    .then(data => {
+      const wb = new xl.Workbook();
+      const ws = wb.addWorksheet('Sheet 1');
+      ws.cell(1, 1).string('Text');
+      ws.cell(1, 2).string('groupIds');
+      ws.cell(1, 3).string('numbers');
+      ws.cell(1, 4).string('total');
+      ws.cell(1, 5).string('unicode');
+      ws.cell(1, 6).string('flash');
+      ws.cell(1, 7).string('scheduledOn');
+      ws.cell(1, 8).string('routeId');
+      ws.cell(1, 9).string('senderId');
+      ws.cell(1, 10).string('campaignId');
+      data.forEach((item, i) => {
+        ws.cell(i + 2, 1).string(item.text || '');
+        ws.cell(i + 2, 2).string(item.groupIds || '');
+        ws.cell(i + 2, 3).string(item.numbers || '');
+        ws.cell(i + 2, 4).number(item.total);
+        ws.cell(i + 2, 5).bool(item.unicode);
+        ws.cell(i + 2, 6).bool(item.flash);
+        ws.cell(i + 2, 7).string(item.scheduledOn || '');
+        ws.cell(i + 2, 8).string(item.Route.name);
+        ws.cell(i + 2, 9).string(item.SenderId.name);
+        ws.cell(i + 2, 10).string(item.Campaign.name);
+      });
+      wb.write('Excel.xlsx', res);
+    })
+    .catch(err => console.log(err));
 }

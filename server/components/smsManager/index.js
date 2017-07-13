@@ -146,19 +146,22 @@ const SmsManager = {
       }).then(messages => SmsManager.addToSmsQueue(messages)),
       db.Transaction.findAll({
         where: { transactionStatusId: 1, createdAt: { $lte: moment().subtract(10, 'minute') } },
-      }).then(transactions => db.Message.findAll({
-        where: {
-          messageStatusId: 2,
-          messageFlyId: transactions.map(x => x.messageFlyId),
-          send: 1,
-          createdAt: { $lte: moment().subtract(10, 'minute') },
-        },
-        include: [db.Upstream, db.MessageFly, db.SenderId],
-      }).then(messages => SmsManager.processItem({ list: messages }))
-        .then(() => db.Transaction.update(
-          { transactionStatusId: 2 },
-          { where: { id: transactions.map(x => x.id) } }
-        ))),
+      }).then(transactions => {
+        if (!transactions.length) return Promise.resolve();
+        return db.Message.findAll({
+          where: {
+            messageStatusId: 2,
+            messageFlyId: transactions.map(x => x.messageFlyId),
+            send: 1,
+            createdAt: { $lte: moment().subtract(10, 'minute') },
+          },
+          include: [db.Upstream, db.MessageFly, db.SenderId],
+        }).then(messages => SmsManager.processItem({ list: messages }))
+          .then(() => db.Transaction.update(
+            { transactionStatusId: 2 },
+            { where: { id: transactions.map(x => x.id) } }
+          ));
+      }),
     ]).catch(err => console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', err));
   },
   createBulkMessages({ list, messageFlyId, userId, senderId, routeId, campaignId, unicode,
