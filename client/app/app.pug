@@ -15,10 +15,12 @@
         i.fa.fa-align-justify
       // brand
       a.navbar-brand.text-lt(ui-sref='home.list')
-        i.fa.fa-btc
+        i.fa.fa-envelope-o
+        span.m-l-xs(ng-if='!$ctrl.app.settings.asideFolded') MSGQ
         span.hidden-folded.m-l-xs
           //&nbsp;{{$ctrl.company.name}}
-          img(ng-src='{{$ctrl.company.logo}}', alt='{{$ctrl.company.name}}')
+          img(ng-if='$ctrl.company.logo' ng-src='{{$ctrl.company.logo}}', alt='{{$ctrl.company.name}}')
+
 
 
 

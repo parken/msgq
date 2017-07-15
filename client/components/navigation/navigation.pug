@@ -1,6 +1,16 @@
 nav.navi(ui-nav='' )
+  ul.nav(ng-if='!$ctrl.OAuth.isAuthenticated()')
+    li.hidden-folded.padder-h.m-t.m-b-sm.text-muted.text-xs
+      span Quick Links
+    li(ui-sref-active='active' ng-repeat='menu in $ctrl.menus' ui-sref='{{menu.state}}')
+      a(ng-click='$ctrl.OTP.open()')
+        i.fa.fa-sign-in.icon
+        span &nbsp;&nbsp;&nbsp;&nbsp;
+        span Login / Signup
+        i.my-icon
+          i
   //- list
-  ul.nav
+  ul.nav(ng-if='$ctrl.OAuth.isAuthenticated()')
     //li(ui-sref-active='active')
       a(ui-sref='water_ag.dashboard')
         i.fa.fa-dashboard
