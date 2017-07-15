@@ -539,6 +539,7 @@ gulp.task('copy:assets', () => {
 
 gulp.task('copy:server', () => {
   return gulp.src([
+    '.sequelizerc',
     'package.json'
   ], {cwdbase: true})
         .pipe(gulp.dest(paths.dist));

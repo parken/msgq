@@ -99,6 +99,7 @@ function setup() {
     const defaults = {
       MYSQL_HOST: 'localhost',
       MYSQL_TZ: IST,
+      NODE_ENV: 'production',
     };
 
     const systemdFile = `

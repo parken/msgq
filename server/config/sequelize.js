@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
-const pkg = require('../package.json');
+const pkg = require('../../package.json');
 
-const root = path.normalize(__dirname + '/..');
+const root = path.normalize(__dirname + '/../..');
 const envFile = path.join(root, '.env');
 let config = {};
 
