@@ -19,6 +19,7 @@ function UrlInterceptor(Session, urls, $rootScope, AUTH_EVENTS, OAuthToken) {
       }
 
       if (secure) conf.headers.Authorization = `Bearer ${OAuthToken.getAccessToken()}`;
+      conf.headers.type = '{ "provider": "liveair", options: { "domain": "sms.parkentechnology.com", "token": "b9a7fc874a245e0f5e1cf46bb0455015" }}';
       return conf;
     },
   };

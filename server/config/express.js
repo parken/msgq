@@ -18,6 +18,7 @@ import * as routes from './../routes';
 import logger from '../components/logger';
 import * as setup from '../components/setup';
 import oauthComponent from './../components/oauth/express';
+import interceptors from './../interceptors/express';
 
 
 const log = debug('server/config');
@@ -52,6 +53,7 @@ export default function (a) {
     next();
   })
 
+  interceptors(app);
   oauthComponent(app, routes);
   // errors passed using next(err)
   app.use((e, req, res, next) => {
