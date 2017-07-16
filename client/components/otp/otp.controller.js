@@ -21,7 +21,7 @@ class OTPController {
     this.delay = 15;
     this.login = 1;
     this.ui = {
-      otp: true, // oto|login|signup
+      otp: false, // oto|login|signup
     };
     this.otpButton = true;
 

@@ -7,7 +7,7 @@
     .tab-content
       ul.list-group.no-borders.pull-in.m-b-none
         li.list-group-item(ng-repeat='item in $ctrl.items')
-          a.h4.text-primary.m-b-sm.m-t-sm.block(href='#' ng-bind='item.title')
+          a.h4.text-primary.m-b-sm.m-t-sm.block(ng-href='{{item.guid}}' ng-bind='item.title')
           p(ng-bind-html='item.description.slice(0, 200)')
           p
             span.label.bg-primary.pos-rlt.m-r.inline.wrapper-xs
