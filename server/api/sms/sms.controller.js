@@ -12,8 +12,8 @@ import constants from '../../config/constants';
 
 import * as schema from './sms.schema';
 
-const { sms_types, routes } = constants;
-const { PLAIN, UNICODE } = sms_types;
+const { smsTypes, routes } = constants;
+const { PLAIN, UNICODE } = smsTypes;
 const { PROMOTIONAL, TRASACTIONAL, SENDER_ID, OTP } = routes;
 
 function sendSms(text, list) {
