@@ -1,7 +1,7 @@
 /* @ngInject */
 export default function routes($stateProvider) {
   $stateProvider
-    .state('home.sendSms', {
+    .state('sendSms', {
       url: '/send-sms',
       template: '<send-sms></send-sms>',
     });

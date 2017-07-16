@@ -1,3 +1,5 @@
+
+import logger from '../../components/logger';
 import { getRouteType } from '../../conn/sqldb/helper';
 
 export default function (sequelize, DataTypes) {
@@ -62,9 +64,9 @@ export default function (sequelize, DataTypes) {
           where: { id: [userId, resellerId] },
         })).then(users => Promise.all([
           users.map(user => user.decrement({ [`${user.roleId === 4 ? 'selling' : 'sending'
-            }Balance${getRouteType(routeId)}`]: instances.length })),
+          }Balance${getRouteType(routeId)}`]: instances.length })),
         ]))
-          .catch(err => console.log(err));
+          .catch(err => logger.err('message: afterBulkCreate', err));
       },
     },
   });

@@ -1,6 +1,7 @@
 
 
-export default function (db) {
+export default function (database) {
+  const db = database;
   db.RefreshToken = db.sequelize.import('./refreshToken.model');
   db.AccessToken = db.sequelize.import('./accessToken.model');
   db.App = db.sequelize.import('./app.model');

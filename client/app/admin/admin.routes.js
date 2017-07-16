@@ -8,5 +8,5 @@ export default function routes($stateProvider) {
     .state('admin.dashboard', {
       url: '/dashboard',
       template: '<admin-dashboard></admin-dashboard>',
-  });
+    });
 }

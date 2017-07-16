@@ -4,10 +4,10 @@ export default {
     PROMOTIONAL: 1,
     TRASACTIONAL: 2,
     SENDER_ID: 3,
-    OTP: 4
+    OTP: 4,
   },
-  sms_types: {
+  smsTypes: {
     PLAIN: 1,
     UNICODE: 2,
   },
-}
+};

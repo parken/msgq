@@ -1,3 +1,6 @@
+
+import logger from '../../components/logger';
+
 export default function (sequelize, DataTypes) {
   const UpstreamPlan = sequelize.define('UpstreamPlan', {
     id: {
@@ -42,7 +45,7 @@ export default function (sequelize, DataTypes) {
               routeId: upstream.routeId,
             }),
           ]))
-          .catch(err => console.log(err));
+          .catch(err => logger.error(err));
       },
     },
   });

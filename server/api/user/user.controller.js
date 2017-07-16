@@ -1,4 +1,5 @@
 import request from 'request';
+
 import config from '../../config/environment';
 import logger from '../../components/logger';
 import { sms, slack } from '../../components/notify';
@@ -8,17 +9,9 @@ import { getRouteType } from '../../conn/sqldb/helper';
 import db from '../../conn/sqldb';
 
 function handleError(res, argStatusCode, err) {
-  console.log(err)
   logger.error('user.controller', err);
   const statusCode = argStatusCode || 500;
   res.status(statusCode).send(err);
-}
-
-export function wStates(req, res) {
-  return db.WState
-    .findAll({attributes: ['id', 'name'], raw: true})
-    .then(wS => res.json(wS))
-    .catch(err => handleError(res, 500, err));
 }
 
 export function me(req, res) {
@@ -61,7 +54,7 @@ export function showUuid(req, res) {
       }],
     })
     .then((loginIdentifier) => {
-      if (!loginIdentifier) return res.status(404).json({ message: 'Invalid Request' })
+      if (!loginIdentifier) return res.status(404).json({ message: 'Invalid Request' });
       return res.json(loginIdentifier.User);
     })
     .catch(err => handleError(res, 500, err));
@@ -105,7 +98,7 @@ export function login(req, res) {
   return (code
     ? getApp(code)
     : db.App.findById(1, { raw: true }))
-    .then(app => {
+    .then((app) => {
       const options = {
         url: `${config.OAUTH_SERVER}${config.OAUTH_ENDPOINT}`,
         auth: {
@@ -138,7 +131,7 @@ export function refresh(req, res) {
         required: true,
       }],
     })
-    .then(app => {
+    .then((app) => {
       if (!app) return res.status(400).json({ message: 'Invalid Token' });
       const options = {
         url: `${config.OAUTH_SERVER}${config.OAUTH_ENDPOINT}`,
@@ -191,7 +184,7 @@ export function update(req, res) {
         id,
       },
     })
-    .then(() => res.json({id}))
+    .then(() => res.json({ id }))
     .catch(err => handleError(res, 500, err));
 }
 
@@ -213,7 +206,7 @@ export function otpLogin(req, res) {
     }).then(([user, newUser]) => {
       if (!user) {
         return res.status(400).json({
-          message: 'User Details not matching with our records. Please contact support'
+          message: 'User Details not matching with our records. Please contact support',
         });
       }
 
@@ -223,11 +216,11 @@ export function otpLogin(req, res) {
 
       const text = `${otp} is your OTP. Treat this as confidential. Sharing it with anyone gives` +
         'them full access to your account. We never call you to verify OTP.';
-      if (user.mobile) sms({to: user.mobile, text});
+      if (user.mobile) sms({ to: user.mobile, text });
       db.User
-        .update({otp, otpStatus: 1}, {where: {id: user.id}})
+        .update({ otp, otpStatus: 1 }, { where: { id: user.id } })
         .catch(err => logger.error('user.ctrl/otp', err));
-      return res.json({message: 'success', id: user.id, newUser});
+      return res.json({ message: 'success', id: user.id, newUser });
     }).catch(err => handleError(res, 500, err));
 }
 
@@ -243,7 +236,7 @@ export function otpSend(req, res) {
   }).then((user) => {
     if (!user) {
       return res.status(400).json({
-        message: 'User Details not matching with our records. Please contact support'
+        message: 'User Details not matching with our records. Please contact support',
       });
     }
 
@@ -253,11 +246,11 @@ export function otpSend(req, res) {
 
     const text = `${otp} is your OTP. Treat this as confidential. Sharing it with anyone gives` +
       'them full access to your account. We never call you to verify OTP.';
-    if (user.mobile) sms({to: user.mobile, text});
+    if (user.mobile) sms({ to: user.mobile, text });
     db.User
-      .update({otp, otpStatus: 1}, {where: {id: user.id}})
+      .update({ otp, otpStatus: 1 }, { where: { id: user.id } })
       .catch(err => logger.error('user.ctrl/otp', err));
-    return res.json({message: 'success', id: user.id});
+    return res.json({ message: 'success', id: user.id });
   }).catch(err => handleError(res, 500, err));
 }
 
@@ -270,11 +263,11 @@ export function otpVerify(req, res) {
     },
   })
     .then((user) => {
-      if (!user) return res.status(400).json({error_description: 'Invalid OTP'});
+      if (!user) return res.status(400).json({ error_description: 'Invalid OTP' });
       user
-        .update({otpStatus: 0})
+        .update({ otpStatus: 0 })
         .catch(err => logger.error('user.ctrl/otpVerify', err));
-      return res.json({message: 'success', id: user.id});
+      return res.json({ message: 'success', id: user.id });
     }).catch(err => handleError(res, 500, err));
 }
 
@@ -287,18 +280,18 @@ export function passwordChange(req, res) {
       otp: req.body.otp,
     },
     attributes: ['id', 'mobile', 'email', 'name'],
-  }).then(u => {
+  }).then((u) => {
     if (!u) {
       return res
         .status(400)
-        .json({error: 'Invalid password', error_description: 'Invalid current password'});
+        .json({ error: 'Invalid password', error_description: 'Invalid current password' });
     }
 
-    return u.update({password: req.body.password})
+    return u.update({ password: req.body.password })
       .then(() => {
         res.status(204).end();
         u.revokeTokens(db); // revoke all
-        const {id, name, mobile, email} = u;
+        const { id, name, mobile, email } = u;
         return slack(`Password change: ${id}, ${name}, ${mobile}, ${email}`);
       });
   })
@@ -308,7 +301,7 @@ export function passwordChange(req, res) {
 export function sendLogin(req, res) {
   return db.User
     .find({ where: { id: req.params.id } })
-    .then(user => {
+    .then((user) => {
       if (!user) return res.status(404).end();
       const otp = user.otpStatus === 1 && user.otp
         ? user.otp
@@ -317,11 +310,11 @@ export function sendLogin(req, res) {
       const text = `Your account has been created click on the link to login ${
         req.origin}/home?otp=${otp}&id=${user.mobile}`;
 
-      if (user.mobile) sms({to: user.mobile, text});
+      if (user.mobile) sms({ to: user.mobile, text });
       db.User
-        .update({otp, otpStatus: 1}, {where: {id: user.id}})
+        .update({ otp, otpStatus: 1 }, { where: { id: user.id } })
         .catch(err => logger.error('user.ctrl/otp', err));
-      return res.json({message: 'success', id: user.id});
+      return res.json({ message: 'success', id: user.id });
     })
     .catch(err => handleError(res, 500, err));
 }
@@ -335,7 +328,10 @@ export function addSellingRootUser(req, res) {
   if (!userId || !routeId || !limit || req.user.roleId !== 1) {
     return res.status(404).json({ message: 'Invalid Request.' });
   }
-  return db.Selling.create({ userId, routeId, limit, createdBy: req.user.id,
+  return db.Selling.create({ userId,
+    routeId,
+    limit,
+    createdBy: req.user.id,
     updatedBy: req.user.id })
     .then(() => res.status(202).end())
     .catch(err => handleError(res, 500, err));
@@ -349,8 +345,13 @@ export function addSelling(req, res) {
   if (req.user[`sellingBalance${getRouteType(routeId)}`] < limit) {
     return res.status(404).json({ message: 'Limit Exceeded.' });
   }
-  return db.Selling.create({ userId, sendingUserId, routeId, limit,
-    fromUserId: fromUserId || req.user.id, createdBy: req.user.id, updatedBy: req.user.id })
+  return db.Selling.create({ userId,
+    sendingUserId,
+    routeId,
+    limit,
+    fromUserId: fromUserId || req.user.id,
+    createdBy: req.user.id,
+    updatedBy: req.user.id })
     .then(() => res.status(202).end())
     .catch(err => handleError(res, 500, err));
 }

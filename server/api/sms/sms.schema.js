@@ -1,14 +1,15 @@
 
 import constants from '../../config/constants';
-const { sms_types, routes } = constants;
-const { PLAIN, UNICODE } = sms_types;
+
+const { smsTypes, routes } = constants;
+const { PLAIN, UNICODE } = smsTypes;
 const { PROMOTIONAL, TRASACTIONAL, SENDER_ID, OTP } = routes;
 
 // Todo: return error bucket
 export const sms = {
   route_id: {
     type: 'number',
-    enum: [PROMOTIONAL, TRASACTIONAL, SENDER_ID, OTP]
+    enum: [PROMOTIONAL, TRASACTIONAL, SENDER_ID, OTP],
   },
   message: {
     type: 'string',
@@ -44,7 +45,7 @@ export const unicodeSMS = {
     sms_type: {
       type: 'number',
       enum: [PLAIN, UNICODE],
-      default : PLAIN,
+      default: PLAIN,
     },
   }),
   required: smsRequired.concat(['mobile_numbers', 'sms_type']),
@@ -60,7 +61,7 @@ export const flashSMS = {
     },
     flash_sms: {
       type: 'boolean',
-      default : false,
+      default: false,
     },
   }),
   required: smsRequired.concat(['mobile_numbers', 'flash_sms']),
@@ -76,7 +77,7 @@ export const duplicateSMS = {
     },
     duplicate: {
       type: 'boolean',
-      default : false, // if lastmessage == current message
+      default: false, // if lastmessage == current message
     },
   }),
   required: smsRequired.concat(['mobile_numbers', 'duplicate']),
@@ -92,7 +93,7 @@ export const signatureSMS = {
     },
     signature: {
       type: 'boolean',
-      default : false,
+      default: false,
     },
   }),
   required: smsRequired.concat(['mobile_numbers', 'signature']),
@@ -135,10 +136,10 @@ export const groupSMS = {
       type: 'array',
       items: {
         type: 'number',
-      }
+      },
     },
   }),
-  required:  smsRequired.concat(['mobile_numbers', 'group_ids']),
+  required: smsRequired.concat(['mobile_numbers', 'group_ids']),
 };
 
 export const scheduledSMS = {
@@ -147,7 +148,7 @@ export const scheduledSMS = {
   properties: Object.assign(sms, {
     scheduled_on: {
       type: 'string',
-      format: 'date-time'
+      format: 'date-time',
     },
   }),
   required: smsRequired.concat(['mobile_numbers', 'scheduled_on']),
@@ -163,11 +164,10 @@ export const csvSMS = {
         type: 'number',
         minimum: 7000000000,
         maximum: 9999999999,
-        //pattern: '^[789]\\d{9},' pattern works with strings
+        // pattern: '^[789]\\d{9},' pattern works with strings
       },
     },
   }),
   required: smsRequired.concat(['mobile_numbers_from_csv']),
 };
-
 

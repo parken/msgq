@@ -17,6 +17,7 @@ import config from './environment';
 import * as routes from './../routes';
 import logger from '../components/logger';
 import * as setup from '../components/setup';
+import rssFeed from './../components/feed/express';
 import oauthComponent from './../components/oauth/express';
 
 
@@ -50,11 +51,11 @@ export default function (a) {
     const req = r;
     if (req.headers.origin) req.origin = req.headers.origin.split('://')[1];
     next();
-  })
-
+  });
+  rssFeed(app);
   oauthComponent(app, routes);
   // errors passed using next(err)
-  app.use((e, req, res, next) => {
+  app.use((e, req, res) => {
     const err = e;
     const { body, headers, user } = req;
 

@@ -2,7 +2,6 @@ import logger from '../../components/logger';
 import db from '../../conn/sqldb';
 
 function handleError(res, argStatusCode, err) {
-  console.log(err)
   logger.error('user.controller', err);
   const statusCode = argStatusCode || 500;
   res.status(statusCode).send(err);
@@ -19,7 +18,7 @@ export function index(req, res) {
         attributes: ['groupId', [db.sequelize.fn('COUNT', 'contactId'), 'count']],
         where: { groupId: groups.map(x => x.id) },
         group: 'groupId',
-      }).then((groupsContactCount) => res.json(groups.map(x => {
+      }).then(groupsContactCount => res.json(groups.map((x) => {
         const group = x.toJSON();
         let contact = groupsContactCount.filter(y => (y.groupId === group.id))[0];
         if (contact) contact = contact.toJSON();

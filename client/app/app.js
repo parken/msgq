@@ -27,10 +27,13 @@ import FileReader from '../components/file-reader';
 import Navigation from '../components/navigation';
 import Report from '../components/report';
 
+import Manage from './manage';
 import Admin from './admin';
 import Home from './home';
 import User from './user';
-import DeliveryReport from './home/delivery-report';
+
+import SendSms from './send-sms';
+import DeliveryReport from './delivery-report';
 import SenderId from './sender-id';
 import FourOFour from './four-o-four';
 import 'angular-oauth2';
@@ -38,30 +41,32 @@ import 'angular-oauth2';
 setupGAnalytics('UA-98313820-1');  // Google Analytics
 angular
   .module('msgQueApp', [
-    ngCookies, ngAnimate, ngSanitize, uiRouter,
-    'angular-oauth2',
-    uiBootstrap,
+    ngCookies, ngAnimate, ngSanitize, uiRouter, 'angular-oauth2', uiBootstrap,
+    // - framework
     AsideMenu, Navbar, Footer, constants, Auth, UpdateTitle, FileReader,
-    Home, FourOFour, OTPModule, User, SenderId, Navigation, DeliveryReport,
-    Report, Admin
+    Home, FourOFour, OTPModule, User, Navigation,
+    // - project specific
+    SenderId, DeliveryReport, Report, SendSms,
+    Manage, // - admin
+    Admin, // - reseller
   ])
   .component('msgqueApp', AppComponent)
   .config(routeConfig)
   .run(events)
-  .directive('watchChange', function() {
+  .directive('watchChange', () => {
     return {
       scope: {
         onchange: '&watchChange'
       },
       link: function(scope, element, attrs) {
-        element.on('input', function() {
-          scope.$apply(function () {
+        element.on('input', () => {
+          scope.$apply(() => {
             scope.onchange();
           });
         });
       }
     };
-  });;
+  });
 
 angular
   .element(document)

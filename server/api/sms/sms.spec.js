@@ -1,49 +1,48 @@
 
 /* globals sinon, describe, expect, it */
-'use strict';
 
-var proxyquire = require('proxyquire').noPreserveCache();
 
-var smsCtrlStub = {
+const proxyquire = require('proxyquire').noPreserveCache();
+
+const smsCtrlStub = {
   show: 'smsCtrl.show',
   create: 'smsCtrl.create',
 };
 
-var routerStub = {
+const routerStub = {
   get: sinon.spy(),
   post: sinon.spy(),
 };
 
 // require the index with our stubbed out modules
-var smsIndex = proxyquire('./index.js', {
+const smsIndex = proxyquire('./index.js', {
   express: {
     Router() {
       return routerStub;
-    }
+    },
   },
-  './sms.controller': smsCtrlStub
+  './sms.controller': smsCtrlStub,
 });
 
-describe('SMS API Router:', function() {
-  it('should return an express router instance', function() {
+describe('SMS API Router:', () => {
+  it('should return an express router instance', () => {
     expect(smsIndex).to.equal(routerStub);
   });
 
 
-  describe('POST /api/sms', function() {
-    it('should route to sms.controller.create', function() {
+  describe('POST /api/sms', () => {
+    it('should route to sms.controller.create', () => {
       expect(routerStub.post
-        .withArgs('/', 'smsCtrl.create')
+        .withArgs('/', 'smsCtrl.create'),
       ).to.have.been.calledOnce;
     });
   });
 
-  describe('GET /api/sms/:id', function() {
-    it('should route to sms.controller.show', function() {
+  describe('GET /api/sms/:id', () => {
+    it('should route to sms.controller.show', () => {
       expect(routerStub.get
-        .withArgs('/:id', 'smsCtrl.show')
+        .withArgs('/:id', 'smsCtrl.show'),
       ).to.have.been.calledOnce;
     });
   });
-
 });

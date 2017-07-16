@@ -15,7 +15,7 @@ function notifyAdminSenderIdApproval(senderId) {
 const SenderId = {
   createSenderId(senderId, userId) {
     return db.SenderId.findAll({ where: { name: senderId } })
-      .then(senderIds => {
+      .then((senderIds) => {
         let promise;
         const newObj = { createdBy: userId, updatedBy: userId, name: senderId };
         if (!senderIds.length) promise = db.SenderId.create(newObj);
@@ -29,7 +29,7 @@ const SenderId = {
         }
         if (!promise) promise = db.SenderId.create(newObj);
         return promise
-          .then(data => {
+          .then((data) => {
             notifyAdminSenderIdApproval(senderId);
             return Promise.resolve(data);
           });
@@ -39,7 +39,7 @@ const SenderId = {
     return db.SenderId.find({
       attributes: ['id', 'name', 'senderIdStatusId'],
       where: { name: senderId, createdBy: userId },
-    }).then(userSenderId => {
+    }).then((userSenderId) => {
       if (!userSenderId) return SenderId.createSenderId(senderId, userId);
       return Promise.resolve(userSenderId);
     });

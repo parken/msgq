@@ -1,8 +1,13 @@
+import debug from 'debug';
 import moment from 'moment';
+import rp from 'request-promise';
+
 import db from '../../conn/sqldb';
 import SenderId from '../../components/senderId';
-import rp from 'request-promise';
+import logger from '../../components/logger';
 import { getRouteType } from '../../conn/sqldb/helper';
+
+const log = debug('components/smsManager');
 
 const SmsManager = {
   messageFly: { queue: [], processing: false },
@@ -17,6 +22,7 @@ const SmsManager = {
         MessageFly: { text },
         SenderId: { name: sender },
       } = message;
+      log('unicode, flash', unicode, flash);
       return rp({
         method: 'POST',
         uri: 'http://sms.parkentechnology.com/httpapi/httpapi',
@@ -30,11 +36,11 @@ const SmsManager = {
         },
         json: true,
       })
-        .then((body) => message.update({ messageStatusId: 4, comment: body, operatorOn: moment() }))
+        .then(body => message.update({ messageStatusId: 4, comment: body, operatorOn: moment() }))
         .then(() => SmsManager.processItem({ list, reject }))
         .catch(() => SmsManager.processItem({ list, reject: true }));
     }
-    if (reject) return Promise.reject("Rejecting on request");
+    if (reject) return Promise.reject('Rejecting on request');
     return Promise.resolve();
   },
   processOperatorSelection({ list }) {
@@ -42,9 +48,9 @@ const SmsManager = {
     const { routeId, messageFlyId } = list[0];
     return db.Upstream
       .findAll({ where: { routeId, balance: { $gt: 0 } } })
-      .then(upstreams => {
+      .then((upstreams) => {
         const upstreamMessageMap = {};
-        for (let i = 0; i < upstreams.length; i++) {
+        for (let i = 0; i < upstreams.length; i += 1) {
           const upstream = upstreams[i];
           if (upstream.balance >= list.length) {
             upstreamMessageMap[upstream.id] = list.splice(0, list.length);
@@ -54,18 +60,17 @@ const SmsManager = {
         }
         upstreamMessageMap[0] = list;
         return db.sequelize.transaction()
-          .then(transaction => {
+          .then((transaction) => {
             const promises = [
               db.Message
                 .update(
                   { messageStatusId: 3 },
                   { where: { id: upstreamMessageMap[0].map(x => x.id) } },
-                  { transaction }
-                ),
+                  { transaction }),
             ];
             delete upstreamMessageMap[0];
             const messageIdAllocated = [];
-            promises.push(...Object.keys(upstreamMessageMap).map(upstreamId => {
+            promises.push(...Object.keys(upstreamMessageMap).map((upstreamId) => {
               const id = upstreamMessageMap[upstreamId].map(x => x.id);
               messageIdAllocated.push(...id);
               const upstream = db.Upstream.build({ id: upstreamId });
@@ -76,7 +81,8 @@ const SmsManager = {
                 db.Transaction.create(
                   {
                     upstreamId,
-                    messageFlyId, count: upstreamMessageMap[upstreamId].map(x => x.id).length,
+                    messageFlyId,
+                    count: upstreamMessageMap[upstreamId].map(x => x.id).length,
                     transactionStatusId: 1,
                   }, { transaction }),
                 upstream.decrement({ balance: id.length }, { transaction }),
@@ -84,7 +90,7 @@ const SmsManager = {
             }));
             return Promise
               .all(promises)
-              .then(data => {
+              .then((data) => {
                 transaction.commit();
                 return db.Message.findAll({
                   where: { id: messageIdAllocated },
@@ -95,7 +101,7 @@ const SmsManager = {
               .then(transactions => db.Transaction.update(
                 { transactionStatusId: 2 },
                 { where: { id: transactions.map(x => x.id) } }))
-              .catch(err => {
+              .catch((err) => {
                 transaction.rollback();
                 return Promise.reject(err);
               });
@@ -146,7 +152,7 @@ const SmsManager = {
       }).then(messages => SmsManager.addToSmsQueue(messages)),
       db.Transaction.findAll({
         where: { transactionStatusId: 1, createdAt: { $lte: moment().subtract(10, 'minute') } },
-      }).then(transactions => {
+      }).then((transactions) => {
         if (!transactions.length) return Promise.resolve();
         return db.Message.findAll({
           where: {
@@ -159,15 +165,23 @@ const SmsManager = {
         }).then(messages => SmsManager.processItem({ list: messages }))
           .then(() => db.Transaction.update(
             { transactionStatusId: 2 },
-            { where: { id: transactions.map(x => x.id) } }
-          ));
+            { where: { id: transactions.map(x => x.id) } }));
       }),
-    ]).catch(err => console.log('>>>>>>>>>>>>>>>>>>>>>>>>>', err));
+    ]).catch(err => logger.error('addPendingMessagesToQueue', err));
   },
   createBulkMessages({ list, messageFlyId, userId, senderId, routeId, campaignId, unicode,
-                       flash, scheduledOn, send }) {
-    return db.Message.bulkCreate(list.map(number => ({ number, messageFlyId, messageStatusId: 1,
-      userId, senderId, routeId, campaignId, flash, scheduledOn, send, unicode,
+    flash, scheduledOn, send }) {
+    return db.Message.bulkCreate(list.map(number => ({ number,
+      messageFlyId,
+      messageStatusId: 1,
+      userId,
+      senderId,
+      routeId,
+      campaignId,
+      flash,
+      scheduledOn,
+      send,
+      unicode,
     }))).then(messages => (send ? SmsManager.addToSmsQueue(messages) : Promise.resolve()));
   },
   /**
@@ -175,7 +189,7 @@ const SmsManager = {
    * @returns {Promise.<Array.<Instance>>}
    */
   addToScheduler({ list, messageTextId, userId, senderId, packageTypeId, messageTypeId, scheduledOn,
-                   campaignId }) {
+    campaignId }) {
     return db.ScheduleMessage.bulkCreate(list.map(number => ({
       userId,
       number,
@@ -199,8 +213,8 @@ const SmsManager = {
         where: { id },
         attributes: ['id', 'roleId', `sellingBalance${getRouteType(routeId)}`,
           `sendingBalance${getRouteType(routeId)}`] })
-      .then(users => {
-        if (users.every(u => {
+      .then((users) => {
+        if (users.every((u) => {
           const balanceField = `${u.roleId === 4 ? 'selling' : 'sending'
           }Balance${getRouteType(routeId)}`;
           return u[balanceField] >= count;
@@ -224,7 +238,7 @@ const SmsManager = {
    * @returns {*}
    */
   sendSms({ text, user, routeId, campaign, numbers, groupIds, unicode, flash, senderId,
-            scheduledOn }) {
+    scheduledOn }) {
     if (!text || !user) return Promise.reject({ message: 'Invalid request.' });
     const { id: userId, resellerId } = user;
     return Promise.all([
@@ -248,11 +262,29 @@ const SmsManager = {
         }
         const send = senderIdStatusId === 2;
         return SmsManager.canSendSms({ userId, resellerId, routeId, count: list.length })
-          .then(() => db.MessageFly.create({ text, numbers, groupIds, total: list.length,
-            unicode, flash, scheduledOn, campaignId, routeId, senderId: id, send }))
-          .then(messageFly => SmsManager.createBulkMessages({ list, messageFlyId: messageFly.id,
-            userId: user.id, senderId: id, routeId, campaignId, unicode, flash, scheduledOn,
-            send }));
+          .then(() => db.MessageFly.create({ text,
+            numbers,
+            groupIds,
+            total: list.length,
+            unicode,
+            flash,
+            scheduledOn,
+            campaignId,
+            routeId,
+            senderId: id,
+            send }))
+          .then(messageFly => SmsManager
+            .createBulkMessages({ list,
+              messageFlyId: messageFly.id,
+              userId: user.id,
+              senderId: id,
+              routeId,
+              campaignId,
+              unicode,
+              flash,
+              scheduledOn,
+              send,
+            }));
       });
   },
 };

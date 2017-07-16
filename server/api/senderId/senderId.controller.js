@@ -5,7 +5,6 @@ import { notifyOnUserChannel } from '../../components/notify';
 import db from '../../conn/sqldb';
 
 function handleError(res, argStatusCode, err) {
-  console.log(err)
   logger.error('user.controller', err);
   const statusCode = argStatusCode || 500;
   res.status(statusCode).send(err);
@@ -66,13 +65,13 @@ export function create(req, res) {
           return res.json({ message: 'success' });
         });
     })
-    .catch((err) => handleError(res, 500, err));
+    .catch(err => handleError(res, 500, err));
 }
 
 export function deleteSenderId(req, res) {
   return db.SenderId.destroy({ where: { id: req.params.id } })
-    .then((data) => res.json(data))
-    .catch((err) => handleError(res, 500, err));
+    .then(data => res.json(data))
+    .catch(err => handleError(res, 500, err));
 }
 
 export function index(req, res) {
@@ -86,7 +85,7 @@ export function index(req, res) {
     promise = Promise.resolve([req.user]);
   }
   return promise
-    .then(users => {
+    .then((users) => {
       const where = { senderIdStatusId: { $not: 3 } };
       if (users) where.createdBy = users.map(x => x.id);
       if (status) where.$and = { senderIdStatusId: status.split(',') };
@@ -113,7 +112,7 @@ export function show(req, res) {
     promise = Promise.resolve([req.user]);
   }
   return promise
-    .then(users => {
+    .then((users) => {
       const where = { id: req.params.id };
       if (users) where.createdBy = users.map(x => x.id);
       return db.SenderId.find({
@@ -143,10 +142,10 @@ export function block(req, res) {
 export function createXls(req, res, next) {
   return db.SenderId
     .findAll({})
-    .then(data => {
+    .then((data) => {
       const senderId = data.map(x => x.name);
-      var wb = new xl.Workbook();
-      var ws = wb.addWorksheet('Sheet 1');
+      const wb = new xl.Workbook();
+      const ws = wb.addWorksheet('Sheet 1');
       ws.cell(1, 1).string('Sender Ids');
       senderId.forEach((item, i) => {
         ws.cell(i + 2, 1).string(item);

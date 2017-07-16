@@ -4,7 +4,7 @@ import debug from 'debug';
 import dotenv from 'dotenv';
 
 const log = debug('config/env');
-const root = path.normalize(__dirname + '/../..');
+const root = path.normalize(`${__dirname}/../..`);
 const envFile = path.join(root, '.env');
 const setupCompleted = fs.existsSync(envFile);
 const variables = setupCompleted ? dotenv.config({ path: envFile }) : {};

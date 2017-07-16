@@ -1,0 +1,16 @@
+.wrapper-md.ng-scope
+  .row
+    .col-sm-6.col-xs-12
+      h1.m-n.font-thin.h3.text-black News & Updates
+      small.text-muted Welcome to cloud messaging.
+  .tab-container
+    .tab-content
+      ul.list-group.no-borders.pull-in.m-b-none
+        li.list-group-item(ng-repeat='item in $ctrl.items')
+          a.h4.text-primary.m-b-sm.m-t-sm.block(href='#' ng-bind='item.title')
+          p(ng-bind-html='item.description.slice(0, 200)')
+          p
+            span.label.bg-primary.pos-rlt.m-r.inline.wrapper-xs
+              i.arrow.right.arrow-primary
+              |  Tags:
+            a.m-r-sm(href='' ng-repeat='cat in item.categories' ng-bind='cat')

@@ -69,12 +69,10 @@ export default function (sequelize, DataTypes) {
         return Promise.all([
           db.AccessToken.update(
             { expires },
-            { where: { userId: this.id } }
-          ),
+            { where: { userId: this.id } }),
           db.RefreshToken.update(
             { expires },
-            { where: { userId: this.id } }
-          ),
+            { where: { userId: this.id } }),
         ]);
       },
 
@@ -103,13 +101,13 @@ export default function (sequelize, DataTypes) {
         });
       },
       checkEmailExists(db, email) {
-        return db.User.count({ where: { email } }).then(rows => {
+        return db.User.count({ where: { email } }).then((rows) => {
           if (rows > 0) return Promise.resolve(true);
           return Promise.resolve(false);
         });
       },
       checkMobileExists(db, mobile) {
-        return db.User.count({ where: { mobile } }).then(rows => {
+        return db.User.count({ where: { mobile } }).then((rows) => {
           if (rows > 0) return Promise.resolve(true);
           return Promise.resolve(false);
         });

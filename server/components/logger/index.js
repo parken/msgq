@@ -4,7 +4,7 @@ import winston from 'winston';
 import config, { NODE_ENV } from '../../config/environment';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-const dir = path.join(config.root,'logs');
+const dir = path.join(config.root, 'logs');
 if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 
 const logger = new winston.Logger({

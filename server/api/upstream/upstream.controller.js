@@ -1,9 +1,7 @@
 import logger from '../../components/logger/index';
-import { getRouteType } from '../../conn/sqldb/helper';
 import db from '../../conn/sqldb/index';
 
 function handleError(res, argStatusCode, err) {
-  console.log(err)
   logger.error('user.controller', err);
   const statusCode = argStatusCode || 500;
   res.status(statusCode).send(err);

@@ -7,7 +7,7 @@ function handleError(res, argStatusCode, err) {
   res.status(statusCode).send(err);
 }
 
-function updateContacts({ contacts, userId, groupId}) {
+function updateContacts({ contacts, userId, groupId }) {
   const contact = contacts.shift();
   if (contact) {
     const { name, number } = contact;

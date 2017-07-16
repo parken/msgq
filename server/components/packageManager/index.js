@@ -15,9 +15,9 @@ const PackageManager = {
         [db.Sequelize.fn('COUNT', db.Sequelize.col('userPackageId')), 'count']],
       where: { userId, userPackageId },
       group: 'userPackageId',
-    }).then(packagesUsage => {
+    }).then((packagesUsage) => {
       const result = {};
-      userPackageId.forEach(id => {
+      userPackageId.forEach((id) => {
         let usage = packagesUsage.filter(x => (x.userPackageId === id));
         if (usage.length) usage = usage[0].toJSON();
         else usage = { count: 0 };
@@ -28,10 +28,10 @@ const PackageManager = {
   },
   availableLimit(userId, packageTypeId) {
     return PackageManager.activePackages(userId, packageTypeId)
-      .then(activePackages => {
+      .then((activePackages) => {
         if (!activePackages.length) return Promise.reject({ message: 'No Package Available.' });
         return PackageManager.packageUsage(activePackages.map(x => x.id), userId)
-          .then(packagesUsage => activePackages.map(uP => {
+          .then(packagesUsage => activePackages.map((uP) => {
             const userPackage = uP.toJSON();
             userPackage.used = packagesUsage[userPackage.id];
             return userPackage;

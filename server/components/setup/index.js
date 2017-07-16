@@ -12,7 +12,7 @@ const log = debug('components/setup');
 const IST = '+05:30';
 
 const offset = moment().utcOffset();
-const TZ = ''.concat(offset < 0 ? "-" : "+",moment(''.concat(Math.abs(offset/60),Math.abs(offset%60) < 10 ? "0" : "",Math.abs(offset%60)),"hmm").format("HH:mm"));
+const TZ = ''.concat(offset < 0 ? '-' : '+', moment(''.concat(Math.abs(offset / 60), Math.abs(offset % 60) < 10 ? '0' : '', Math.abs(offset % 60)), "hmm").format('HH:mm'));
 
 function serveForm({ values = {}, err = '' } = {}) {
   return (req, res) => {
@@ -26,8 +26,7 @@ function serveForm({ values = {}, err = '' } = {}) {
       PORT: 'Application Port',
       SERVER_USER: 'SSH User',
       SERVER_USER_PASSWORD: 'SSH Password',
-      SERVER_GROUP: 'SSH User Group',
-    };
+      SERVER_GROUP: 'SSH User Group' };
     const numuricFields = ['PORT'];
     const timezones = [IST];
 
@@ -40,33 +39,33 @@ function serveForm({ values = {}, err = '' } = {}) {
         <p style="color:red">${err.toString()}</p>
          <br><br>
           ${
-      Object.keys(captions)
-        .map(key => {
-          const field = captions[key];
-          if (key === 'MYSQL_TZ') {
-            return `<br> <br> <br>
+  Object.keys(captions)
+    .map((key) => {
+      const field = captions[key];
+      if (key === 'MYSQL_TZ') {
+        return `<br> <br> <br>
                   ${field}:
                   <select
                     name="${key}"
                     value="${field ? `${field}` : ''}">
                     <option value="">Select</option>
                     ${
-              timezones.map(t =>
-                `<option ${TZ === t ? 'selected="true"' : ''}">${t}</option>`)
-              }
+  timezones.map(t =>
+    `<option ${TZ === t ? 'selected="true"' : ''}">${t}</option>`)
+}
                     </select>
                 `;
-          }
+      }
 
-          return `<br>
+      return `<br>
                   ${field}:
                   <input
                     type="${numuricFields.includes(field) ? 'number' : 'text'}"
                     name="${key}"
                     value="${values[key] ? `${values[key]}` : ''}">
                 `;
-        })
-      }
+    })
+}
           <br><br><br>
           <input type="submit">
         </form>
@@ -94,7 +93,7 @@ function setup() {
     const SYSTEMD_FILE_NAME = 'msgque.service';
     const conn = new Sequelize(
       MYSQL_DB, MYSQL_USER,
-      MYSQL_PASS, { host: MYSQL_HOST, dialect: 'mysql', timezone: MYSQL_TZ }
+      MYSQL_PASS, { host: MYSQL_HOST, dialect: 'mysql', timezone: MYSQL_TZ },
     );
     const defaults = {
       MYSQL_HOST: 'localhost',
@@ -128,7 +127,7 @@ WantedBy=multi-user.target`;
 
     return conn
       .authenticate()
-      .then(() => new Promise(resolve => {
+      .then(() => new Promise((resolve) => {
         fs.writeFileSync(envFile, env);
         fs.writeFileSync(`${root}/${SYSTEMD_FILE_NAME}`, systemdFile);
         exec(`chmod u+x ${root}/after-setup.sh`);

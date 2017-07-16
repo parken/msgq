@@ -14,7 +14,7 @@ module.exports = {
         updatedBy: 1,
         routeId: 1,
       }],
-      {});
+    {});
   },
   down(queryInterface) {
     return queryInterface.bulkDelete('upstreams', { id: [1] });

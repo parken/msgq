@@ -1,13 +1,13 @@
 const { engine, timestamps, keys } = require('../helper.js');
 
 module.exports = {
-  up: function(queryInterface, DataTypes) {
+  up(queryInterface, DataTypes) {
     return queryInterface.createTable('refresh_tokens', Object.assign({
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
       },
       userId: keys('users'),
       sessionId: keys('sessions'),
@@ -22,7 +22,7 @@ module.exports = {
       },
     }, timestamps(3)), engine);
   },
-  down: function(queryInterface) {
+  down(queryInterface) {
     return queryInterface.dropTable('refresh_tokens');
-  }
+  },
 };

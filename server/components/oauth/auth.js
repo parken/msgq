@@ -14,7 +14,7 @@ export function logout(req, res, next) {
       },
       raw: true,
     })
-    .then((s) => (s && s.sessionId ? db.Session.logout(db, s.sessionId) : Promise.resolve()))
+    .then(s => (s && s.sessionId ? db.Session.logout(db, s.sessionId) : Promise.resolve()))
     .then(s => res.json(s))
     .catch(next);
 }

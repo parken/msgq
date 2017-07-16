@@ -66,7 +66,7 @@ class AppController {
       .revokeToken()
       .then(() => {
         this.Session.destroy();
-        if (this.$state.current.auth) this.$state.go('home.list');
+        if (this.$state.current.auth) this.$state.go('home.dash');
         return this.$window.location.reload();
       });
   }

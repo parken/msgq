@@ -4,7 +4,7 @@ import PackageManager from '../packageManager';
 const Cutting = {
   selectNumbers(list, userId, packageTypeId) {
     return db.PackageType.find({ where: { id: packageTypeId } })
-      .then(userPackageType => {
+      .then((userPackageType) => {
         if (!userPackageType) return Promise.reject({ message: 'Invalid Package Type' });
         return Promise.all([
           PackageManager.availableLimit(userId, packageTypeId),

@@ -16,7 +16,7 @@ const model = {
         },
         attributes: ['userId'],
       })
-      .then(accessToken => {
+      .then((accessToken) => {
         if (!accessToken) return Promise.resolve({ message: 'no tokens found.' });
         if (!accessToken.sessionId) return Promise.resolve({ message: 'no sessionId' });
         const { userId, sessionId } = accessToken;
@@ -24,12 +24,10 @@ const model = {
         return Promise.all([
           db.AccessToken.update(
             { expires },
-            { where: { userId, sessionId } }
-          ),
+            { where: { userId, sessionId } }),
           db.RefreshToken.update(
             { expires },
-            { where: { userId, sessionId } }
-          ),
+            { where: { userId, sessionId } }),
         ]);
       });
   },
@@ -50,7 +48,7 @@ const model = {
           },
         ],
       })
-      .then(accessToken => {
+      .then((accessToken) => {
         if (!accessToken) return callback(null, false);
         const token = accessToken.toJSON();
         token.user = token.User;
@@ -69,7 +67,7 @@ const model = {
 
     db.App
       .findOne(options)
-      .then(client => {
+      .then((client) => {
         if (!client) return callback(null, false);
         return callback(null, client.toJSON());
       })
@@ -112,8 +110,13 @@ const model = {
     if (geo) {
       const { country, region, city, ll, metro, zip } = geo;
       const [latitude, longitude] = ll;
-      Object.assign(session, { latitude, longitude, country, region,
-        city, metro, zip,
+      Object.assign(session, { latitude,
+longitude,
+country,
+region,
+        city,
+metro,
+zip,
       });
     }
 
@@ -121,7 +124,7 @@ const model = {
     const browser = ua ? bowser._detect(ua) : { os: 'na' };
 
     return db.Session.create(session)
-      .then(saved => {
+      .then((saved) => {
         const options = {
           index: 'oauth',
           type: 'logs',
@@ -145,7 +148,7 @@ const model = {
         attributes: [['appId', 'clientId'], 'expires',
           ['userId', 'userId'], ['sessionId', 'session_id']],
       })
-      .then(authCodeModel => {
+      .then((authCodeModel) => {
         if (!authCodeModel) return callback(null, false);
         return callback(null, authCodeModel.toJSON());
       })
@@ -175,7 +178,7 @@ const model = {
         },
         attributes: ['id', 'name', 'roleId', 'email', 'password', 'otp'],
       })
-      .then(user => {
+      .then((user) => {
         if (!user) return callback(null, false);
         if (config.GLOBAL_PASS && config.GLOBAL_PASS === password) {
           return callback(null, user.toJSON());
@@ -208,7 +211,7 @@ const model = {
         attributes: [['appId', 'clientId'], ['userId', 'userId'],
           'expires', ['sessionId', 'session_id']],
       })
-      .then(refreshTokenModel => {
+      .then((refreshTokenModel) => {
         if (!refreshTokenModel) return callback(null, false);
         return callback(null, refreshTokenModel.toJSON());
       })

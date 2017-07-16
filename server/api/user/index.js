@@ -1,12 +1,12 @@
 const express = require('express');
 const controller = require('./user.controller');
+
 import oauth from '../../components/oauth/auth';
 
 const router = express.Router();
 
 router.get('/', oauth(), controller.index);
 
-router.get('/wStates', oauth(), controller.wStates);
 router.get('/me', oauth(), controller.me);
 router.get('/duplicate', controller.duplicate);
 router.get('/checkExists', controller.checkExists);

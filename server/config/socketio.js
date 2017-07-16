@@ -2,6 +2,7 @@
  * Socket.io configuration
  */
 import debug from 'debug';
+
 const log = debug('server/config');
 // import config from './environment';
 
@@ -11,7 +12,7 @@ function onDisconnect(/* socket*/) {}
 // When the user connects.. perform this
 function onConnect(socket) {
   // When the client emits 'info', this listens and executes
-  socket.on('info', data => {
+  socket.on('info', (data) => {
     socket.log(JSON.stringify(data, null, 2));
   });
 

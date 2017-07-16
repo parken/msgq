@@ -1,6 +1,7 @@
 import path from 'path';
 import _ from 'lodash';
 import dotenv from 'dotenv';
+
 const root = path.normalize(`${__dirname}/../../..`);
 const env = dotenv.config({ path: path.join(root, '.env') });
 // All configurations will extend these options
@@ -37,4 +38,5 @@ module.exports = _.merge(
   all,
   require('./shared'),
   env,
+  /* eslint import/no-dynamic-require:0 */
   require(`./${process.env.NODE_ENV}.js`) || {});

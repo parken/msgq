@@ -10,7 +10,7 @@ export default function (req, res) {
       },
       attributes: ['id', 'name'],
     })
-    .then(model => {
+    .then((model) => {
       if (!model) return res.status(404).json({ error: 'Invalid Client' });
       return res.json(model);
     })

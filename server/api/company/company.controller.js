@@ -25,5 +25,5 @@ export function show(req, res) {
       if (!company) return res.status(404).json({ message: 'Invalid Request' });
       return res.json(company);
     })
-    .catch((err) => handleError(res, 500, err));
+    .catch(err => handleError(res, 500, err));
 }
