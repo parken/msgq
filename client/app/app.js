@@ -8,8 +8,6 @@ import ngCookies from 'angular-cookies';
 import uiRouter from 'angular-ui-router';
 import uiBootstrap from 'angular-ui-bootstrap';
 
-// import ngMessages from 'angular-messages';
-
 import { routeConfig } from './app.config';
 
 import AppComponent from './app.component';
@@ -25,6 +23,7 @@ import Footer from '../components/footer';
 import UpdateTitle from '../components/update-title';
 import FileReader from '../components/file-reader';
 import Navigation from '../components/navigation';
+import AdminNavigation from '../components/admin-navigation';
 import Report from '../components/report';
 
 import Manage from './manage';
@@ -44,9 +43,10 @@ angular
     ngCookies, ngAnimate, ngSanitize, uiRouter, 'angular-oauth2', uiBootstrap,
     // - framework
     AsideMenu, Navbar, Footer, constants, Auth, UpdateTitle, FileReader,
-    Home, FourOFour, OTPModule, User, Navigation,
+    Home, FourOFour, OTPModule, Navigation,
     // - project specific
-    SenderId, DeliveryReport, Report, SendSms,
+    SenderId, DeliveryReport, Report, SendSms, User,
+    AdminNavigation,
     Manage, // - admin
     Admin, // - reseller
   ])

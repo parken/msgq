@@ -1,7 +1,7 @@
-const express = require('express');
-const controller = require('./upstream.controller');
+import express from 'express';
 
 import oauth from '../../components/oauth/auth';
+import * as controller from './upstream.controller';
 
 const router = express.Router();
 

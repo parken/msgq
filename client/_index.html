@@ -1,49 +1,53 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <base href="/">
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <base href="/">
   <title update-title> MSGQue | Play </title>
   <meta name="description" content="MSGQue">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <!--<script type="text/javascript" src="https://www.google.com/jsapi"></script>-->
-    <link rel="manifest" href="manifest.json">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <link rel="manifest" href="manifest.json">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 </head>
 <body>
-    <!--[if lt IE 9]>
-      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+<!--[if lt IE 9]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+  your browser</a> to improve your experience.</p>
+<![endif]-->
 
-    <msgque-app></msgque-app>
-    <script>
-      //http://jsfiddle.net/manjeshpv/eh18n2sg/
-      google.load("elements", "1", {
-        packages: "transliteration"
-      });
+<msgque-app></msgque-app>
+<script>
+  //http://jsfiddle.net/manjeshpv/eh18n2sg/
+  google.load("elements", "1", {
+    packages: "transliteration"
+  });
 
-      function onLoad() {
-        var options = {
-          sourceLanguage:
-          google.elements.transliteration.LanguageCode.ENGLISH,
-          destinationLanguage:
-            [google.elements.transliteration.LanguageCode.HINDI],
-          //shortcutKey: 'ctrl+g',
-          transliterationEnabled: true
-        };
+  function onLoad() {
+    var options = {
+      sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH,
+      destinationLanguage: [google.elements.transliteration.LanguageCode.HINDI],
+      //shortcutKey: 'ctrl+g',
+      transliterationEnabled: true
+    };
 
-        // Create an instance on TransliterationControl with the required
-        // options.
-        var options = {sourceLanguage:'en',destinationLanguage:['hi','ml','ta','te','kn','mr','or','pa','ur','sa','gu','bn'],shortcutKey:'ctrl+g',transliterationEnabled:true};
-        var control = new google.elements.transliteration.TransliterationControl(options);
+    // Create an instance on TransliterationControl with the required
+    // options.
+    var options = {
+      sourceLanguage: 'en',
+      destinationLanguage: ['hi', 'ml', 'ta', 'te', 'kn', 'mr', 'or', 'pa', 'ur', 'sa', 'gu', 'bn'],
+      shortcutKey: 'ctrl+g',
+      transliterationEnabled: true
+    };
+    var control = new google.elements.transliteration.TransliterationControl(options);
 
-        // Enable transliteration in the textbox with id
-        // 'transliterateTextarea'.
-        control.makeTransliteratable(['transliterateTextarea']);
-        control.showControl('translControl');
-      }
-      google.setOnLoadCallback(onLoad);
-    </script>
+    // Enable transliteration in the textbox with id
+    // 'transliterateTextarea'.
+    control.makeTransliteratable(['transliterateTextarea']);
+    control.showControl('translControl');
+  }
+  google.setOnLoadCallback(onLoad);
+</script>
 </body>
 </html>

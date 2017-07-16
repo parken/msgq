@@ -1,7 +1,7 @@
 /* @ngInject */
 export default function routes($stateProvider) {
   $stateProvider
-    .state('user.profile', {
+    .state('users.profile', {
       url: '/profile',
       template: '<user-profile></user-profile>',
     });

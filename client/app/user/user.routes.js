@@ -1,7 +1,7 @@
 /* @ngInject */
 export default function routes($stateProvider) {
   $stateProvider
-    .state('user', {
+    .state('users', {
       abstract: true,
       url: '/users',
       template: '<div ui-view=""></div>',

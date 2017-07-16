@@ -20,7 +20,7 @@
             .sparkline.inline(ng-init='data2=[ 105,102,106,107,105,104,101,99,98,109,105,100,108,110,105,110,109 ]', ui-jq='sparkline', ui-options="[105,102,106,107,105,104,101,99,98,109,105,100,108,110,105,110,109], {type:'bar', height:20, barWidth:5, barSpacing:1, barColor:'#dce5ec'}")
               canvas(width='101', height='20', style='display: inline-block; width: 101px; height: 20px; vertical-align: top;')
     // / main header
-    .wrapper-md.ng-scope(ng-controller='FlotChartDemoCtrl')
+    .wrapper-md.ng-scope
       // stats
       .row
         .col-md-5
@@ -141,26 +141,7 @@
                 div(style='position: absolute; top: 39px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;') 100
                 div(style='position: absolute; top: 2px; font-style: normal; font-variant: normal; font-weight: 400; font-stretch: normal; font-size: 11px; line-height: 12.65px; font-family: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(161, 167, 172); left: 0px; text-align: right;') 120
             canvas.flot-overlay(width='607', height='240', style='direction: ltr; position: absolute; left: 0px; top: 0px; width: 607px; height: 240px;')
-        .col.wrapper-lg.w-lg.bg-light.dk.r-r
-          h4.font-thin.m-t-none.m-b Reports
-          div
-            div
-              span.pull-right.text-primary 60%
-              span Consulting
-            .progress-xs.m-t-sm.bg-white.progress.ng-isolate-scope(value='60', animate='true', type='primary')
-              .progress-bar.progress-bar-primary(ng-class="type && 'progress-bar-' + type", role='progressbar', aria-valuenow='60', aria-valuemin='0', aria-valuemax='100', ng-style="{width: percent + '%'}", aria-valuetext='60%', ng-transclude='', style='width: 60%;')
-            div
-              span.pull-right.text-info 35%
-              span Online tutorials
-            .progress-xs.m-t-sm.bg-white.progress.ng-isolate-scope(value='35', animate='true', type='info')
-              .progress-bar.progress-bar-info(ng-class="type && 'progress-bar-' + type", role='progressbar', aria-valuenow='35', aria-valuemin='0', aria-valuemax='100', ng-style="{width: percent + '%'}", aria-valuetext='35%', ng-transclude='', style='width: 35%;')
-            div
-              span.pull-right.text-warning 25%
-              span EDU management
-            .progress-xs.m-t-sm.bg-white.progress.ng-isolate-scope(value='25', animate='true', type='warning')
-              .progress-bar.progress-bar-warning(ng-class="type && 'progress-bar-' + type", role='progressbar', aria-valuenow='25', aria-valuemin='0', aria-valuemax='100', ng-style="{width: percent + '%'}", aria-valuetext='25%', ng-transclude='', style='width: 25%;')
-          p.text-muted
-            | Dales nisi nec adipiscing elit. Morbi id neque quam. Aliquam sollicitudin venenatis
+
       // / service
       // tasks
       .panel.wrapper

@@ -74,9 +74,9 @@
                 | support@msgq.com
               .line.line-dashed.b-b.line-xxs.no-margin
             li(ng-if='$ctrl.user.admin')
-              a(ui-sref='user.add') Add User
+              a(ui-sref='users.add') Add User
             li
-              a(ui-sref='user.profile') Profile
+              a(ui-sref='users.profile') Profile
             li.hide.divider
             //li
               a(ui-sref='access.password_reset') Change Password
@@ -92,40 +92,28 @@
         <div class="navi-wrap" ui-jq="slimScroll" ui-options="{height:'100%', size:'8px'}">
       .navi-wrap
         // user
-        //#aside-user.clearfix.hidden-xs.text-center
-          .dropdown.wrapper(dropdown='')
-            a(ui-sref='app.page.profile')
-              span.thumb-lg.w-auto-folded.avatar.m-t-sm
-                h1 {{ App.biz.short }}
-                //img.img-full(src='img/a0.jpg', alt='...')
-            a.dropdown-toggle.hidden-folded(href='')
-              //dropdown-toggle=''
-              span.clear
-                span.block.m-t-sm
-                  strong.font-bold.text-lt {{App.biz.name}}
-                  //b.caret
-                span.text-muted.text-xs.block {{App.biz.mobile}}
-            // dropdown
-            ul.dropdown-menu.animated.fadeInRight.w.hidden-folded
-              //li.wrapper.b-b.m-b-sm.bg-info.m-t-n-xs
-                span.arrow.top.hidden-folded.arrow-info
-                div
-                  p 300mb of 500mb used
-                progressbar.progress-xs.m-b-none.dker(value='60', type='white')
-              li
-                a(href='') Settings
-              li
-                a(ui-sref='app.page.profile') Profile
-              //li
-                a(href='')
-                  span.badge.bg-danger.pull-right 3
-                  |               Notifications
-              //li.divider
-              //li
-                a(ui-sref='access.signin') Logout
-            // / dropdown
+        #aside-user.clearfix.hidden-xs.text-center(ng-if='[1, 2].includes($ctrl.user.roleId)')
+          .padder-h.text-left
+            span.font-bold.m-b Credits
+
+            table(style='width:100%')
+              tr
+                th P
+                td.text-right 5000(200)
+              tr
+                th T
+                td.text-right 5000(200)
+              tr
+                th S
+                td.text-right 5000(2000)
+              tr
+                th O
+                td.text-right 5000(20)
           .line.dk.hidden-folded
-        navigation
+
+        admin-navigation(ng-if='[1, 2].includes($ctrl.user.roleId)')
+        navigation(ng-if='$ctrl.user.roleId === 3 || !$ctrl.OAuth.isAuthenticated()')
+
   .app-content
     div(ui-butterbar='')
     a.off-screen-toggle.hide(href='', ui-toggle-class='off-screen', data-target='.app-aside')
