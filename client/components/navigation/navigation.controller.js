@@ -32,7 +32,7 @@ class NavigationController {
       {name: 'Group Add', state: 'admin.users.list', icon: 'fa fa-user'},
       {name: 'Group List', state: 'admin.users.list', icon: 'fa fa-user'},
       {name: 'Dynamic SMS', state: 'admin.users.list', icon: 'fa fa-user'},
-      {name: 'Sent SMS', state: 'admin.users.list', icon: 'fa fa-user'},
+      {name: 'Sent SMS', state: 'admin.users.list', icon: 'fa fa-envelope-open-o'},
       {name: 'Scheduled SMS', state: 'admin.users.list', icon: 'fa fa-user'},
       {name: 'Error Code', state: 'admin.users.list', icon: 'fa fa-user'},
       {name: 'Templates', state: 'admin.users.list', icon: 'fa fa-user'},
