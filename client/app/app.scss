@@ -1,6 +1,6 @@
-$icon-font-path: '/assets/fonts/bootstrap/';
-@import '~bootstrap-sass/assets/stylesheets/bootstrap';
-$fa-font-path: '/assets/fonts/font-awesome/';
+$icon-font-path: "/assets/fonts/bootstrap/";
+@import '../angulr/main';
+$fa-font-path: "/assets/fonts/font-awesome";
 @import '~font-awesome/scss/font-awesome';
 
 // @import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,900|Roboto:300,500,700,900);
@@ -16,9 +16,22 @@ $fa-font-path: '/assets/fonts/font-awesome/';
   padding: 0.2em 0;
 }
 
-// Component styles are injected through gulp
+// Component styles are injected through grunt
 /* inject:scss */
-@import 'main/main';
 @import '../components/footer/footer';
 @import '../components/modal/modal';
+@import '../components/navbar/navbar';
 /* endinject */
+
+.min-h-500 {
+  min-height: 500px;
+}
+
+.padder-h {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.no-margin {
+  margin: 0 0 0 0;
+}

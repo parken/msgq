@@ -1,0 +1,97 @@
+nav.navi(ui-nav='' )
+  ul.nav(ng-if='!$ctrl.OAuth.isAuthenticated()')
+    li.hidden-folded.padder-h.m-t.m-b-sm.text-muted.text-xs
+      span Quick Links
+    li(ui-sref-active='active' ng-repeat='menu in $ctrl.menus' ui-sref='{{menu.state}}')
+      a(ng-click='$ctrl.OTP.open()')
+        i.fa.fa-sign-in.icon
+        span &nbsp;&nbsp;&nbsp;&nbsp;
+        span Login / Signup
+        i.my-icon
+          i
+  //- list
+  ul.nav(ng-if='$ctrl.OAuth.isAuthenticated()')
+    //li(ui-sref-active='active')
+      a(ui-sref='water_ag.dashboard')
+        i.fa.fa-dashboard
+        span &nbsp;&nbsp;&nbsp;&nbsp;Dashboard
+        i.my-icon
+          i
+      ul.nav.nav-sub.dk
+        li.nav-sub-header
+          a(ui-sref='app.dashboard')
+            span Dashboard
+    li.hidden-folded.padder-h.m-t.m-b-sm.text-muted.text-xs
+      span Navigation
+    li.active
+      a.auto(href='')
+        span.pull-right.text-muted
+          i.fa.fa-fw.fa-angle-right.text
+          i.fa.fa-fw.fa-angle-down.text-active
+        i.glyphicon.glyphicon-stats.icon.text-primary-dker
+        span.font-bold Upstreams
+      ul.nav.nav-sub.dk
+        li.active(ui-sref-active='active')
+          a(ui-sref='app.dashboard-v1', href='#/app/dashboard-v1')
+            span Add
+        li(ui-sref-active='active')
+          a(ui-sref='app.dashboard-v2', href='#/app/dashboard-v2')
+            span List
+    li.active
+      a.auto(href='')
+        span.pull-right.text-muted
+          i.fa.fa-fw.fa-angle-right.text
+          i.fa.fa-fw.fa-angle-down.text-active
+        i.glyphicon.glyphicon-stats.icon.text-primary-dker
+        span.font-bold Admin
+      ul.nav.nav-sub.dk
+        li.active(ui-sref-active='active')
+          a(ui-sref='user.add')
+            span Add New User
+        li.active(ui-sref-active='active')
+          a(ui-sref='app.dashboard-v1', href='#/app/dashboard-v1')
+            span My User Credits
+        li.active(ui-sref-active='active')
+          a(ui-sref='app.dashboard-v1', href='#/app/dashboard-v1')
+            span My Users
+        li.active(ui-sref-active='active')
+          a(ui-sref='app.dashboard-v1', href='#/app/dashboard-v1')
+            span My Resellers
+        li.active(ui-sref-active='active')
+          a(ui-sref='app.dashboard-v1', href='#/app/dashboard-v1')
+            span User Reports
+    li.active
+      a.auto(href='')
+        span.pull-right.text-muted
+          i.fa.fa-fw.fa-angle-right.text
+          i.fa.fa-fw.fa-angle-down.text-active
+        i.glyphicon.glyphicon-stats.icon.text-primary-dker
+        span.font-bold Consumption
+      ul.nav.nav-sub.dk
+        li.active(ui-sref-active='active')
+          a(ui-sref='app.dashboard-v1', href='#/app/dashboard-v1')
+            span Actual Consumption
+        li(ui-sref-active='active')
+          a(ui-sref='app.dashboard-v2', href='#/app/dashboard-v2')
+            span Virtual Consumption
+    li.active
+      a.auto(href='')
+        span.pull-right.text-muted
+          i.fa.fa-fw.fa-angle-right.text
+          i.fa.fa-fw.fa-angle-down.text-active
+        i.glyphicon.glyphicon-stats.icon.text-primary-dker
+        span.font-bold Website
+      ul.nav.nav-sub.dk
+        li.active(ui-sref-active='active')
+          a(ui-sref='app.dashboard-v1', href='#/app/dashboard-v1')
+            span Site Settings
+        li(ui-sref-active='active')
+          a(ui-sref='app.dashboard-v2', href='#/app/dashboard-v2')
+            span Site Credits
+    li(ui-sref-active='active' ng-repeat='menu in $ctrl.menus[$ctrl.user.roleId]' ui-sref='{{menu.state}}' ng-if='$ctrl.user.roleId')
+      a(ui-sref='#')
+        i.fa.fa-list-alt.icon
+        span &nbsp;&nbsp;&nbsp;&nbsp;
+        span(ng-bind='menu.name')
+        i.my-icon
+          i

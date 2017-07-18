@@ -1,0 +1,77 @@
+.row
+  .col-xs-12
+    .wrapper-xs
+      a.btn.w.padder.b-a(
+        ng-repeat='route in $ctrl.routes track by $index'
+        ng-click='$ctrl.setRoute(route.id)'
+      ) {{route.name}} ({{route.balance}})
+
+
+  .col-xs-12
+    .col-xs-6.b-r
+      .m-b-lg: a.text-u-l.pull-right Load Previous Message
+      .clearfix
+      form.validate-form(name='sendSmsForm' ng-submit='$ctrl.sendSms()')
+        .form-group(ng-if='$ctrl.routeIndex === 2')
+          select.form-control(
+          ng-options='sender.name as sender.name for sender in $ctrl.senderIds track by sender.name'
+          ng-model='$ctrl.data.senderId'
+          required
+          )
+        .form-group(ng-if='$ctrl.routeIndex === 1')
+          .input-group
+            input#senderId.form-control(
+              type='text'
+              maxlength='6'
+              ng-model='$ctrl.data.senderId'
+              placeholder='Sender ID'
+              ng-pattern='/[A-Z0-9]{6}/i'
+              watch-change='$ctrl.change()'
+              ng-focus='$ctrl.loadSenderIds()'
+              required
+            )
+            .input-group-addon(ng-bind='($ctrl.senderIdLength || 0) + "/6"')
+        .form-group
+          label(ng-if='')
+          textarea.form-control(
+            rows='5'
+            ng-model='$ctrl.numbers'
+            placeholder='Enter mobile numbers here 1234567890, 0123456789, 9012345678 8901234567 7890123456'
+            ng-blur='$ctrl.validateNumbers()'
+            ng-focus='$ctrl.loadGroups()'
+          )
+        .form-group
+          div
+            .col-md-3.col-sm-4.no-padder
+              select.form-control(ng-change='$ctrl.translation($ctrl.data.unicode)' ng-model='$ctrl.data.unicode')
+                option(value='false') English
+                option(value='true') Unicode
+            span#translControl(style="float:right; margin-right:2px; margin-top:2px;" ng-if='$ctrl.data.unicode ==="true"')
+            span.pull-right(ng-bind='($ctrl.data.message.length || 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.message.length || 0)/160)')
+          textarea#transliterateTextarea.form-control(
+
+            rows='5'
+            ng-model='$ctrl.data.message'
+            placeholder='You are delivering crucial information. Keep it to-the-point.'
+            ng-focus='$ctrl.loadTemplates()'
+            required
+          )
+        .form-group
+          input.form-control(
+            type='text'
+            ng-model='$ctrl.data.campaignName'
+            placeholder='Campaign Name'
+            ng-focus='$ctrl.loadCampaigns()'
+          )
+        div
+          button.col-xs-4.btn.btn-info(type='submit') Send SMS Now
+          span.col-xs-1.padder-xs Or
+          a.col-xs-6.padder-xs Schedule SMS
+          a.col-xs-1.pull-right.padder-xs
+            i.fa.fa-cog
+    .col-xs-6
+      .col-xs-8
+        ul.list-group
+          a.list-group-item(ng-repeat='item in $ctrl.list' ng-click='$ctrl.bindData(item.name, $ctrl.field)') {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
+      .col-xs-4.b-a
+        //span Rest details here to be

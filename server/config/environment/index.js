@@ -1,19 +1,12 @@
-'use strict';
-/*eslint no-process-env:0*/
-
 import path from 'path';
 import _ from 'lodash';
+import dotenv from 'dotenv';
 
-/*function requiredProcessEnv(name) {
-  if(!process.env[name]) {
-    throw new Error('You must set the ' + name + ' environment variable');
-  }
-  return process.env[name];
-}*/
-
+const root = path.normalize(`${__dirname}/../../..`);
+const env = dotenv.config({ path: path.join(root, '.env') });
 // All configurations will extend these options
 // ============================================
-var all = {
+const all = {
   env: process.env.NODE_ENV,
 
   // Root path of server
@@ -28,26 +21,15 @@ var all = {
   // Server IP
   ip: process.env.IP || '0.0.0.0',
 
-  // Should we populate the DB with sample data?
-  seedDB: false,
-
-  // Secret for session, you will want to change this and make it an environment variable
-  secrets: {
-    session: 'msgque-secret'
-  },
-  PLIVO: {
-    AUTH_ID: process.env.PLIVO_AUTH_ID || 'id',
-    AUTH_TOKEN: process.env.PLIVO_AUTH_TOKEN || 'token',
-  },
-  MYSQL: {
-    username: process.env.MYSQL_USER,
-    password: process.env.MYSQL_PASS,
-    database: process.env.MYSQL_DB,
-    host: process.env.MYSQL_HOST,
-    dialect: 'mysql',
-    logging: false,
-    timezone: '+05:30',
-  },
+  PLAY_URL: process.env.PLAY_URL,
+  MSG: process.env.MSG,
+  PLIVO_AUTH_ID: process.env.PLIVO_AUTH_ID || 'id',
+  PLIVO_AUTH_TOKEN: process.env.PLIVO_AUTH_TOKEN || 'token',
+  MYSQL_DB: process.env.MYSQL_DB,
+  MYSQL_USER: process.env.MYSQL_USER,
+  MYSQL_PASS: process.env.MYSQL_PASS,
+  MYSQL_HOST: process.env.MYSQL_HOST,
+  MYSQL_TZ: '+05:30',
 };
 
 // Export the config object based on the NODE_ENV
@@ -55,4 +37,6 @@ var all = {
 module.exports = _.merge(
   all,
   require('./shared'),
+  env,
+  /* eslint import/no-dynamic-require:0 */
   require(`./${process.env.NODE_ENV}.js`) || {});

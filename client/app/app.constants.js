@@ -2,6 +2,8 @@
 
 import angular from 'angular';
 
+import appConfig from '../../server/config/environment/shared';
+
 export default angular.module('msgqueApp.constants', [])
-  .constant('appConfig', require('../../server/config/environment/shared'))
+  .constant('appConfig', appConfig)
   .name;

@@ -1,7 +1,3 @@
-/**
- * Created by Manjesh on 11-04-2017.
- */
-
 import db, { App, RefreshToken, Session } from '../conn/sqldb';
 
 export function authorise(req, res) {
@@ -13,7 +9,7 @@ export function authorise(req, res) {
       },
       attributes: ['id', 'name'],
     })
-    .then(model => {
+    .then((model) => {
       if (!model) return res.status(404).json({ error: 'Invalid Client' });
       return res.json(model);
     })
@@ -29,7 +25,7 @@ export function logout(req, res, next) {
       },
       raw: true,
     })
-  .then((s) => (s && s.sessionId ? Session.logout(db, s.sessionId) : Promise.resolve()))
-  .then(s => res.json(s))
-  .catch(next);
+    .then(s => (s && s.sessionId ? Session.logout(db, s.sessionId) : Promise.resolve()))
+    .then(s => res.json(s))
+    .catch(next);
 }

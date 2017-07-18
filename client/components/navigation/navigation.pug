@@ -1,0 +1,51 @@
+nav.navi(ui-nav='' )
+  create-group
+  ul.nav(ng-if='!$ctrl.OAuth.isAuthenticated()')
+    li.hidden-folded.padder-h.m-t.m-b-sm.text-muted.text-xs
+      span Quick Links
+    li(ui-sref-active='active' ng-repeat='menu in $ctrl.menus' ui-sref='{{menu.state}}')
+      a(ng-click='$ctrl.OTP.open()')
+        i.fa.fa-sign-in.icon
+        span &nbsp;&nbsp;&nbsp;&nbsp;
+        span Login / Signup
+        i.my-icon
+          i
+  //- list
+  ul.nav(ng-if='$ctrl.OAuth.isAuthenticated()')
+    //li(ui-sref-active='active')
+      a(ui-sref='water_ag.dashboard')
+        i.fa.fa-dashboard
+        span &nbsp;&nbsp;&nbsp;&nbsp;Dashboard
+        i.my-icon
+          i
+      ul.nav.nav-sub.dk
+        li.nav-sub-header
+          a(ui-sref='app.dashboard')
+            span Dashboard
+    li.hidden-folded.padder-h.m-t.m-b-sm.text-muted.text-xs
+      span Admin
+    li(ui-sref-active='active' ng-repeat='menu in $ctrl.menus' ui-sref='{{menu.state}}')
+      a(ui-sref='water_ag.branchs.list()')
+        i.fa.fa-list-alt.icon
+        span &nbsp;&nbsp;&nbsp;&nbsp;
+        span(ng-bind='menu.name')
+        i.my-icon
+          i
+      li.hidden-folded.padder.m-t.m-b-sm.text-muted.text-xs
+        span Reseller
+      li(ui-sref-active='active' ng-repeat='menu in $ctrl.rmenus' ui-sref='{{menu.state}}')
+        a(ui-sref='water_ag.branchs.list()')
+          i.fa.fa-list-alt.icon
+          span &nbsp;&nbsp;&nbsp;&nbsp;
+          span(ng-bind='menu.name')
+          i.my-icon
+            i
+      li.hidden-folded.padder-h.m-t.m-b-sm.text-muted.text-xs
+        span User
+      li(ui-sref-active='active' ng-repeat='menu in $ctrl.umenus' ui-sref='{{menu.state}}')
+        a(ui-sref='water_ag.branchs.list()')
+          i.fa.fa-list-alt.icon
+          span &nbsp;&nbsp;&nbsp;&nbsp;
+          span(ng-bind='menu.name')
+          i.my-icon
+            i

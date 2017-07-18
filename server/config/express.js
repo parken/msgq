@@ -2,66 +2,75 @@
  * Express configuration
  */
 
-'use strict';
-
+import debug from 'debug';
+import cors from 'cors';
 import express from 'express';
 import favicon from 'serve-favicon';
 import morgan from 'morgan';
-import shrinkRay from 'shrink-ray';
 import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import errorHandler from 'errorhandler';
 import path from 'path';
+
 import config from './environment';
-import auth from '../api/auth';
-import oAuthorize from './../api/authorise';
-import oAuthenticate from './../components/oauthjs/auth';
+import * as routes from './../routes';
+import logger from '../components/logger';
+import * as setup from '../components/setup';
+import rssFeed from './../components/feed/express';
+import oauthComponent from './../components/oauth/express';
 
-import routes from './../routes';
 
+const log = debug('server/config');
 
-var oAuth = require('./../components/oauthjs');
+/* eslint consistent-return:0 */
+export default function (a) {
+  const app = a;
+  const env = app.get('env');
 
-export default function(app) {
-  var env = app.get('env');
-
-  if(env === 'development' || env === 'test') {
+  if (env === 'development' || env === 'test') {
     app.use(express.static(path.join(config.root, '.tmp')));
   }
 
-  if(env === 'production') {
+  if (env === 'production') {
     app.use(favicon(path.join(config.root, 'client', 'favicon.ico')));
   }
-
+  setup.init(app);
   app.set('appPath', path.join(config.root, 'client'));
   app.use(express.static(app.get('appPath')));
+  app.use(cors());
   app.use(morgan('dev'));
 
   app.set('views', `${config.root}/server/views`);
   app.set('view engine', 'pug');
-  app.use(shrinkRay());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
   app.use(methodOverride());
   app.use(cookieParser());
+  app.use((r, res, next) => {
+    const req = r;
+    if (req.headers.origin) req.origin = req.headers.origin.split('://')[1];
+    next();
+  });
+  rssFeed(app);
+  oauthComponent(app, routes);
+  // errors passed using next(err)
+  app.use((e, req, res) => {
+    const err = e;
+    const { body, headers, user } = req;
 
-  app.use('/auth', auth);
+    logger.error(err.message, err, {
+      url: req.originalUrl,
+      body,
+      headers,
+      user,
+    });
 
-  app.oauth = oAuth;
-  // OAuth Token authorization_code, password, refresh_token
-  app.all('/oauth/token', app.oauth.grant());
-  app.oauth.authenticate = oAuthenticate;
+    return res.status(500).json({ message: err.message, stack: err.stack });
+  });
 
-  // OAuth Authorise from Third party applications
-  app.use('/authorise', app.oauth.authenticate(), oAuthorize);
-  app.use('/api/authorise', app.oauth.authenticate(), oAuthorize);
-
-  // OAuth Authorise from Third party applications
-  routes(app);
-  app.use(app.oauth.errorHandler());
-
-  if(env === 'development') {
+  if (env === 'development') {
+    /* eslint global-require:0 */
     const webpackDevMiddleware = require('webpack-dev-middleware');
     const stripAnsi = require('strip-ansi');
     const webpack = require('webpack');
@@ -84,32 +93,32 @@ export default function(app) {
           stats: {
             colors: true,
             timings: true,
-            chunks: false
-          }
-        })
+            chunks: false,
+          },
+        }),
       ],
       port: config.browserSyncPort,
-      plugins: ['bs-fullscreen-message']
+      plugins: ['bs-fullscreen-message'],
     });
 
     /**
      * Reload all devices when bundle is complete
      * or send a fullscreen error message to the browser instead
      */
-    compiler.plugin('done', function(stats) {
-      console.log('webpack done hook');
-      if(stats.hasErrors() || stats.hasWarnings()) {
+    compiler.plugin('done', (stats) => {
+      log('webpack done hook');
+      if (stats.hasErrors() || stats.hasWarnings()) {
         return browserSync.sockets.emit('fullscreen:message', {
           title: 'Webpack Error:',
           body: stripAnsi(stats.toString()),
-          timeout: 100000
+          timeout: 100000,
         });
       }
       browserSync.reload();
     });
   }
 
-  if(env === 'development' || env === 'test') {
+  if (env === 'development' || env === 'test') {
     app.use(errorHandler()); // Error handler - has to be last
   }
 }
