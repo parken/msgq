@@ -24,6 +24,7 @@ import UpdateTitle from '../components/update-title';
 import FileReader from '../components/file-reader';
 import Navigation from '../components/navigation';
 import AdminNavigation from '../components/admin-navigation';
+import CreateGroup from '../components/create-group';
 import Report from '../components/report';
 
 import Manage from './manage';
@@ -46,7 +47,7 @@ angular
     Home, FourOFour, OTPModule, Navigation,
     // - project specific
     SenderId, DeliveryReport, Report, SendSms, User,
-    AdminNavigation,
+    AdminNavigation, CreateGroup,
     Manage, // - admin
     Admin, // - reseller
   ])
