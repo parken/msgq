@@ -5,6 +5,9 @@
       .row
         .col-sm-6.col-xs-12
           h1.m-n.font-thin.h3.text-black(ng-bind='$ctrl.header')
+          a(ui-sref='users.list()')
+            span.m-r.fa.fa-list
+            | List
       .panel.panel-default.m-t-sm
         .panel-body
           .col-md-8
@@ -15,6 +18,10 @@
                     input.form-control(placeholder='Name' ng-model='$ctrl.data.name' required)
                   .row.m-t-xs
                     input.form-control(type='number' placeholder='Mobile' ng-model='$ctrl.data.mobile' required)
+                  .row.m-t-xs
+                    input.form-control(type='email' placeholder='Email' ng-model='$ctrl.data.email')
+                  .row.m-t-xs
+                    input.form-control(type='password' placeholder='Password' ng-model='$ctrl.data.password')
                   .row.m-t-xs
                     input.form-control(placeholder='Support person name' ng-model='$ctrl.data.supportName')
                   .row.m-t-xs

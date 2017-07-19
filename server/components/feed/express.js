@@ -1,5 +1,5 @@
 
-import defaultFeed from './feed.json';
+import defaultFeed from './feed';
 
 const feed = (req, res) => res.json(defaultFeed);
 

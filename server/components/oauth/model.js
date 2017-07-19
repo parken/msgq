@@ -32,7 +32,7 @@ const model = {
       });
   },
   getAccessToken(bearerToken, callback) {
-    db.AccessToken
+    return db.AccessToken
       .findOne({
         where: { accessToken: bearerToken },
         attributes: ['accessToken', 'expires', ['sessionId', 'session_id']],

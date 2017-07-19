@@ -1,22 +1,24 @@
-class UserProfileController {
+import template from './profile.pug';
+class controller {
   /* @ngInject */
-  constructor($http, Session) {
+  constructor($http, Session, $stateParams) {
     this.$http = $http;
     this.Session = Session;
+    this.$stateParams = $stateParams;
   }
 
   $onInit() {
-    this.$http.get('/users/me')
+    this.user = this.Session.read('userinfo');
+    const { id = this.user.id } = this.$stateParams;
+    this.$http.get(`/users/${id}`)
       .then(({ data: user }) => {
         this.user = user;
-        this.Session.create('userinfo', user);
-      });
-    this.$http.get('/company')
-      .then(({ data: company }) => {
-        this.company = company;
-        this.Session.create('company', company);
       });
   }
 }
 
-export default UserProfileController;
+export default {
+  template,
+  controller,
+};
+

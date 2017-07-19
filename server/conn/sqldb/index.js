@@ -10,7 +10,12 @@ const db = {
     MYSQL_DB,
     MYSQL_USER,
     MYSQL_PASS,
-    { host: MYSQL_HOST, dialect: 'mysql', timezone: MYSQL_TZ, seederStorage: 'sequelize' }
+    { host: MYSQL_HOST,
+      dialect: 'mysql',
+      timezone: MYSQL_TZ,
+      seederStorage: 'sequelize',
+      supportBigNumbers: true,
+    },
   ),
 };
 

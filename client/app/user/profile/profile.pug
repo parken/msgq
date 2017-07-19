@@ -4,8 +4,8 @@
     .bg-light.lter.b-b.wrapper-md
       .row
         .col-sm-6.col-xs-12
-          h1.m-n.font-thin.h3.text-black Profile Details
-          a(ui-sref='users.profile-edit()')
+          h1.m-n.font-thin.h3.text-black {{$ctrl.stateParams.id ? 'User' : 'Profile' }} Details
+          a(ui-sref='user.edit($ctrl.stateParams)')
             span.m-r.fa.fa-pencil-square-o
             | Edit Details
       .panel.panel-default.m-t-sm
@@ -31,20 +31,20 @@
                   .row.m-t-xs
                     .col-xs-3 Company
                     .col-xs-1 :
-                    .col-xs-8(ng-bind='$ctrl.company.name')
+                    .col-xs-8(ng-bind='$ctrl.user.name')
                   .row.m-t-xs
                     .col-xs-3 Name
                     .col-xs-1 :
-                    .col-xs-8(ng-bind='$ctrl.company.supportName')
+                    .col-xs-8(ng-bind='$ctrl.user.supportName')
                   .row.m-t-xs
                     .col-xs-3 Mobile
                     .col-xs-1 :
-                    .col-xs-8 +{{$ctrl.company.supportMobile}}
+                    .col-xs-8 +{{$ctrl.user.supportMobile}}
                   .row.m-t-xs
                     .col-xs-3 Email
                     .col-xs-1 :
-                    .col-xs-8(ng-bind='$ctrl.company.supportEmail')
+                    .col-xs-8(ng-bind='$ctrl.user.supportEmail')
                   .row.m-t-xs
                     .col-xs-3 Login URL
                     .col-xs-1 :
-                    .col-xs-8(ng-bind='$ctrl.company.loginUrl')
+                    .col-xs-8(ng-bind='$ctrl.user.loginUrl')

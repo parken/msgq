@@ -55,7 +55,7 @@ export default function (a) {
   rssFeed(app);
   oauthComponent(app, routes);
   // errors passed using next(err)
-  app.use((e, req, res) => {
+  app.use((e, req, res, next) => {
     const err = e;
     const { body, headers, user } = req;
 

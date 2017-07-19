@@ -8,41 +8,60 @@ import { getRouteType } from '../../conn/sqldb/helper';
 
 import db from '../../conn/sqldb';
 
-function handleError(res, argStatusCode, err) {
-  logger.error('user.controller', err);
-  const statusCode = argStatusCode || 500;
-  res.status(statusCode).send(err);
-}
 
-export function me(req, res) {
+export function me(req, res, next) {
   return db.User
     .findById(req.user.id, {
       attributes: ['mobile', 'email', 'name', 'id', 'roleId', 'admin'],
       raw: 'true',
     })
     .then(u => res.json(u))
-    .catch(err => handleError(res, 500, err));
+    .catch(next);
 }
 
 
-export function index(req, res) {
+export function index(req, res, next) {
   return db.User
     .findAll()
     .then(data => res.json(data))
-    .catch(err => handleError(res, 500, err));
+    .catch(next);
 }
 
-export function show(req, res) {
-  return db.User
-    .find({
-      where: { id: req.params.id },
-      attributes: ['id', 'name', 'email', 'mobile'],
-    })
-    .then(data => res.json(data))
-    .catch(err => handleError(res, 500, err));
+export function show(req, res, next) {
+  switch (req.user.roleId) {
+    case 1:
+    case 2: {
+      return db.User
+        .find({
+          where: { id: req.params.id },
+          attributes: [
+            'id',
+            'name',
+            'email',
+            'mobile',
+            'supportName',
+            'supportMobile',
+            'supportEmail',
+            'loginUrl',
+          ],
+        })
+        .then(data => res.json(data))
+        .catch(next);
+    }
+    default: {
+      return db.User
+        .find({
+          where: { id: req.params.id },
+          attributes: ['id', 'name', 'email', 'mobile'],
+        })
+        .then(data => res.json(data))
+        .catch(next);
+    }
+  }
+
 }
 
-export function showUuid(req, res) {
+export function showUuid(req, res, next) {
   return db.LoginIdentifier
     .find({
       where: { uuid: req.params.uuid },
@@ -57,10 +76,10 @@ export function showUuid(req, res) {
       if (!loginIdentifier) return res.status(404).json({ message: 'Invalid Request' });
       return res.json(loginIdentifier.User);
     })
-    .catch(err => handleError(res, 500, err));
+    .catch(next);
 }
 
-export function create(req, res) {
+export function create(req, res, next) {
   const user = req.body;
   if (`${user.mobile}`.length === 10) user.mobile += 910000000000;
   if (`${user.supportMobile}`.length === 10) user.supportMobile += 910000000000;
@@ -69,10 +88,10 @@ export function create(req, res) {
   return db.User
     .create(user)
     .then(data => res.json(data))
-    .catch(err => handleError(res, 500, err));
+    .catch(next);
 }
 
-export function signup(req, res) {
+export function signup(req, res, next) {
   const { id, name, password, otp, email } = req.body;
   db.User.find({
     attributes: ['id'],
@@ -85,7 +104,7 @@ export function signup(req, res) {
         .catch(err => logger.error('user.ctrl/otpVerify', err));
       slack(`Signup: ${u.id}, ${u.name}, ${u.mobile}, ${u.email}`);
       return res.status(201).end();
-    }).catch(err => handleError(res, 500, err));
+    }).catch(next);
 }
 
 function getApp(code) {
@@ -93,7 +112,7 @@ function getApp(code) {
     .then(authCode => authCode.App.toJSON());
 }
 
-export function login(req, res) {
+export function login(req, res, next) {
   const { code } = req.body;
   return (code
     ? getApp(code)
@@ -122,7 +141,7 @@ export function login(req, res) {
     });
 }
 
-export function refresh(req, res) {
+export function refresh(req, res, next) {
   return db.App
     .find({
       include: [{
@@ -163,15 +182,15 @@ export function logout(req, res, next) {
     .catch(next);
 }
 
-export function duplicate(req, res) {
+export function duplicate(req, res, next) {
   const mobile = `91${req.query.mobile}`;
   return db.User
     .count({ where: { mobile } })
     .then(data => res.json({ mobile: !!data }))
-    .catch(err => handleError(res, 500, err));
+    .catch(next);
 }
 
-export function update(req, res) {
+export function update(req, res, next) {
   const id = req.user.id || req.params.id;
   const user = req.body;
   delete user.id;
@@ -185,18 +204,18 @@ export function update(req, res) {
       },
     })
     .then(() => res.json({ id }))
-    .catch(err => handleError(res, 500, err));
+    .catch(next);
 }
 
 // Check email and phone exists
-export function checkExists(req, res) {
+export function checkExists(req, res, next) {
   return db.User
     .checkExists(db, req.query.email, req.query.mobile)
     .then(status => res.json(status))
-    .catch(err => handleError(res, 500, err));
+    .catch(next);
 }
 
-export function otpLogin(req, res) {
+export function otpLogin(req, res, next) {
   return db.User
     .findOrCreate({
       where: {
@@ -221,10 +240,10 @@ export function otpLogin(req, res) {
         .update({ otp, otpStatus: 1 }, { where: { id: user.id } })
         .catch(err => logger.error('user.ctrl/otp', err));
       return res.json({ message: 'success', id: user.id, newUser });
-    }).catch(err => handleError(res, 500, err));
+    }).catch(next);
 }
 
-export function otpSend(req, res) {
+export function otpSend(req, res, next) {
   db.User.find({
     where: {
       $or: {
@@ -251,10 +270,10 @@ export function otpSend(req, res) {
       .update({ otp, otpStatus: 1 }, { where: { id: user.id } })
       .catch(err => logger.error('user.ctrl/otp', err));
     return res.json({ message: 'success', id: user.id });
-  }).catch(err => handleError(res, 500, err));
+  }).catch(next);
 }
 
-export function otpVerify(req, res) {
+export function otpVerify(req, res, next) {
   db.User.find({
     attributes: ['id'],
     where: {
@@ -268,12 +287,12 @@ export function otpVerify(req, res) {
         .update({ otpStatus: 0 })
         .catch(err => logger.error('user.ctrl/otpVerify', err));
       return res.json({ message: 'success', id: user.id });
-    }).catch(err => handleError(res, 500, err));
+    }).catch(next);
 }
 
 
 // Creates a new User in the DB
-export function passwordChange(req, res) {
+export function passwordChange(req, res, next) {
   return db.User.find({
     where: {
       id: req.body.id,
@@ -295,10 +314,10 @@ export function passwordChange(req, res) {
         return slack(`Password change: ${id}, ${name}, ${mobile}, ${email}`);
       });
   })
-    .catch(err => handleError(res, 500, err));
+    .catch(next);
 }
 
-export function sendLogin(req, res) {
+export function sendLogin(req, res, next) {
   return db.User
     .find({ where: { id: req.params.id } })
     .then((user) => {
@@ -316,14 +335,14 @@ export function sendLogin(req, res) {
         .catch(err => logger.error('user.ctrl/otp', err));
       return res.json({ message: 'success', id: user.id });
     })
-    .catch(err => handleError(res, 500, err));
+    .catch(next);
 }
 
-export function loginUid(req, res) {
+export function loginUid(req, res, next) {
   return res.status(500).json({});
 }
 
-export function addSellingRootUser(req, res) {
+export function addSellingRootUser(req, res, next) {
   const { userId, routeId, limit } = req.body;
   if (!userId || !routeId || !limit || req.user.roleId !== 1) {
     return res.status(404).json({ message: 'Invalid Request.' });
@@ -334,10 +353,10 @@ export function addSellingRootUser(req, res) {
     createdBy: req.user.id,
     updatedBy: req.user.id })
     .then(() => res.status(202).end())
-    .catch(err => handleError(res, 500, err));
+    .catch(next);
 }
 
-export function addSelling(req, res) {
+export function addSelling(req, res, next) {
   const { userId, sendingUserId, routeId, limit, fromUserId } = req.body;
   if (!userId || !sendingUserId || !routeId || !limit) {
     return res.status(404).json({ message: 'Invalid Request.' });
@@ -353,5 +372,5 @@ export function addSelling(req, res) {
     createdBy: req.user.id,
     updatedBy: req.user.id })
     .then(() => res.status(202).end())
-    .catch(err => handleError(res, 500, err));
+    .catch(next);
 }

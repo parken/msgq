@@ -1,3 +1,5 @@
+import template from './add.pug';
+
 class UserAddController {
   /* @ngInject */
   constructor($http, $state, $stateParams, Session) {
@@ -13,19 +15,32 @@ class UserAddController {
       this.header = 'Add New User'
     } else {
       this.header = 'Edit Details';
-      this.id = this.$state.current.name === 'users.edit' ? this.$stateParams.id : this.user.id;
+      this.id = this.$state.current.name === 'user.edit' ? this.$stateParams.id : this.user.id;
+      this.getUser();
     }
   }
 
+  getUser() {
+    this.$http.get(`/users/${this.id}`)
+      .then(({ data: user }) => {
+        this.data = user;
+      });
+  }
+
   submit() {
-    this.$http[this.id ? 'put' : 'post'](`/users${this.id ? `/${this.id}` : ''}`, this.data)
-      .then(({ data: user }) => this.$http.get(`/users/${user.id}/sendLogin`))
-      .then(() => {
-        this.message = 'Success.';
-        delete this.data;
+    if (!this.data.password) delete this.data.password;
+    this.$http.post(`/users${this.id ? `/${this.id}` : ''}`, this.data)
+      // .then(({ data: user }) => this.$http.get(`/users/${user.id}/sendLogin`))
+      .then(({ data: user }) => {
+        this.message = 'Successfully saved.';
       })
       .catch(() => (this.message = 'Error creating user.'));
   }
 }
 
-export default UserAddController;
+const UserAddComponent = {
+  template,
+  controller: UserAddController,
+};
+
+export default UserAddComponent;
