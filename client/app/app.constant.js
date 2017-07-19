@@ -6,9 +6,22 @@ const { host, protocol, origin: API_SERVER } = window.location;
 const PREFIX = `${protocol}//${host.substr(0, host.indexOf('-') + 1)}`;
 const TLD = `${host.substr(host.lastIndexOf('.') + 1)}`;
 
+// Create an instance on TransliterationControl with the required
+// options.
+const options = {
+  sourceLanguage: 'en',
+  destinationLanguage: ['hi', 'ml', 'ta', 'te', 'kn', 'mr', 'or', 'pa', 'ur', 'sa', 'gu', 'bn'],
+  shortcutKey: 'ctrl+g',
+  transliterationEnabled: true,
+};
+// eslint-disable-next-line
+const googleTransliteration = google;
+
 const constants = angular
   .module('msgQueApp.constants', [])
   .constant('moment', moment)
+  .constant('TransliterationControl',
+    new googleTransliteration.elements.transliteration.TransliterationControl(options))
   .constant('urls', {
     API_SERVER,
     token: 'oauth',
@@ -18,7 +31,8 @@ const constants = angular
     host,
   })
   .constant('Enum', {
-    countries: [{ id: 1, name: 'United States (+1)' },
+    countries: [
+      { id: 1, name: 'United States (+1)' },
       { id: 93, name: 'Afghanistan (+93)' },
       { id: 358, name: 'Åland Islands (+358)' },
       { id: 355, name: 'Albania (+355)' },
@@ -265,7 +279,8 @@ const constants = angular
       { id: 212, name: 'Western Sahara (+212)' },
       { id: 967, name: 'Yemen (+967)' },
       { id: 260, name: 'Zambia (+260)' },
-      { id: 263, name: 'Zimbabwe (+263)' }],
+      { id: 263, name: 'Zimbabwe (+263)' },
+    ],
   });
 
 export default constants.name;

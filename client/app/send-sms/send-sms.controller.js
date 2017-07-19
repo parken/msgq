@@ -1,14 +1,23 @@
 class SendSmsController {
   /* @ngInject */
-  constructor($http, $state, Session, $scope) {
+  constructor($http, $state, Session, $scope, $timeout, TransliterationControl) {
     this.$http = $http;
     this.$state = $state;
     this.Session = Session;
     this.Math = Math;
     this.$scope = $scope;
+    this.$timeout = $timeout;
+    this.TransliterationControl = TransliterationControl;
   }
 
   $onInit() {
+    this.$timeout(() => {
+      // Enable transliteration in the textbox with id
+      // 'transliterateTextarea'.
+      this.TransliterationControl.makeTransliteratable(['transliterateTextarea']);
+      this.TransliterationControl.showControl('translControl');
+    }, 0);
+
     this.user = this.Session.read('userinfo');
     this.data = {
       numbersList: [],
@@ -31,24 +40,20 @@ class SendSmsController {
     this
       .$http
       .get('/routes')
-      .then(({ data: { senderId, routes } }) => {
-        if (senderId) {
-          this.data.senderId = senderId;
-          this.senderIdLength = senderId.length;
-        }
+      .then(({ data: routes }) => {
         this.routes = routes.length ? routes : [{ id: 1, name: 'Promotional', balance: 50 }];
       });
     this.translation('true');
   }
 
   setRoute(routeId) {
-      this.routeIndex = routeId;
-      if (routeId === 1) return this.loadSenderIds();
-      return this.senderId = '';
+    this.routeIndex = routeId;
+    if (routeId === 1) return this.loadSenderIds();
+    return (this.senderId = '');
   }
 
   translation(unicode) {
-    if(unicode === 'true') {
+    if (unicode === 'true') {
       // Load the Google Transliterate API
 
     }
@@ -67,7 +72,9 @@ class SendSmsController {
       this.data.numbersList.push(n);
     });
     this.numbers = this.data.numbersList.join(',');
-    if (this.foundInvalidNumber) this.error.numberError = 'Some numbers were invalid/duplicate and were removed.';
+    if (this.foundInvalidNumber) {
+      this.error.numberError = 'Some numbers were invalid/duplicate and were removed.';
+    }
   }
 
   loadSenderIds() {
@@ -78,7 +85,9 @@ class SendSmsController {
       .get('/senderId', { params: { fl: 'id,name,senderIdStatusId', status: '1,2' } })
       .then(({ data: senderIds }) => {
         this.list = this.senderIds = senderIds;
-        if (!this.data.senderId && this.senderIds.length) this.data.senderId = this.senderIds[0].name;
+        if (!this.data.senderId && this.senderIds.length) {
+          this.data.senderId = this.senderIds[0].name;
+        }
         console.log(this.data.senderId )
       });
   }

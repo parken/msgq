@@ -19,7 +19,7 @@ module.exports = {
       id: 3,
       name: 'Yogendra Singh',
       email: 'yog27ray@gmail.com',
-      mobile: '917066435888',
+      mobile: '919920745396',
       password: 'b66d23a547540570278a532f4718f7ae',
       roleId: 3,
       resellerId: 2,

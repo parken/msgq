@@ -20,34 +20,7 @@
 <msgque-app></msgque-app>
 <script>
   //http://jsfiddle.net/manjeshpv/eh18n2sg/
-  google.load("elements", "1", {
-    packages: "transliteration"
-  });
-
-  function onLoad() {
-    var options = {
-      sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH,
-      destinationLanguage: [google.elements.transliteration.LanguageCode.HINDI],
-      //shortcutKey: 'ctrl+g',
-      transliterationEnabled: true
-    };
-
-    // Create an instance on TransliterationControl with the required
-    // options.
-    var options = {
-      sourceLanguage: 'en',
-      destinationLanguage: ['hi', 'ml', 'ta', 'te', 'kn', 'mr', 'or', 'pa', 'ur', 'sa', 'gu', 'bn'],
-      shortcutKey: 'ctrl+g',
-      transliterationEnabled: true
-    };
-    var control = new google.elements.transliteration.TransliterationControl(options);
-
-    // Enable transliteration in the textbox with id
-    // 'transliterateTextarea'.
-    control.makeTransliteratable(['transliterateTextarea']);
-    control.showControl('translControl');
-  }
-  google.setOnLoadCallback(onLoad);
+  google.load("elements", "1", { packages: "transliteration" });
 </script>
 </body>
 </html>
