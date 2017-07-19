@@ -10,7 +10,11 @@ function handleError(res, argStatusCode, err) {
 
 export function index(req, res) {
   return db.Route.findAll()
-    .then(routes => res.json(routes.filter(x =>
-      req.user[`${req.user.roleId === 4 ? 'selling' : 'sending'}Balance${getRouteType(x.id)}`])))
+    .then(routes => res.json(routes.map(x => x.toJSON()).filter(x => {
+      const route = x;
+      route.balance = req.user[`${req.user.roleId === 4 ? 'selling' : 'sending'
+      }Balance${getRouteType(x.id)}`];
+      return route.balance;
+    })))
     .catch(err => handleError(res, 500, err));
 }

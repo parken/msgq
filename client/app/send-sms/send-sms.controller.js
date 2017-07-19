@@ -42,12 +42,13 @@ class SendSmsController {
       .get('/routes')
       .then(({ data: routes }) => {
         this.routes = routes.length ? routes : [{ id: 1, name: 'Promotional', balance: 50 }];
+        this.data.routeId = this.routes[0].id;
       });
     this.translation('true');
   }
 
   setRoute(routeId) {
-    this.routeIndex = routeId;
+    this.data.routeId = routeId;
     if (routeId === 1) return this.loadSenderIds();
     return (this.senderId = '');
   }
@@ -63,18 +64,19 @@ class SendSmsController {
     if (!this.numbers) return;
     const numbers = this.numbers.replace(/\n/g, ',').split(',');
 
+    const numbersList = [];
     numbers.forEach(n => {
       const reg = n.match(this.numberPattern);
-      if (this.data.numbersList.includes(n) || !reg) {
+      if (numbersList.includes(n) || !reg) {
         this.foundInvalidNumber = true;
         return;
       }
-      this.data.numbersList.push(n);
+      numbersList.push(n);
     });
-    this.numbers = this.data.numbersList.join(',');
+    this.numbers = numbers.join(',');
     if (this.foundInvalidNumber) {
       this.error.numberError = 'Some numbers were invalid/duplicate and were removed.';
-    }
+    } else this.data.numbers = numbersList.join(',');
   }
 
   loadSenderIds() {
@@ -88,7 +90,6 @@ class SendSmsController {
         if (!this.data.senderId && this.senderIds.length) {
           this.data.senderId = this.senderIds[0].name;
         }
-        console.log(this.data.senderId )
       });
   }
 
@@ -103,7 +104,7 @@ class SendSmsController {
 
   loadCampaigns() {
     //load Campaigns on focus of message field
-    this.field = 'campaignName';
+    this.field = 'campaign';
     this
       .$http
       .get('/campaigns')
@@ -112,7 +113,7 @@ class SendSmsController {
 
   loadGroups() {
     //load initial Groups
-    this.field = 'groups';
+    this.field = 'groupId';
     this
       .$http
       .get('/groups')
@@ -130,11 +131,22 @@ class SendSmsController {
     this
       .$http
       .post('/drafts')
-      .then(({ data: message }) => this.message = message);
+      .then(({ data: message }) => (this.message = message));
   }
 
-  bindData(data, field) {
-    this.data[field] = data;
+  bindData(item, field) {
+    switch (field) {
+      case 'groupId': {
+        if (!this.data.groupId) this.data.groupId = '';
+        const groupIds = this.data.groupId.split(',');
+        if (!groupIds.includes(`${item.id}`)) groupIds.push(`${item.id}`);
+        else groupIds.splice(groupIds.indexOf(`${item.id}`), 1);
+        this.data.groupId = groupIds.filter(x => x).join(',');
+        break;
+      }
+      default:
+        this.data[field] = item.name;
+    }
   }
 
 }

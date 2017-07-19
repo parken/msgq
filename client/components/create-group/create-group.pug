@@ -7,12 +7,11 @@ ul.nav()
       .input-group(ng-if='$ctrl.isCreateGrp')
         input.form-control(
           ng-model='$ctrl.groupName'
-          ng-blur='$ctrl.createGroup($ctrl.groupName)'
           placeholder='Group Name'
         )
-        .input-group-addon
+        .input-group-addon(ng-click='$ctrl.createGroup($ctrl.groupName)' )
           i.fa.fa-plus
-          span(ng-click='$ctrl.createGroup($ctrl.groupName)')
+          span
 
   li
     a(ng-click='$ctrl.view(group)' ng-repeat='group in $ctrl.groups')

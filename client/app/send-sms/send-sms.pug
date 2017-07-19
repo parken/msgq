@@ -30,7 +30,7 @@
               ng-focus='$ctrl.loadSenderIds()'
               required
             )
-            .input-group-addon(ng-bind='($ctrl.senderIdLength || 0) + "/6"')
+            .input-group-addon(ng-bind='($ctrl.data.senderId.length || 0) + "/6"')
         .form-group
           label(ng-if='')
           textarea.form-control(
@@ -51,7 +51,7 @@
           textarea#transliterateTextarea.form-control(
 
             rows='5'
-            ng-model='$ctrl.data.message'
+            ng-model='$ctrl.data.text'
             placeholder='You are delivering crucial information. Keep it to-the-point.'
             ng-focus='$ctrl.loadTemplates()'
             required
@@ -59,7 +59,7 @@
         .form-group
           input.form-control(
             type='text'
-            ng-model='$ctrl.data.campaignName'
+            ng-model='$ctrl.data.campaign'
             placeholder='Campaign Name'
             ng-focus='$ctrl.loadCampaigns()'
           )
@@ -72,6 +72,6 @@
     .col-xs-6
       .col-xs-8
         ul.list-group
-          a.list-group-item(ng-repeat='item in $ctrl.list' ng-click='$ctrl.bindData(item.name, $ctrl.field)') {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
+          a.list-group-item(ng-repeat='item in $ctrl.list' ng-click='$ctrl.bindData(item, $ctrl.field)') {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
       .col-xs-4.b-a
         //span Rest details here to be

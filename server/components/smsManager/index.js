@@ -62,11 +62,12 @@ const SmsManager = {
         return db.sequelize.transaction()
           .then((transaction) => {
             const promises = [
-              db.Message
-                .update(
+              upstreamMessageMap[0].length
+                ? db.Message.update(
                   { messageStatusId: 3 },
                   { where: { id: upstreamMessageMap[0].map(x => x.id) } },
-                  { transaction }),
+                  { transaction })
+                : Promise.resolve(),
             ];
             delete upstreamMessageMap[0];
             const messageIdAllocated = [];
@@ -74,19 +75,17 @@ const SmsManager = {
               const id = upstreamMessageMap[upstreamId].map(x => x.id);
               messageIdAllocated.push(...id);
               const upstream = db.Upstream.build({ id: upstreamId });
-              return Promise.all([
-                db.Message.update(
-                  { messageStatusId: 2, upstreamId },
-                  { where: { id } }, { transaction }),
-                db.Transaction.create(
+              return db.Message.update(
+                { messageStatusId: 2, upstreamId },
+                { where: { id } }, { transaction })
+                .then(() => upstream.decrement({ balance: id.length }, { transaction }))
+                .then(() => db.Transaction.create(
                   {
                     upstreamId,
                     messageFlyId,
                     count: upstreamMessageMap[upstreamId].map(x => x.id).length,
                     transactionStatusId: 1,
-                  }, { transaction }),
-                upstream.decrement({ balance: id.length }, { transaction }),
-              ]);
+                  }, { transaction }));
             }));
             return Promise
               .all(promises)
@@ -96,7 +95,7 @@ const SmsManager = {
                   where: { id: messageIdAllocated },
                   include: [db.Upstream, db.MessageFly, db.SenderId],
                 }).then(messages => SmsManager.processItem({ list: messages }))
-                  .then(() => Promise.resolve(data.splice(1, data.length).map(x => x[1])));
+                  .then(() => Promise.resolve(data.splice(1, data.length)));
               })
               .then(transactions => db.Transaction.update(
                 { transactionStatusId: 2 },

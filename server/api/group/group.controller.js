@@ -28,3 +28,12 @@ export function index(req, res) {
       }))))
     .catch(err => handleError(res, 500, err));
 }
+
+export function create(req, res, next) {
+  const { name } = req.body;
+  if (!name) return res.status(500).json({ message: 'Invalid request' });
+  return db.Group
+    .create({ name, userId: req.user.id })
+    .then(data => res.json(data))
+    .catch(next);
+}

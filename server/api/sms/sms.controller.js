@@ -44,9 +44,8 @@ export function create(req, res, next) {
   } = req.body;
 
   if (!routeId || !text) {
-    return res.status(400).status({ message: 'arguements missing. (route_id or message)' });
+    return res.status(400).json({ message: 'arguements missing. (route_id or message)' });
   }
-
   const validate = () => {
     const ajv = new Ajv();
     let current;
@@ -67,7 +66,7 @@ export function create(req, res, next) {
 
   const sendingTime = (scheduledOn ? new Date(scheduledOn) : new Date()).getHours();
 
-  if (req.body.route_id === PROMOTIONAL && sendingTime >= 9 && sendingTime < 21) {
+  if (routeId === PROMOTIONAL && (sendingTime < 9 || sendingTime >= 21)) {
     return res.status(400).json({ message: 'Promotional SMS is allowed from 9AM to 9PM' });
   }
 
