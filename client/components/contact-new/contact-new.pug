@@ -1,0 +1,12 @@
+form.form-inline(action='/action_page.php')
+  .form-group
+    label(for='email') Email:
+    input#email.form-control(type='email', placeholder='Enter email', name='email')
+  .form-group
+    label(for='pwd') Password:
+    input#pwd.form-control(type='password', placeholder='Enter password', name='pwd')
+  .checkbox
+    label
+    input(type='checkbox', name='remember')
+    |  Remember me
+  button.btn.btn-default(type='submit') Submit

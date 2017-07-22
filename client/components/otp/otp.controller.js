@@ -46,8 +46,11 @@ class OTPController {
             if (this.options.next) this.$state.go(this.options.next, this.options.nextParams);
           });
       })
-      .catch(err => (this.error = err.data.error_description
-          || err.statusText || 'Unexpected error contact hello@ayyayo.com'));
+      .catch(err => {
+        console.log('error');
+        this.error = err.data.error_description
+          || err.statusText || 'Unexpected error contact hello@ayyayo.com';
+      });
   }
 
   signup(user) {

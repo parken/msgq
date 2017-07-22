@@ -36,6 +36,7 @@ import SendSms from './send-sms';
 import DeliveryReport from './delivery-report';
 import SenderId from './sender-id';
 import FourOFour from './four-o-four';
+import ContactList from './contact-list';
 import 'angular-oauth2';
 
 setupGAnalytics('UA-98313820-1');  // Google Analytics
@@ -47,7 +48,7 @@ angular
     Home, FourOFour, OTPModule, Navigation,
     // - project specific
     SenderId, DeliveryReport, Report, SendSms, User,
-    AdminNavigation, CreateGroup,
+    AdminNavigation, CreateGroup, ContactList,
     Manage, // - admin
     Admin, // - reseller
   ])

@@ -43,11 +43,13 @@
         .form-group
           div
             .col-md-3.col-sm-4.no-padder
-              select.form-control(ng-change='$ctrl.translation($ctrl.data.unicode)' ng-model='$ctrl.data.unicode')
-                option(value='false') English
-                option(value='true') Unicode
-            span#translControl(style="float:right; margin-right:2px; margin-top:2px;" ng-if='$ctrl.data.unicode ==="true"')
-            span.pull-right(ng-bind='($ctrl.data.message.length || 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.message.length || 0)/160)')
+              select.form-control(
+                ng-options='item.val as item.name for item in $ctrl.langs'
+                ng-change='$ctrl.translation($ctrl.data.unicode)'
+                ng-model='$ctrl.data.unicode'
+              )
+            span#translControl(style="float:right; margin-right:2px; margin-top:2px;" ng-show='$ctrl.data.unicode')
+            span.m-r-xs.padder-xs.pull-right(ng-bind='($ctrl.data.message.length || 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.message.length || 0)/160)')
           textarea#transliterateTextarea.form-control(
 
             rows='5'
@@ -70,8 +72,10 @@
           a.col-xs-1.pull-right.padder-xs
             i.fa.fa-cog
     .col-xs-6
-      .col-xs-8
+      .col-xs-12
         ul.list-group
-          a.list-group-item(ng-repeat='item in $ctrl.list' ng-click='$ctrl.bindData(item, $ctrl.field)') {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
-      .col-xs-4.b-a
-        //span Rest details here to be
+          a.list-group-item(ng-repeat='item in $ctrl.list' ng-click='$ctrl.bindData(item, $ctrl.field)')
+            label.i-checks.i-checks-sm(ng-if='$ctrl.field === "groupId"' ng-model='item.id')
+              input(type='checkbox')
+              i
+            span {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}

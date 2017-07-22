@@ -17,13 +17,14 @@ class SendSmsController {
       this.TransliterationControl.makeTransliteratable(['transliterateTextarea']);
       this.TransliterationControl.showControl('translControl');
     }, 0);
+    this.langs = [{ name: 'English', val: 0 }, { name: 'Unicode', val: 1 }];
 
     this.user = this.Session.read('userinfo');
     this.data = {
       numbersList: [],
       senderId: '',
       message: '',
-      unicode: 'true',
+      unicode: 1,
     }; //body of Api
 
     this.senderIdLength = 0;
