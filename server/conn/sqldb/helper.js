@@ -26,14 +26,14 @@ module.exports = {
       },
     };
 
-    if (type === 2) {
+    if (type >= 2) {
       options.updatedAt = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'),
       };
     }
 
-    if (type === 3) {
+    if (type >= 3) {
       options.deletedAt = {
         type: Sequelize.DATE,
         defaultValue: null,

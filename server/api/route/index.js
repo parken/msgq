@@ -5,7 +5,7 @@ const controller = require('./routes.controller');
 
 import oauth from '../../components/oauth/auth';
 
-router.get('/', oauth(), controller.index);
+router.get('/', oauth, controller.index);
 
 // senderid 6/6 message
 

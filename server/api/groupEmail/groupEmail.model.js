@@ -1,25 +1,25 @@
 export default function (sequelize, DataTypes) {
-  const LoginIdentifier = sequelize.define('LoginIdentifier', {
+  const GroupEmail = sequelize.define('GroupEmail', {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
-    uuid: DataTypes.STRING,
+    email: DataTypes.STRING,
   }, {
-    tableName: 'login_identifier',
+    tableName: 'group_emails',
     timestamps: true,
     paranoid: true,
     classMethods: {
       associate(db) {
-        LoginIdentifier.belongsTo(db.User, {
-          foreignKey: 'userId',
+        GroupEmail.belongsTo(db.Group, {
+          foreignKey: 'groupId',
           allowNull: false,
         });
       },
     },
   });
 
-  return LoginIdentifier;
+  return GroupEmail;
 }

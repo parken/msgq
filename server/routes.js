@@ -16,6 +16,7 @@ import template from './api/template';
 import campaign from './api/campaign';
 import upstream from './api/upstream';
 import route from './api/route';
+import messageFly from './api/messageFly';
 
 export default function (app) {
   // Insert routes below
@@ -29,6 +30,7 @@ export default function (app) {
   app.use('/api/templates', template);
   app.use('/api/campaigns', campaign);
   app.use('/api/upstreams', upstream);
+  app.use('/api/messageFly', messageFly);
   app.use('/api', route);
 
   // All undefined asset or api routes should return a 404

@@ -5,6 +5,6 @@ import * as controller from './upstream.controller';
 
 const router = express.Router();
 
-router.post('/:id/plan', oauth(), controller.createPlan);
+router.post('/:id/plan', oauth, controller.createPlan);
 
 module.exports = router;

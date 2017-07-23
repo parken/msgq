@@ -37,3 +37,13 @@ export function create(req, res, next) {
     .then(data => res.json(data))
     .catch(next);
 }
+
+export function addEmailToGroup(req, res, next) {
+  return db.Group.find({ where: { name: req.params.name } })
+    .then(group => {
+      if (!group) return res.status(500).json({ message: 'no group found.' });
+      return db.GroupEmail
+        .findOrCreate({ where: { groupId: group.id, email: req.params.email } })
+        .then(() => res.status(202).end());
+    }).catch(err => console.log(err));
+}

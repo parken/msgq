@@ -5,6 +5,6 @@ import oauth from '../../components/oauth/auth';
 
 const router = express.Router();
 
-router.post('/sync', oauth(), controller.syncContact);
+router.post('/sync', oauth, controller.syncContact);
 
 module.exports = router;

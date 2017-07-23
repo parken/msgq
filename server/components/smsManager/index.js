@@ -267,6 +267,7 @@ const SmsManager = {
             total: list.length,
             unicode,
             flash,
+            userId,
             scheduledOn,
             campaignId,
             routeId,
