@@ -26,9 +26,10 @@ function updateContacts({ contacts, userId, groupId }) {
 export function syncContact(req, res) {
   const { name, contacts } = req.body;
   if (!name || !contacts) return res.status(500).json({ message: 'Invalid Request' });
-  return db.Group
+  db.Group
     .findOrCreate({ where: { name, userId: req.user.id } })
     .then(([group]) => updateContacts({ contacts, userId: req.user.id, groupId: group.id }))
     .then(() => res.end())
-    .catch(err => handleError(res, 500, err));
+    .catch(err => console.log(err));
+  return res.end();
 }
