@@ -16,7 +16,8 @@ function updateContacts({ contacts, userId, groupId }) {
         ? item.update({ name }).then(() => Promise.resolve(item))
         : db.Contact.create({ name, number, userId })))
       .then(({ id: contactId }) => db.GroupContact
-        .findOrCreate({ where: { groupId, contactId } }))
+        .find({ where: { groupId, contactId } })
+        .then(data => (data ? Promise.resolve() : db.GroupContact.create({ groupId, contactId }))))
       .then(() => updateContacts({ contacts, userId, groupId }))
       .catch(() => updateContacts({ contacts, userId, groupId }));
   }
