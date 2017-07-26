@@ -91,6 +91,21 @@ export function create(req, res, next) {
     .catch(next);
 }
 
+export function createCustomer(req, res, next) {
+  const user = req.body;
+  user.roleId = 5;
+  user.createdBy = req.user.id;
+  user.otp = Math.floor(Math.random() * 90000) + 10000;
+  delete user.id;
+  return db.User
+    .find({ where: { email: user.email, createdBy: user.createdBy, roleId: user.roleId } })
+    .then(data => (data
+      ? Promise.resolve(data)
+      : db.User.create(user)))
+    .then(data => res.json(data))
+    .catch(next);
+}
+
 export function signup(req, res, next) {
   const { id, name, password, otp, email } = req.body;
   db.User.find({
