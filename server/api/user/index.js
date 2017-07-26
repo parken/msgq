@@ -16,11 +16,12 @@ router.get('/:id/sendLogin', oauth, controller.sendLogin);
 
 router.post('/', oauth, controller.create);
 router.post('/signup', controller.signup);
+router.post('/customer', oauth, controller.createCustomer);
 router.post('/login', controller.login);
 router.post('/otpLogin', controller.otpLogin);
 router.post('/otp', controller.otpSend);
 router.post('/otpVerify', controller.otpVerify);
-router.post('/:id', oauth, controller.update);
+router.put('/:id', oauth, controller.update);
 router.post('/:id/selling', oauth, controller.addSelling);
 router.post('/:id/sellingRoot', oauth, controller.addSellingRootUser);
 

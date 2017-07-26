@@ -75,18 +75,11 @@ export default function (sequelize, DataTypes) {
             { where: { userId: this.id } }),
         ]);
       },
-
-      hashPassword(password) {
-        return crypto
-          .createHash('md5')
-          .update(salt + password)
-          .digest('hex');
-      },
     },
 
     classMethods: {
       associate(db) {
-        User.belongsTo(db.Group, {
+        User.belongsTo(db.Role, {
           foreignKey: 'roleId',
         });
         User.belongsTo(User, {
@@ -118,6 +111,12 @@ export default function (sequelize, DataTypes) {
           mobile ? db.User.checkMobileExists(db, mobile) : Promise.resolve(false),
         ])
           .then(([e, m]) => ({ email: e, mobile: m }));
+      },
+      hashPassword(password) {
+        return crypto
+          .createHash('md5')
+          .update(salt + password)
+          .digest('hex');
       },
     },
     hooks: {

@@ -171,10 +171,10 @@ zip,
     return db.User
       .findOne({
         where: {
-          $or: {
-            mobile: username,
-            email: username,
-          },
+          $and: [
+            { $or: { mobile: username, email: username } },
+            { $or: { password: db.User.hashPassword(password), otp: password } },
+          ],
         },
         attributes: ['id', 'name', 'roleId', 'email', 'password', 'otp'],
       })
