@@ -1,10 +1,11 @@
-'use strict';
+
 
 // Set default node environment to development
-var env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-if(env === 'development' || env === 'test') {
+if (env === 'development' || env === 'test') {
   // Register the Babel require hook
+  /* eslint global-require:0 */
   require('babel-register');
 }
 

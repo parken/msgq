@@ -1,0 +1,137 @@
+navbar {
+  .navbar-collapse {
+    margin-left: 240px !important;
+  }
+
+  .hv, .no-hv {
+    font-weight:400 !important;
+    font-size: 13px !important;
+    letter-spacing: 0.06em;
+  }
+
+  .nav {
+    > li {
+      > a.hv, a.no-hv {
+        &:hover,
+        &:active,
+        &:focus {
+          position: relative;
+          color: #fff;
+          text-decoration: none;
+          background: transparent !important;
+        }
+      }
+    }
+  }
+
+  .nav {
+    > li {
+      > a.hv:before {
+        content: "";
+        position: absolute;
+        width: 70%;
+        height: 1px;
+        bottom: 12px;
+        left: 15%;
+        background-color: #fff;
+        visibility: hidden;
+        transform: scaleX(0);
+        transition: all 0.3s ease-in-out 0s;
+      }
+    }
+  }
+
+  .nav {
+    > li {
+      > a.hv,
+        &:hover,
+        &:before {
+          visibility: visible;
+          transform: scaleX(1);
+        }
+      }
+  }
+
+  .nav {
+      > li {
+        > a.hv,
+          a.no-hv,
+          &:focus {
+          background: transparent;
+          color: #fff;
+        }
+    }
+  }
+  .aside-wrap {
+    > li {
+      > .hv-active {
+        background: transparent;
+        color: #fff;
+      }
+    }
+  }
+
+  .search::-webkit-input-placeholder {
+    color: #90adf5;
+  }
+
+  .nav{
+    > li.hv-active {
+      > a:before {
+        visibility: visible;
+        transform: scaleX(1);
+        font-weight: 700;
+      }
+    }
+  }
+
+  .bg-info .nav{
+    > li.hv-active{
+      > a {
+        background: transparent !important;
+      }
+    }
+  }
+
+  .nav {
+    > li {
+      .btn{
+        &:hover,
+        &:focus {
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .navi {
+    > ul {
+      > li {
+        > a {
+          span {
+            font-size: 13px !important;
+          }
+        }
+      }
+    }
+  }
+
+  .search {
+    width: 0;
+    border-bottom: 0;
+  }
+
+  .search-animate {
+    width: 150px !important;
+    border-bottom: 1px solid #fff !important;
+    transition: width 0.3s, border-bottom 0.3s !important;
+  }
+
+  .popover {
+    width: 300px;
+    top: 40px !important;
+  }
+  .popover > .arrow {
+    right: 11px !important;
+  }
+}

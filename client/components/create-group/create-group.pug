@@ -1,0 +1,19 @@
+ul.nav()
+  li(ui-sref-active='active')
+    a(ng-click='$ctrl.OTP.open()')
+      a.btn(ng-click='$ctrl.isCreateGrp = !$ctrl.isCreateGrp' ng-if='!$ctrl.isCreateGrp')
+        i.fa.fa-users
+        span Create Group
+      .input-group(ng-if='$ctrl.isCreateGrp')
+        input.form-control(
+          ng-model='$ctrl.groupName'
+          placeholder='Group Name'
+        )
+        .input-group-addon(ng-click='$ctrl.createGroup($ctrl.groupName)' )
+          i.fa.fa-plus
+          span
+
+  li
+    a(ng-click='$ctrl.view(group)' ng-repeat='group in $ctrl.groups')
+      span(ng-bind='group.name')
+

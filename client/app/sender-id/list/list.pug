@@ -1,0 +1,11 @@
+.panel.panel-default.m-t-sm
+  .panel-body
+    .col-md-8
+      .panel
+        .panel-heading
+          .col-xs-12.m-t-xs
+            button.btn.btn-success(ng-click='$ctrl.AddSenderId.open()') Add
+          .col-xs-12.m-t-xs(ng-repeat='senderId in $ctrl.senderIds')
+            .col-xs-3.pointer(ng-bind='senderId.name' ng-click='$ctrl.$state.go("senderId.view", { id: senderId.id })')
+            .col-xs-4(ng-bind='senderId.company')
+            .col-xs-3(ng-bind='senderId.CreatedBy.name' ng-if='$ctrl.user.admin === 2')

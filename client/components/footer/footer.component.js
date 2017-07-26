@@ -1,10 +1,9 @@
-import angular from 'angular';
+import template from './footer.pug';
+import controller from './footer.controller';
 
-export class FooterComponent {}
+const FooterComponent = {
+  template,
+  controller,
+};
 
-export default angular.module('directives.footer', [])
-  .component('footer', {
-    template: require('./footer.pug'),
-    controller: FooterComponent
-  })
-  .name;
+export default FooterComponent;

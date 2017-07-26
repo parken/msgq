@@ -1,7 +1,10 @@
 {
-    "extends": "../.eslintrc",
-    "env": {
-        "browser": true,
-        "commonjs": true
-    }
+  "extends": [
+    "airbnb/base",
+    "angular"
+  ],
+  "rules": {
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
+    "angular/no-service-method": "off"
+  }
 }
