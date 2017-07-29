@@ -11,13 +11,18 @@ function updateContacts({ contacts, userId, groupId }) {
   const contact = contacts.shift();
   if (contact) {
     const { name, number, email, birthday } = contact;
-    return db.Contact.find({ where: { number, userId } })
+    const where = { userId };
+    if (number) where.number = number;
+    if (email) where.email = email;
+    return db.Contact.find({ where })
       .then(item => (item
-        ? item.update({ name, email, birthday }).then(() => Promise.resolve(item))
-        : db.Contact.create({ name, number, userId, email, birthday })))
-      .then(({ id: contactId }) => db.GroupContact
-        .find({ where: { groupId, contactId } })
-        .then(data => (data ? Promise.resolve() : db.GroupContact.create({ groupId, contactId }))))
+        ? item.update({ name, email, birthday }).then(() => Promise.resolve([item, false]))
+        : db.Contact
+          .create({ name, number, userId, email, birthday })
+          .then(x => Promise.resolve([x, true]))))
+      .then(([{ id: contactId }, created]) => (created
+        ? db.GroupContact.create({ groupId, contactId })
+        : Promise.resolve()))
       .then(() => updateContacts({ contacts, userId, groupId }))
       .catch(() => updateContacts({ contacts, userId, groupId }));
   }
