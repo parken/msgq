@@ -7,15 +7,30 @@ function handleError(res, argStatusCode, err) {
   res.status(statusCode).send(err);
 }
 
-
 export function index(req, res, next) {
-  const { limit = 20, offset = 0, fl } = req.query;
-  return db.Upstream
-    .findAll({
-      limit,
-      offset,
-    })
-    .then(upstreams => res.json(upstreams))
+  const { limit = 20, offset = 0, fl, where } = req.query;
+
+  const options = {
+    attributes: fl ? fl.split(',') : ['id', 'name'],
+    limit,
+    offset,
+  };
+
+  if (where) {
+    options.where = where.split(',').reduce((nxt, x) => {
+      const [key, value] = x.split(':');
+      return Object.assign(nxt, { [key]: value });
+    }, {});
+  }
+
+  return Promise
+    .all([
+      db.Upstream
+        .findAll(options),
+      db.Upstream
+        .count(),
+    ])
+    .then(([upstreams, numFound]) => res.json({ items: upstreams, meta: { numFound } }))
     .catch(next);
 }
 
@@ -36,10 +51,26 @@ export function create(req, res, next) {
     .catch(next);
 }
 
+export function activate(req, res, next) {
+  const { id } = req.params;
+  db.Upstream
+    .findById(id)
+    .then(({ routeId }) => db.Upstream
+      .deactivateOtherRoutes(db, { routeId }))
+    .then(() => db.Upstream
+      .update({ active: true }, { where: { id } }))
+    .then(() => res.status(201).end())
+    .catch(next);
+}
+
 export function update(req, res, next) {
   return db.Upstream
-    .update(Object
-      .assign({}, req.body, { updatedBy: req.user.id }), { where: { id: req.params.id } })
+    .update(
+      Object.assign({}, req.body, {
+        active: false,
+        updatedBy: req.user.id,
+      }),
+      { where: { id: req.params.id } })
     .then(() => res.status(201).end())
     .catch(next);
 }
@@ -52,7 +83,7 @@ export function destroy(req, res, next) {
 }
 
 export function createPlan(req, res) {
-  const {count} = req.body;
+  const { count } = req.body;
   if (!count || req.user.roleId !== 1) return res.status(404).json({message: 'Invalid Request'});
   return db.UpstreamPlan
     .create({

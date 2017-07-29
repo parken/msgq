@@ -10,12 +10,15 @@ import db from '../../conn/sqldb';
 
 
 export function me(req, res, next) {
-  return db.User
-    .findById(req.user.id, {
-      attributes: ['mobile', 'email', 'name', 'id', 'roleId', 'admin'],
-      raw: 'true',
-    })
-    .then(u => res.json(u))
+  return Promise.all([
+    db.User
+      .findById(req.user.id, {
+        attributes: ['mobile', 'email', 'name', 'id', 'roleId', 'admin'],
+        raw: 'true',
+      }),
+    db.Route.findAll(),
+  ])
+    .then(([u, upstreams]) => res.json(Object.assign(u, { upstreams })))
     .catch(next);
 }
 

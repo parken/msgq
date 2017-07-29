@@ -5,7 +5,11 @@ const controller = require('./routes.controller');
 
 import oauth from '../../components/oauth/auth';
 
+
+router.get('/:routeId/upstreams/active', oauth, controller.activeUpstream);
+
 router.get('/', oauth, controller.index);
+
 
 // senderid 6/6 message
 
