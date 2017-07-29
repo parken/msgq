@@ -11,6 +11,8 @@ module.exports = {
       },
       name: DataTypes.STRING,
       number: DataTypes.STRING,
+      email: DataTypes.STRING,
+      birthday: DataTypes.STRING,
       userId: keys('users'),
     }, timestamps(3)), engine);
   },

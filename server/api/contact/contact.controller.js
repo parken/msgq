@@ -10,11 +10,11 @@ function handleError(res, argStatusCode, err) {
 function updateContacts({ contacts, userId, groupId }) {
   const contact = contacts.shift();
   if (contact) {
-    const { name, number } = contact;
+    const { name, number, email, birthday } = contact;
     return db.Contact.find({ where: { number, userId } })
       .then(item => (item
-        ? item.update({ name }).then(() => Promise.resolve(item))
-        : db.Contact.create({ name, number, userId })))
+        ? item.update({ name, email, birthday }).then(() => Promise.resolve(item))
+        : db.Contact.create({ name, number, userId, email, birthday })))
       .then(({ id: contactId }) => db.GroupContact
         .find({ where: { groupId, contactId } })
         .then(data => (data ? Promise.resolve() : db.GroupContact.create({ groupId, contactId }))))

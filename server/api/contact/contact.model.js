@@ -8,6 +8,8 @@ export default function (sequelize, DataTypes) {
     },
     name: DataTypes.STRING,
     number: DataTypes.STRING,
+    email: DataTypes.STRING,
+    birthday: DataTypes.STRING,
   }, {
     tableName: 'contacts',
     timestamps: true,
