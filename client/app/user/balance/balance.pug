@@ -1,0 +1,63 @@
+.hbox.hbox-auto-xs.hbox-auto-sm
+  .col
+    // main header
+    .bg-light.lter.b-b.wrapper-md
+      .row
+        .col-sm-6.col-xs-12
+          h1.m-n.font-thin.h3.text-black(ng-bind='$ctrl.header')
+            a.pull-right(ui-sref='users.list()')
+              span.m-r.fa.fa-list
+              | List
+      form.form(ng-submit='$ctrl.submit()' name='balForm')
+        .row
+          .col-xs-12
+            .form-group
+              label(for='type') Type
+              select#type.form-control(
+                name='type'
+                required
+                ng-model='$ctrl.data.type'
+                ng-options='type for type in ["Selling", "Sending"]'
+              )
+        .row
+          .col-xs-12
+            .form-group.ng-hide
+              label(for='from') Sending User ID
+              input#from.form-control(type='text' placeholder='Sending User ID' ng-model='$ctrl.data.fromId')
+        .row
+          .col-xs-12
+            .form-group
+              label(for='to') Receiving User ID
+              select#to.form-control(
+                name='routeId'
+                required
+                ng-model='$ctrl.data.userId'
+                ng-options='user for user in [4, 5]'
+              )
+        .row
+          .col-xs-12
+            .form-group
+              label(for='limit') Credit Limit
+              input#limit.form-control(
+                type='number'
+                placeholder='Credit Limit'
+                ng-model='$ctrl.data.limit'
+              )
+        .row
+          .col-xs-12
+            .form-group
+              label(for='routeId') Route Type
+              select#routeId.form-control(
+                name='routeId'
+                required
+                ng-model='$ctrl.data.routeId'
+                ng-options='route.val as route.name for route in $ctrl.routes'
+              )
+
+        .row
+          .col-md-6.col-sm-12.col-xs-12(ng-if='$ctrl.message' ng-bind='$ctrl.message')
+        .row
+          .col-md-6.col-sm-12.col-xs-12
+            button.m-t-xs.btn.btn-success(type='submit' ng-disabled='balForm.$invalid')
+              span(ng-if='!$ctrl.ui.loading') Save
+              span(ng-if='$ctrl.ui.loading') Saving...

@@ -19,7 +19,10 @@
                 i.fa.fa-chevron-left
             li
               a.no-padder
-                select.input-sm.form-control.w-xs.inline.v-middle
+                select.input-sm.form-control.w-xs.inline.v-middle(
+                  ng-model='this.data.page'
+                  ng-options='page for page in $ctrl.pages'
+                )
             li
               a(href='')
                 i.fa.fa-chevron-right

@@ -51,6 +51,12 @@ export default function (sequelize, DataTypes) {
     timestamps: true,
     paranoid: true,
     instanceMethods: {
+      hashPassword(password) {
+        return crypto
+          .createHash('md5')
+          .update(salt + password)
+          .digest('hex');
+      },
       verifyPasswordAsync(password) {
         const hashedPass = crypto
           .createHash('md5')
@@ -60,7 +66,7 @@ export default function (sequelize, DataTypes) {
           : Promise.reject({ code: 400, message: 'Check password!' });
       },
       verifyPassword(password, cb) {
-        return (this.hashPassword(password) === this.password) ?
+        return (User.hashPassword(password) === this.password) ?
           cb(null, this.toJSON()) : cb(null, false);
       },
 

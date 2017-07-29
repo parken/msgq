@@ -189,7 +189,10 @@ zip,
           return callback(null, verifiedUser);
         }));
       })
-      .catch(err => callback(null, false, err));
+      .catch(err => {
+        console.log('sssssssssssssssss', err)
+        callback(null, false, err)
+      });
   },
 
   saveRefreshToken(refreshToken, client, expires, user, sessionId, callback) {

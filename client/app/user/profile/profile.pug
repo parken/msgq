@@ -48,3 +48,21 @@
                     .col-xs-3 Login URL
                     .col-xs-1 :
                     .col-xs-8(ng-bind='$ctrl.user.loginUrl')
+
+    .bg-light.lter.b-b.wrapper-md
+      .row
+        .col-sm-6.col-xs-12
+          h1.m-n.font-thin.h3.text-black  Route Mapping
+          a(ui-sref='user.edit($ctrl.stateParams)')
+            span.m-r.fa.fa-pencil-square-o
+            | Edit Details
+      .panel.panel-default.m-t-sm
+        .panel-body
+          select.input-sm.form-control.w-xs.inline.v-middle(
+            ng-model='this.data.routeId'
+            ng-options='page for page in [1,2,3,4]'
+          )
+          select.input-sm.form-control.w-xs.inline.v-middle(
+            ng-model='this.data.upstreamId'
+            ng-options='page for page in [1,2,3,4,5]'
+          )

@@ -10,6 +10,10 @@ export default function routes($stateProvider) {
       url: '',
       template: '<users-list></users-list>',
     })
+    .state('users.balance', {
+      url: '/balance',
+      template: '<balance></balance>',
+    })
     .state('users.add', {
       url: '/add',
       template: '<user-add></user-add>',

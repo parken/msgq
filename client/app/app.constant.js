@@ -31,6 +31,13 @@ const constants = angular
     host,
   })
   .constant('Enum', {
+    roles: [
+      {"val":1,"name":"Admin"},
+      {"val":2,"name":"Reseller"},
+      {"val":3,"name":"Leaf Reseller"},
+      {"val":4,"name":"User"},
+      {"val":5,"name":"Customer"},
+    ],
     routes: [
       { val: 1, name: 'Promotional' },
       { val: 2, name: 'Transactional' },
