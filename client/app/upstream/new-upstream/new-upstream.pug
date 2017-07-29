@@ -1,0 +1,60 @@
+.wrapper
+  .padder-v.h4 Add Upstream
+  .b-b.b-gray.m-b-md
+  form.form.form-validation(name='form' ng-submit='$ctrl.submit();')
+    .row
+      .col-md-6.col-sm-12.col-xs-12
+        .form-group
+          label(for='name') Name
+          input#name.form-control(type='text', placeholder='Name' name='name' required ng-model='$ctrl.data.name' ng-pattern="/[a-z \']$/i")
+      .col-md-6.col-sm-12.col-xs-12
+        .form-group
+          label(for='provider') Provider
+          input#provider.form-control(type='text', placeholder='Provider Name' required ng-model='$ctrl.data.provider' ng-pattern='/[a-z0-9 -]$/i')
+    .row
+      .col-md-6.col-sm-12.col-xs-12
+        .form-group
+          label(for='link') Upstream Link
+          input#link.form-control(type='url', placeholder='Link' name='link' required ng-model='$ctrl.data.link')
+      .col-md-6.col-sm-12.col-xs-12
+        .form-group
+          label(for='balance') Balance
+          input#balance.form-control(type='text', placeholder='Balance' name='balance' required ng-model='$ctrl.data.balance' ng-pattern='/[0-9]+$/')
+    .row
+      .col-md-6.col-sm-12.col-xs-12
+        .form-group
+          label(for='support') Support Email
+          input#support.form-control(type='email', placeholder='Support Email' name='support' required ng-model='$ctrl.data.support')
+      .col-md-6.col-sm-12.col-xs-12
+        .form-group
+          label(for='routeId') Route type
+          select#routeId.form-control(
+            name='routeId'
+            required
+            ng-model='$ctrl.data.routeId'
+            ng-options='route.val as route.name for route in $ctrl.routes'
+          )
+    .row
+      .col-md-12.col-sm-12.col-xs-12
+        label.col-xs-12.input-group(for='comment')
+          span Comment
+          .pull-right.ng-binding(ng-bind='"(" + ($ctrl.data.comment.length || 0) + "/300)"') (0/300)
+          textarea#comment.form-control(
+            required
+            name='comment'
+            rows='5'
+            ng-model='$ctrl.data.comment'
+            maxlength='300'
+          )
+    .row
+      .col-xs-12
+        .form-group
+          label.i-checks.i-checks-sm
+            input(type='checkbox' name='active' ng-model='$ctrl.data.active' ng-true-value='1' ng-false-value='0')
+            i
+            | Active
+    .row
+      .col-xs-12
+        button.btn.btn-success(type='submit' ng-disabled='form.$invalid')
+          span(ng-if='!$ctrl.ui.loading') Submit
+          span(ng-if='$ctrl.ui.loading') Submitting...

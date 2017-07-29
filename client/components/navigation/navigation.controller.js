@@ -16,7 +16,7 @@ class NavigationController {
     ];
 
     // - resller level fetures
-    this.rmenus = [
+    /*this.rmenus = [
       {name: 'SenderID Approval', state: 'sendSms', icon: 'fa fa-chat'},
       {name: 'Actual Consumption', state: 'sendSms', icon: 'fa fa-chat'},
       {name: 'Sales Consumption', state: 'sendSms', icon: 'fa fa-chat'},
@@ -42,7 +42,7 @@ class NavigationController {
       {name: '----- User', state: 'sendSms', icon: 'fa fa-chat'},
       {name: 'Send SMS', state: 'sendSms', icon: 'fa fa-chat'},
     ];
-
+**/
     this.menus = [
       {name: 'Send SMS', state: 'sendSms', icon: 'fa fa-chat'},
     ];

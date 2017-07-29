@@ -1,0 +1,63 @@
+.panel.panel-default
+  .panel-heading
+    | Upstreams
+  .row.wrapper
+    .col-md-4.col-xs-12.m-b-xs
+      .form-group
+        label.text-xs(for='search') Search
+        input#search.input-sm.form-control(type='text', placeholder='Search' ng-model='$ctrl.searchText')
+    .col-xs-12.col-md-8.no-padder
+      .col-md-6.col-xs-12.no-padder
+        .form-group
+          label.text-xs(for='search') Pages
+          ul.clear.pagination.pagination-sm.m-t-none.m-b-none
+            li
+              a(href='')
+                i.fa.fa-fast-backward
+            li
+              a(href='')
+                i.fa.fa-chevron-left
+            li
+              a.no-padder
+                select.input-sm.form-control.w-xs.inline.v-middle
+            li
+              a(href='')
+                i.fa.fa-chevron-right
+            li
+              a(href='')
+                i.fa.fa-fast-forward
+      .col-md-3.col-xs-12.no-padder
+        .form-group
+          label.text-xs(for='search') No. of Rows
+          select.input-sm.form-control.w-xs.v-middle(
+            ng-model='$ctrl.ui.row'
+            ng-options='row for row in $ctrl.rows'
+          )
+            option(value='') Rows
+      .col-md-3.col-xs-12.no-padder
+        .form-group
+          label.text-xs(for='search') Total Records
+            b.m-l-xs 5000
+          .text-md.font-bold Showing 0 - 100
+  .table-responsive
+    table.table.table-striped.b-t.b-light
+      thead
+        tr
+          th Name
+          th Provider
+          th Balance
+          th Route Type
+          th Active
+          th Created At
+          th(style='width:30px;')
+      tbody
+        tr(ng-repeat='item in $ctrl.items | filter: $ctrl.searchText')
+          td(ng-bind='item.name')
+          td(ng-bind='item.provider')
+          td(ng-bind='item.balance')
+          td(ng-bind='$ctrl.routes[item.routeId - 1]')
+          td
+            label.i-switch.bg-info.pull-right
+              input.ng-pristine.ng-valid.ng-touched(type='checkbox', ng-model='app.settings.headerFixed')
+              i
+          td(ng-bind='item.createdAt')

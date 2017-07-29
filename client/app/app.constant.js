@@ -31,6 +31,13 @@ const constants = angular
     host,
   })
   .constant('Enum', {
+    routes: [
+      { val: 1, name: 'Promotional' },
+      { val: 2, name: 'Transactional' },
+      { val: 3, name: 'Sender Id' },
+      { val: 4, name: 'OTP' },
+      { val: 5, name: 'International' },
+    ],
     countries: [
       { id: 1, name: 'United States (+1)' },
       { id: 93, name: 'Afghanistan (+93)' },
