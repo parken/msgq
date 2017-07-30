@@ -26,6 +26,7 @@ import transaction from './api/transaction';
 import role from './api/role';
 import credit from './api/selling';
 import sending from './api/sending';
+import session from './api/session';
 
 export default function (app) {
   // Insert routes below
@@ -48,6 +49,7 @@ export default function (app) {
   app.use('/api/message', message);
   app.use('/api/sending', sending);
   app.use('/api/credits', credit);
+  app.use('/api/sessions', session);
   app.use('/api', route);
 
   // All undefined asset or api routes should return a 404
