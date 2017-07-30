@@ -1,4 +1,4 @@
-import session from './list-session.pug';
+import template from './list-session.pug';
 class ListSessionController {
   /* @ngInject */
   constructor($http, $state, Session, Enum, toast, util) {
@@ -29,7 +29,6 @@ class ListSessionController {
     this.params = {
       limit: 20,
       offset: 0,
-      fl: 'id,name,provider,balance,routeId,createdAt'
     };
     this.get();
   }
@@ -83,7 +82,7 @@ class ListSessionController {
 
 
 const ListSessionComponent = {
-  session,
+  template,
   controller: ListSessionController,
 };
 

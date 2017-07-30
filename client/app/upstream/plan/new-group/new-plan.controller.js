@@ -1,6 +1,6 @@
-import template from './new-session.pug';
+import template from './new-plan.pug';
 
-class NewSessioncontroller {
+class NewGroupcontroller {
   /* @ngInject */
   constructor($http, $stateParams, $state, Session, Enum, toast) {
     this.$http = $http;
@@ -42,10 +42,10 @@ class NewSessioncontroller {
   }
 }
 
-const NewSessionComponent = {
+const NewGroupComponent = {
   template,
-  controller: NewSessioncontroller,
+  controller: NewGroupcontroller,
 };
 
-export default NewSessionComponent;
+export default NewGroupComponent;
 

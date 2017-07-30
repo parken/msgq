@@ -6,8 +6,8 @@ export function index(req, res, next) {
 
   const options = {
     attributes: fl ? fl.split(',') : ['id', 'routeId', 'limit', 'userId'],
-    limit,
-    offset,
+    limit: Number(limit),
+    offset: Number(offset),
   };
 
   if (where) {

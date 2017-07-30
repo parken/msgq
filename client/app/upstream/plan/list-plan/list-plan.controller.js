@@ -1,7 +1,8 @@
 import template from './list-plan.pug';
 class ListGroupController {
   /* @ngInject */
-  constructor($http, $state, Session, Enum, toast, util) {
+  constructor($http, $state, $stateParams, Session, Enum, toast, util) {
+    this.$stateParams = $stateParams;
     this.$http = $http;
     this.util = util;
     this.$state = $state;
@@ -29,7 +30,6 @@ class ListGroupController {
     this.params = {
       limit: 20,
       offset: 0,
-      fl: 'id,name,provider,balance,routeId,createdAt'
     };
     this.get();
   }
@@ -37,7 +37,7 @@ class ListGroupController {
   get() {
     this
       .$http
-      .get(`/groups`, { params: this.params})
+      .get(`/upstreams/${this.$stateParams.id}/plans`, { params: this.params})
       .then(({ data }) => {
         Object.assign(this.data, data);
         this.pages = this.util.pages(this.data.meta.numFound, this.params.limit);

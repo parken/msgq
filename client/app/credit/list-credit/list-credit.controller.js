@@ -29,7 +29,6 @@ class ListCreditController {
     this.params = {
       limit: 20,
       offset: 0,
-      fl: 'id,name,provider,balance,routeId,createdAt'
     };
     this.get();
   }
@@ -37,7 +36,7 @@ class ListCreditController {
   get() {
     this
       .$http
-      .get(`/tansactions`, { params: this.params})
+      .get(`/credits`, { params: this.params})
       .then(({ data }) => {
         Object.assign(this.data, data);
         this.pages = this.util.pages(this.data.meta.numFound, this.params.limit);

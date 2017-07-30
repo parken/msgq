@@ -32,8 +32,10 @@ export default function (app) {
   // Insert routes below
   app.use('/api/users', user);
   app.use('/api/roles', role);
+  app.use('/api/messages', message);
   app.use('/api/sms', sms);
   app.use('/api/senderId', senderId);
+  app.use('/api/senderIds', senderId);
   app.use('/api/company', company);
   app.use('/api/contacts', contact);
   app.use('/api/routes', route);
@@ -46,11 +48,10 @@ export default function (app) {
   app.use('/api/transactions', transaction);
   app.use('/api/loginIdentifiers', loginIdentifier);
   app.use('/api/priorityNumbers', priorityNumber);
-  app.use('/api/message', message);
+
   app.use('/api/sending', sending);
   app.use('/api/credits', credit);
   app.use('/api/sessions', session);
-  app.use('/api', route);
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')

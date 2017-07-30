@@ -367,7 +367,7 @@ export function addSellingRootUser(req, res, next) {
   }
   return db.Selling.create({ userId,
     routeId,
-    limit,
+    limit: Number(limit),
     createdBy: req.user.id,
     updatedBy: req.user.id })
     .then(() => res.status(202).end())
@@ -385,7 +385,7 @@ export function addSelling(req, res, next) {
   return db.Selling.create({ userId,
     sendingUserId,
     routeId,
-    limit,
+    limit: Number(limit),
     fromUserId: fromUserId || req.user.id,
     createdBy: req.user.id,
     updatedBy: req.user.id })

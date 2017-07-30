@@ -42,12 +42,17 @@ import Upstream from './upstream';
 import Groups from './group';
 import Transaction from './transaction';
 import Template from './template';
-import Session from './session';
+import Sessions from './session';
 import Role from './role';
 import Message from './message';
 import MessageFly from './message-fly';
 import Credit from './credit';
 import Sending from './sending';
+import Campaign from './campaign';
+import Contact from './contact';
+import LoginIdentifier from './loginIdentifier';
+import PriorityNumber from './priorityNumber';
+import SenderIds from './senderId';
 
 import 'angular-oauth2';
 
@@ -60,9 +65,9 @@ angular
     Home, FourOFour, OTPModule, Navigation, service,
     // - project specific
     SenderId, DeliveryReport, Report, SendSms, User,
-    AdminNavigation, CreateGroup, ContactList, Upstream,
-    Groups, Transaction, Template, Session, Role,
-    Message, MessageFly, Credit, Sending,
+    AdminNavigation, CreateGroup, ContactList, Upstream, SenderIds,
+    Groups, Transaction, Template, Sessions, Role, LoginIdentifier,
+    Message, MessageFly, Credit, Sending, Campaign, Contact, PriorityNumber,
     Manage, // - admin
     Admin, // - reseller
   ])

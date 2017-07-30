@@ -7,7 +7,7 @@ import ViewSessionComponent from './view-session/view-session.controller';
 import routing from './session.routes';
 
 export default angular
-  .module('msgQueApp.Session', [uiRouter])
+  .module('msgQueApp.Sessionss', [uiRouter])
   .component('listSession', ListSessionComponent)
   .component('newSession', NewSessionComponent)
   .component('viewSession', ViewSessionComponent)

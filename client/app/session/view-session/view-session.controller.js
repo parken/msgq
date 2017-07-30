@@ -1,4 +1,4 @@
-import session from './view-session.pug';
+import template from './view-session.pug';
 class ViewSessionController {
   /* @ngInject */
   constructor($http, $stateParams, $state, Session, Enum, toast) {
@@ -29,7 +29,7 @@ class ViewSessionController {
 }
 
 const ViewSessionComponent = {
-  session,
+  template,
   controller: ViewSessionController,
 };
 

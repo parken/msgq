@@ -6,8 +6,8 @@ export function index(req, res, next) {
 
   const options = {
     attributes: fl ? fl.split(',') : ['id', 'ip', 'device', 'browser', 'country', 'os', 'city', 'region'],
-    limit,
-    offset,
+    limit: Number(limit),
+    offset: Number(offset),
   };
 
   if (where) {

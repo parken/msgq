@@ -1,8 +1,11 @@
 import xl from 'excel4node';
 import logger from '../../components/logger';
 import config from '../../config/environment';
+import { ROLES } from '../../config/constants';
 import { notifyOnUserChannel } from '../../components/notify';
 import db from '../../conn/sqldb';
+
+const { ADMIN } = ROLES;
 
 function handleError(res, argStatusCode, err) {
   logger.error('user.controller', err);
@@ -74,32 +77,60 @@ export function deleteSenderId(req, res) {
     .catch(err => handleError(res, 500, err));
 }
 
-export function index(req, res) {
-  const { status, fl } = req.query;
-  let promise;
-  if (req.user.admin === 2) {
-    promise = Promise.resolve();
-  } else if (req.user.admin) {
-    promise = db.User.findAll({ attributes: ['id'], where: { loginUrl: req.origin } });
-  } else {
-    promise = Promise.resolve([req.user]);
+export function index(req, res, next) {
+  if (req.user.roleId !== ADMIN) {
+    const { status, fl } = req.query;
+    let promise;
+    if (req.user.admin === 2) {
+      promise = Promise.resolve();
+    } else if (req.user.admin) {
+      promise = db.User.findAll({ attributes: ['id'], where: { loginUrl: req.origin } });
+    } else {
+      promise = Promise.resolve([req.user]);
+    }
+    return promise
+      .then((users) => {
+        const where = { senderIdStatusId: { $not: 3 } };
+        if (users) where.createdBy = users.map(x => x.id);
+        if (status) where.$and = { senderIdStatusId: status.split(',') };
+        return db.SenderId.findAll({
+          attributes: fl ? fl.split(',') : ['id', 'name'],
+          where,
+          include: [{
+            model: db.User,
+            as: 'CreatedBy',
+            attributes: ['id', 'name', 'admin'],
+          }] })
+          .then(data => res.json(data));
+      })
+      .catch(err => handleError(res, 500, err));
   }
-  return promise
-    .then((users) => {
-      const where = { senderIdStatusId: { $not: 3 } };
-      if (users) where.createdBy = users.map(x => x.id);
-      if (status) where.$and = { senderIdStatusId: status.split(',') };
-      return db.SenderId.findAll({
-        attributes: fl ? fl.split(',') : ['id', 'name'],
-        where,
-        include: [{
-          model: db.User,
-          as: 'CreatedBy',
-          attributes: ['id', 'name', 'admin'],
-        }] })
-        .then(data => res.json(data));
-    })
-    .catch(err => handleError(res, 500, err));
+
+
+  const { limit = 20, offset = 0, fl, where } = req.query;
+
+  const options = {
+    attributes: fl ? fl.split(',') : ['id', 'routeId', 'limit', 'userId'],
+    limit: Number(limit),
+    offset: Number(offset),
+  };
+
+  if (where) {
+    options.where = where.split(',').reduce((nxt, x) => {
+      const [key, value] = x.split(':');
+      return Object.assign(nxt, { [key]: value });
+    }, {});
+  }
+
+  return Promise
+    .all([
+      db.Selling
+        .findAll(options),
+      db.Selling
+        .count(),
+    ])
+    .then(([routes, numFound]) => res.json({ items: routes, meta: { numFound } }))
+    .catch(next);
 }
 
 export function show(req, res) {

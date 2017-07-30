@@ -29,7 +29,6 @@ class ListMessageController {
     this.params = {
       limit: 20,
       offset: 0,
-      fl: 'id,name,provider,balance,routeId,createdAt'
     };
     this.get();
   }
@@ -37,7 +36,7 @@ class ListMessageController {
   get() {
     this
       .$http
-      .get(`/message`, { params: this.params})
+      .get(`/messages`, { params: this.params})
       .then(({ data }) => {
         Object.assign(this.data, data);
         this.pages = this.util.pages(this.data.meta.numFound, this.params.limit);

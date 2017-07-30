@@ -20,8 +20,8 @@ export function index(req, res, next) {
 
   const options = {
     attributes: fl ? fl.split(',') : ['id', 'name'],
-    limit,
-    offset,
+    limit: Number(limit),
+    offset: Number(offset),
   };
 
   if (where) {

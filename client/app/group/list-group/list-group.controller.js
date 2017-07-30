@@ -29,7 +29,6 @@ class ListGroupController {
     this.params = {
       limit: 20,
       offset: 0,
-      fl: 'id,name,provider,balance,routeId,createdAt'
     };
     this.get();
   }

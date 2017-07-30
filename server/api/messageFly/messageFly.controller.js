@@ -25,8 +25,8 @@ export function index(req, res, next) {
   const options = {
     attributes: fl ? fl.split(',') : ['id', 'text', 'groupIds', 'numbers', 'total', 'success', 'fail', 'unicode',
       'flash', 'scheduledOn'],
-    limit,
-    offset,
+    limit: Number(limit),
+    offset: Number(offset),
   };
 
   if (where) {
