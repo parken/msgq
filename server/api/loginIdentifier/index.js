@@ -1,11 +1,9 @@
 const express = require('express');
-const controller = require('./contact.controller');
-
-import oauth from '../../components/oauth/auth';
 
 const router = express.Router();
+const controller = require('./routes.controller');
 
-router.post('/sync', oauth, controller.syncContact);
+import oauth from '../../components/oauth/auth';
 
 router.get('/', oauth, controller.index);
 router.get('/:id', oauth, controller.show);

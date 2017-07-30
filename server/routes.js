@@ -15,12 +15,20 @@ import group from './api/group';
 import template from './api/template';
 import campaign from './api/campaign';
 import upstream from './api/upstream';
+import upstreamPlan from './api/upstream/plan';
 import route from './api/route';
+import message from './api/message';
+import loginIdentifier from './api/loginIdentifier';
 import messageFly from './api/messageFly';
+import messageFlyMessage from './api/messageFly/message';
+import priorityNumber from './api/priorityNumber';
+import transaction from './api/transaction';
+import role from './api/role';
 
 export default function (app) {
   // Insert routes below
   app.use('/api/users', user);
+  app.use('/api/roles', role);
   app.use('/api/sms', sms);
   app.use('/api/senderId', senderId);
   app.use('/api/company', company);
@@ -29,8 +37,13 @@ export default function (app) {
   app.use('/api/groups', group);
   app.use('/api/templates', template);
   app.use('/api/campaigns', campaign);
-  app.use('/api/upstreams', upstream);
+  app.use('/api/upstreams', upstream, upstreamPlan);
   app.use('/api/messageFly', messageFly);
+  app.use('/api/messageFlies', messageFly, messageFlyMessage);
+  app.use('/api/transactions', transaction);
+  app.use('/api/loginIdentifiers', loginIdentifier);
+  app.use('/api/priorityNumbers', priorityNumber);
+  app.use('/api/message', message);
   app.use('/api', route);
 
   // All undefined asset or api routes should return a 404

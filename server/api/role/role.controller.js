@@ -1,3 +1,4 @@
+
 import db from '../../conn/sqldb';
 
 export function index(req, res, next) {
@@ -18,48 +19,45 @@ export function index(req, res, next) {
 
   return Promise
     .all([
-      db.Campaign
+      db.Role
         .findAll(options),
-      db.Campaign
+      db.Role
         .count(),
     ])
-    .then(([routes, numFound]) => res.json({ items: routes, meta: { numFound } }))
+    .then(([groups, numFound]) => res.json({ items: groups, meta: { numFound } }))
     .catch(next);
 }
 
 export function show(req, res, next) {
-  return db.Campaign
+  return db.Role
     .findById(req.params.id)
-    .then(route => res.json(route))
+    .then(group => res.json(group))
     .catch(next);
 }
 
 export function create(req, res, next) {
-  return db.Campaign
+  const { number } = req.body;
+  if (!number) return res.status(500).json({ message: 'Invalid request' });
+  return db.Role
     .create(Object.assign({}, req.body, {
-      createdBy: req.user.id,
-      updatedBy: req.user.id,
+      userId: req.user.id,
     }))
     .then(({ id }) => res.status(201).json({ id }))
     .catch(next);
 }
 
 export function update(req, res, next) {
-  return db.Campaign
+  return db.Role
     .update(
-      Object.assign({}, req.body, {
-        active: false,
-        updatedBy: req.user.id,
-      }),
+      Object.assign({}, req.body),
       { where: { id: req.params.id } })
     .then(() => res.status(201).end())
     .catch(next);
 }
 
 export function destroy(req, res, next) {
-  return db.Campaign
+  return db.Role
     .destory({ where: { id: req.params.id } })
     .then(() => res.status(201).end())
     .catch(next);
 }
-

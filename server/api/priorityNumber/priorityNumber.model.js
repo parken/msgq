@@ -8,7 +8,7 @@ export default function (sequelize, DataTypes) {
     },
     number: DataTypes.STRING,
   }, {
-    tableName: 'priority_number',
+    tableName: 'priority_numbers',
     timestamps: true,
     paranoid: true,
     classMethods: {

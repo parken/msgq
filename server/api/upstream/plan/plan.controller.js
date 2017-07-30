@@ -1,4 +1,5 @@
-import db from '../../conn/sqldb';
+import logger from '../../../components/logger/index';
+import db from '../../../conn/sqldb/index';
 
 export function index(req, res, next) {
   const { limit = 20, offset = 0, fl, where } = req.query;
@@ -18,24 +19,24 @@ export function index(req, res, next) {
 
   return Promise
     .all([
-      db.Campaign
+      db.Upstream
         .findAll(options),
-      db.Campaign
+      db.Upstream
         .count(),
     ])
-    .then(([routes, numFound]) => res.json({ items: routes, meta: { numFound } }))
+    .then(([upstreams, numFound]) => res.json({ items: upstreams, meta: { numFound } }))
     .catch(next);
 }
 
 export function show(req, res, next) {
-  return db.Campaign
+  return db.Upstream
     .findById(req.params.id)
-    .then(route => res.json(route))
+    .then(upstream => res.json(upstream))
     .catch(next);
 }
 
 export function create(req, res, next) {
-  return db.Campaign
+  return db.Upstream
     .create(Object.assign({}, req.body, {
       createdBy: req.user.id,
       updatedBy: req.user.id,
@@ -44,8 +45,20 @@ export function create(req, res, next) {
     .catch(next);
 }
 
+export function activate(req, res, next) {
+  const { id } = req.params;
+  db.Upstream
+    .findById(id)
+    .then(({ routeId }) => db.Upstream
+      .deactivateOtherRoutes(db, { routeId }))
+    .then(() => db.Upstream
+      .update({ active: true }, { where: { id } }))
+    .then(() => res.status(201).end())
+    .catch(next);
+}
+
 export function update(req, res, next) {
-  return db.Campaign
+  return db.Upstream
     .update(
       Object.assign({}, req.body, {
         active: false,
@@ -57,9 +70,22 @@ export function update(req, res, next) {
 }
 
 export function destroy(req, res, next) {
-  return db.Campaign
+  return db.Upstream
     .destory({ where: { id: req.params.id } })
     .then(() => res.status(201).end())
     .catch(next);
 }
 
+export function createPlan(req, res) {
+  const { count } = req.body;
+  if (!count || req.user.roleId !== 1) return res.status(404).json({ message: 'Invalid Request' });
+  return db.UpstreamPlan
+    .create({
+      upstreamId: req.params.id,
+      createdBy: req.user.id,
+      updatedBy: req.user.id,
+      count,
+    })
+    .then(() => res.status(202).end())
+    .catch(err => handleError(res, 500, err));
+}

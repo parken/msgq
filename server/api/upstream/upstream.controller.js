@@ -1,12 +1,6 @@
 import logger from '../../components/logger/index';
 import db from '../../conn/sqldb/index';
 
-function handleError(res, argStatusCode, err) {
-  logger.error('user.controller', err);
-  const statusCode = argStatusCode || 500;
-  res.status(statusCode).send(err);
-}
-
 export function index(req, res, next) {
   const { limit = 20, offset = 0, fl, where } = req.query;
 
@@ -84,7 +78,7 @@ export function destroy(req, res, next) {
 
 export function createPlan(req, res) {
   const { count } = req.body;
-  if (!count || req.user.roleId !== 1) return res.status(404).json({message: 'Invalid Request'});
+  if (!count || req.user.roleId !== 1) return res.status(404).json({ message: 'Invalid Request' });
   return db.UpstreamPlan
     .create({
       upstreamId: req.params.id,

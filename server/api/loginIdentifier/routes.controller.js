@@ -4,7 +4,7 @@ export function index(req, res, next) {
   const { limit = 20, offset = 0, fl, where } = req.query;
 
   const options = {
-    attributes: fl ? fl.split(',') : ['id', 'name'],
+    attributes: fl ? fl.split(',') : ['id', 'userId', 'uuid'],
     limit,
     offset,
   };
@@ -18,9 +18,9 @@ export function index(req, res, next) {
 
   return Promise
     .all([
-      db.Campaign
+      db.LoginIdentifier
         .findAll(options),
-      db.Campaign
+      db.LoginIdentifier
         .count(),
     ])
     .then(([routes, numFound]) => res.json({ items: routes, meta: { numFound } }))
@@ -28,38 +28,33 @@ export function index(req, res, next) {
 }
 
 export function show(req, res, next) {
-  return db.Campaign
+  return db.LoginIdentifier
     .findById(req.params.id)
     .then(route => res.json(route))
     .catch(next);
 }
 
 export function create(req, res, next) {
-  return db.Campaign
+  return db.LoginIdentifier
     .create(Object.assign({}, req.body, {
-      createdBy: req.user.id,
-      updatedBy: req.user.id,
+      userId: req.user.id,
     }))
     .then(({ id }) => res.status(201).json({ id }))
     .catch(next);
 }
 
 export function update(req, res, next) {
-  return db.Campaign
+  return db.LoginIdentifier
     .update(
-      Object.assign({}, req.body, {
-        active: false,
-        updatedBy: req.user.id,
-      }),
+      Object.assign({}, req.body),
       { where: { id: req.params.id } })
     .then(() => res.status(201).end())
     .catch(next);
 }
 
 export function destroy(req, res, next) {
-  return db.Campaign
+  return db.LoginIdentifier
     .destory({ where: { id: req.params.id } })
     .then(() => res.status(201).end())
     .catch(next);
 }
-
