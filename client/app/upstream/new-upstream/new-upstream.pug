@@ -1,6 +1,8 @@
 .wrapper
-  .padder-v.h4 Add Upstream
-  .b-b.b-gray.m-b-md
+  .padder-v.h3 {{$ctrl.$stateParams.id ? "Edit" : "Add"}} Upstream
+  a.text-primary.text-u-l.pull-right.m-l-xs(ui-sref='upstreams.list') Show List
+  a.text-primary.text-u-l.pull-right.m-l-xs(ng-if='$ctrl.$stateParams.id' ui-sref='upstream.view($ctrl.$stateParams)') View Upstream
+  .b-b.b-gray.m-b-md.m-t-md
   form.form.form-validation(name='form' ng-submit='$ctrl.submit();')
     .row
       .col-md-6.col-sm-12.col-xs-12
@@ -46,13 +48,6 @@
             ng-model='$ctrl.data.comment'
             maxlength='300'
           )
-    .row
-      .col-xs-12
-        .form-group
-          label.i-checks.i-checks-sm
-            input(type='checkbox' name='active' ng-model='$ctrl.data.active' ng-true-value='1' ng-false-value='0')
-            i
-            | Active
     .row
       .col-xs-12
         button.btn.btn-success(type='submit' ng-disabled='form.$invalid')

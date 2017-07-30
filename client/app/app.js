@@ -26,6 +26,7 @@ import Navigation from '../components/navigation';
 import AdminNavigation from '../components/admin-navigation';
 import CreateGroup from '../components/create-group';
 import Report from '../components/report';
+import service from '../components/services';
 
 import Manage from './manage';
 import Admin from './admin';
@@ -38,6 +39,16 @@ import SenderId from './sender-id';
 import FourOFour from './four-o-four';
 import ContactList from './contact-list';
 import Upstream from './upstream';
+import Groups from './group';
+import Transaction from './transaction';
+import Template from './template';
+import Session from './session';
+import Role from './role';
+import Message from './message';
+import MessageFly from './message-fly';
+import Credit from './credit';
+import Sending from './sending';
+
 import 'angular-oauth2';
 
 setupGAnalytics('UA-98313820-1');  // Google Analytics
@@ -46,10 +57,12 @@ angular
     ngCookies, ngAnimate, ngSanitize, uiRouter, 'angular-oauth2', uiBootstrap,
     // - framework
     AsideMenu, Navbar, Footer, constants, Auth, UpdateTitle, FileReader,
-    Home, FourOFour, OTPModule, Navigation,
+    Home, FourOFour, OTPModule, Navigation, service,
     // - project specific
     SenderId, DeliveryReport, Report, SendSms, User,
     AdminNavigation, CreateGroup, ContactList, Upstream,
+    Groups, Transaction, Template, Session, Role,
+    Message, MessageFly, Credit, Sending,
     Manage, // - admin
     Admin, // - reseller
   ])

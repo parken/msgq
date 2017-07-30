@@ -1,4 +1,4 @@
-import template from './balance.pug';
+import template from './new-credit.pug';
 
 class BalanceController {
   /* @ngInject */

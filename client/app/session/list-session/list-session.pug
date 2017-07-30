@@ -1,0 +1,60 @@
+.panel.panel-default
+  .panel-heading
+    .h3 Sessions
+      a.btn.btn-primary.text-sm.pull-right.m-l-xs(ui-sref='sessions.new') Add Sessions
+  .row.wrapper
+    .col-md-4.col-xs-12.m-b-xs
+      .form-group
+        label.text-xs(for='search') Search
+        input#search.input-sm.form-control(type='text', placeholder='Search' ng-model='$ctrl.searchText')
+    .col-xs-12.col-md-8
+      .col-md-6.col-xs-12
+        .form-group
+          label.text-xs(for='search') Pages
+          ul.clear.pagination.pagination-sm.m-t-none.m-b-none
+            li
+              a(ng-click='$ctrl.first()' ng-class='{"disabled": $ctrl.ui.page === $ctrl.ui.first}')
+                i.fa.fa-fast-backward
+            li
+              a(ng-click='$ctrl.backward()' ng-class='{"disabled": $ctrl.ui.page === $ctrl.ui.first}')
+                i.fa.fa-chevron-left
+            li
+              a.no-padder
+                select.input-sm.form-control.w-xs.inline.v-middle(
+                  ng-model='$ctrl.ui.page'
+                  ng-options='page for page in $ctrl.pages'
+                  ng-change='$ctrl.changePage()'
+                )
+            li
+              a(ng-click='$ctrl.forward()' ng-class='{"disabled": $ctrl.ui.page === $ctrl.ui.last}')
+                i.fa.fa-chevron-right
+            li
+              a(ng-class='{"disabled": $ctrl.ui.page === $ctrl.ui.last}' ng-click='$ctrl.last()')
+                i.fa.fa-fast-forward
+      .col-md-3.col-xs-12
+        .form-group
+          label.text-xs(for='search') No. of Rows
+          select.input-sm.form-control.w-xs.v-middle(
+            ng-model='$ctrl.params.limit'
+            ng-change='$ctrl.get()'
+            ng-options='row for row in $ctrl.rows'
+          )
+      .col-md-3.col-xs-12
+        .form-group
+          label.text-xs(for='search') Total Records
+            b.m-l-xs(ng-bind='$ctrl.data.meta.numFound')
+          .text-md.font-bold Showing {{$ctrl.data.start}} - {{$ctrl.data.end}}
+  .table-responsive
+    table.table.table-striped.b-t.b-light
+      thead
+        tr
+          th ID
+          th Name
+          th Created At
+          th(style='width:30px;')
+      tbody
+        tr(ng-repeat='item in $ctrl.data.items | filter: $ctrl.searchText')
+          td
+            a(ui-sref='session.view({id: item.id})' ng-bind='item.id')
+          td(ng-bind='item.name')
+          td(ng-bind='item.createdAt | date: "dd-MMM-yyyy hh:mm a"')

@@ -4,7 +4,7 @@ import routing from './user.routes';
 import UserAddComponent from './add/add.controller';
 import UserProfileComponent from './profile/profile.controller';
 import UsersListComponent from './list/list.controller';
-import Balance from './balance/balance.controller';
+import Balance from '../credit/new-credit/new-credit.controller';
 
 export default angular
   .module('msgQueApp.user', [

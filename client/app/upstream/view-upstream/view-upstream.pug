@@ -1,4 +1,8 @@
-.wrapper
+.wrapper-lg
+  .h1 View Upstream
+  a.text-primary.text-u-l.pull-right.m-l-xs(ui-sref='upstreams.list') Show List
+  a.text-primary.text-u-l.pull-right.m-l-xs(ui-sref='upstream.edit($ctrl.$stateParams)') Edit Upstream
+  hr
   .row
     .col-md-6.col-sm-12.col-xs-12
       label.text-xs.text-muted Name
@@ -24,7 +28,7 @@
     .col-md-6.col-sm-12.col-xs-12
       .form-group
         label.text-xs.text-muted Route type
-        .text-md.text-black(ng-bind='$ctrl.routes[$ctrl.data.route - 1]')
+        .text-md.text-black(ng-bind='$ctrl.routes[$ctrl.data.routeId - 1].name')
   .row
     .col-xs-12
       .form-group
