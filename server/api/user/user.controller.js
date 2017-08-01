@@ -1,5 +1,5 @@
 import request from 'request';
-
+import rp from 'request-promise';
 import config from '../../config/environment';
 import logger from '../../components/logger';
 import { sms, slack } from '../../components/notify';
@@ -8,12 +8,12 @@ import { getRouteType } from '../../conn/sqldb/helper';
 
 import db from '../../conn/sqldb';
 
-
 export function me(req, res, next) {
   return Promise.all([
     db.User
       .findById(req.user.id, {
-        attributes: ['mobile', 'email', 'name', 'id', 'roleId', 'admin'],
+        attributes: ['mobile', 'email', 'name', 'id', 'roleId', 'admin', 'companyName',
+          'companyAddress', 'supportName', 'supportMobile', 'supportEmail'],
         raw: 'true',
       }),
     db.Route.findAll(),
@@ -110,24 +110,73 @@ export function createCustomer(req, res, next) {
 }
 
 export function signup(req, res, next) {
-  const { id, name, password, otp, email } = req.body;
-  db.User.find({
-    attributes: ['id'],
-    where: { id, otp },
-  })
-    .then((u) => {
-      if (!u) return res.status(400).json({ error_description: 'Invalid OTP' });
-      u
-        .update({ otpStatus: 0, name, password, email })
-        .catch(err => logger.error('user.ctrl/otpVerify', err));
-      slack(`Signup: ${u.id}, ${u.name}, ${u.mobile}, ${u.email}`);
-      return res.status(201).end();
-    }).catch(next);
+  const authorization = req.get('authorization');
+  if (!authorization) return res.status(404).json({ message: 'Unauthorized Access.' });
+  const [clientId, clientSecret] = Buffer.from(authorization.split(' ')[1], 'base64')
+    .toString('ascii').split(':');
+  return db.App
+    .find({ attributes: ['id'], where: { clientId, clientSecret } })
+    .then(app => {
+      if (!app) return res.status(500).json({ message: 'Invalid Authentication.' });
+      const { name, email, mobile } = req.body;
+      let { roleId } = req.body;
+      if (!roleId) roleId = 4;
+      let { password } = req.body;
+      const otp = Math.floor(Math.random() * 90000) + 10000;
+      if (!password) password = otp;
+      const where = { $or: [], appId: app.id };
+      if (email) where.$or.push({ email });
+      if (mobile) where.$or.push({ mobile });
+      return db.User.find({ where })
+        .then(user => (user
+          ? res.status(409).end()
+          : db.User.create({ name, email, mobile, otp, password, appId: app.id, roleId })
+            .then(() => res.end())));
+    })
+    .catch(next);
 }
 
 function getApp(code) {
   return db.AuthCode.find({ where: { auth_code: code }, include: [db.App] })
     .then(authCode => authCode.App.toJSON());
+}
+
+export function googleLogin(req, res, next) {
+  const authorization = req.get('authorization');
+  if (!authorization) return res.status(404).json({ message: 'Unauthorized Access.' });
+  const [clientId, clientSecret] = Buffer.from(authorization.split(' ')[1], 'base64')
+    .toString('ascii').split(':');
+  return db.App
+    .find({ attributes: ['id', 'clientId', 'clientSecret'], where: { clientId, clientSecret } })
+    .then(app => {
+      if (!app) return res.status(500).json({ message: 'Invalid Authentication.' });
+      const { email } = req.body;
+      return db.User
+        .find({ attributes: ['email', 'otp'], where: { email, appId: app.id } })
+        .then(user => {
+          if (!user) return res.status(500).json({ message: 'user not found' });
+          const options = {
+            method: 'POST',
+            uri: `${config.OAUTH_SERVER}${config.OAUTH_ENDPOINT}`,
+            auth: {
+              user: app.clientId,
+              pass: app.clientSecret,
+            },
+            headers: {
+              'user-agent': req.headers['user-agent'],
+              'x-forwarded-for': req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+            },
+            form: {
+              grant_type: 'password',
+              username: user.email,
+              password: user.otp,
+            },
+            json: true,
+          };
+          return rp(options).then(data => res.json(data));
+        });
+    })
+    .catch(err => console.log(err));
 }
 
 export function login(req, res, next) {
@@ -212,15 +261,8 @@ export function update(req, res, next) {
   const id = req.user.id || req.params.id;
   const user = req.body;
   delete user.id;
-  if (req.user.id) {
-    delete user.alternateMobile;
-  }
   return db.User
-    .update(user, {
-      where: {
-        id,
-      },
-    })
+    .update(user, { where: { id } })
     .then(() => res.json({ id }))
     .catch(next);
 }

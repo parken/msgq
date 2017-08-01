@@ -27,6 +27,7 @@ import role from './api/role';
 import credit from './api/selling';
 import sending from './api/sending';
 import session from './api/session';
+import domain from './api/domain';
 
 export default function (app) {
   // Insert routes below
@@ -52,6 +53,7 @@ export default function (app) {
   app.use('/api/sending', sending);
   app.use('/api/credits', credit);
   app.use('/api/sessions', session);
+  app.use('/api/domains', domain);
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')

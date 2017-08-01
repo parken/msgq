@@ -30,6 +30,9 @@ const all = {
   MYSQL_PASS: process.env.MYSQL_PASS,
   MYSQL_HOST: process.env.MYSQL_HOST,
   MYSQL_TZ: '+05:30',
+
+  OAUTH_SERVER: process.env.OAUTH_SERVER,
+  OAUTH_ENDPOINT: process.env.OAUTH_ENDPOINT,
 };
 
 // Export the config object based on the NODE_ENV

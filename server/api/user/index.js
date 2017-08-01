@@ -18,6 +18,7 @@ router.post('/', oauth, controller.create);
 router.post('/signup', controller.signup);
 router.post('/customer', oauth, controller.createCustomer);
 router.post('/login', controller.login);
+router.post('/googleLogin', controller.googleLogin);
 router.post('/otpLogin', controller.otpLogin);
 router.post('/otp', controller.otpSend);
 router.post('/otpVerify', controller.otpVerify);
