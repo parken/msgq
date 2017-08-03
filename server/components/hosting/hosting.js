@@ -51,7 +51,7 @@ export function deploy (options) {
 }
 
 export function generateWebsite(domain, option) {
-  return FileStructure.writeFile(`/websites/${domain}`, option);
+  return FileStructure.writeFile(`/websites/${domain}/index.html`, option);
 }
 
 register().then(x => {
