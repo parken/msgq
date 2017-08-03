@@ -57,7 +57,7 @@ var config = {
     serverConfig: require('./server/config/environment')
   },
 
-  onPrepare: function() {
+  onPrepare() {
     require('babel-register');
     // Load Mocha and Chai + plugins
     require('./mocha.conf');

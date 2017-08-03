@@ -1,20 +1,10 @@
-'use strict';
-/* eslint no-sync: 0 */
+import template from './navbar.pug';
+import controller from './navbar.controller';
 
-import angular from 'angular';
+const NavbarComponent = {
+  template,
+  controller,
+  bindings: { settings: '=' },
+};
 
-export class NavbarComponent {
-  menu = [{
-    title: 'Home',
-    state: 'main'
-  }];
-  isCollapsed = true;
-
-}
-
-export default angular.module('directives.navbar', [])
-  .component('navbar', {
-    template: require('./navbar.pug'),
-    controller: NavbarComponent
-  })
-  .name;
+export default NavbarComponent;

@@ -1,8 +1,17 @@
-# msgque
+# MSGQue
+
+MSGQue is complete and fully featured SMS Server for use by websites & web servers. It is compatible with Plivo, Twillio, SMSGupshup but open source cloud short messaging service.  and ready for you to run on your own servers. MSGQue was developed by Parken Tech to serve its own sms processing requirements and we have since decided that it should be released as an open source project for the community. 
+
+* [Quick Install Guide](#) - install MSGQue quickly on a clean CentOS 7 server.
+* [View some screenshots](#) - how to install the MSGQue prerequisites on CentOS 7
+* [View some screenshots](#) - how to install MSGQue 
+* [View some screenshots](#) web UI
+* [FAQs](#)
+
+
+## Getting Started for Developers
 
 This project was generated with the [Angular Full-Stack Generator](https://github.com/DaftMonk/generator-angular-fullstack) version 4.2.2.
-
-## Getting Started
 
 ### Prerequisites
 
