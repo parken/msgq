@@ -102,4 +102,10 @@ export function createCNAME(domain = 'w91.co', {
   })
 }
 
-
+export default {
+  searchDomains,
+  register,
+  customerPrice,
+  reset,
+  createCNAME,
+};

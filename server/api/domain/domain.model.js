@@ -1,3 +1,4 @@
+import Hosting from '../../components/hosting';
 
 export default function (sequelize, DataTypes) {
   const Domain = sequelize.define('Domain', {
@@ -27,6 +28,26 @@ export default function (sequelize, DataTypes) {
           foreignKey: 'domainTypeId',
           allowNull: true,
         });
+      },
+    },
+    hooks: {
+      afterCreate(instance) {
+        if (!Hosting.ownDomains.some(x => instance.name.endsWith(x))) {
+          return Promise.resolve();
+        }
+        return Promise
+          .all([
+            Hosting.s3.generateWebsite(instance.name),
+            Hosting.s3.register(instance.name),
+          ])
+          .then(([domainPath, s3site]) => Promise
+            .all([
+              Hosting.domain.createCNAME(instance.name.slice(-5), {
+                name: instance.name.split('.').shift(),
+                data: s3site.url,
+              }),
+              Hosting.s3.deploy(instance.name),
+            ]));
       },
     },
   });

@@ -19,6 +19,7 @@
     "method-override": "^2.3.5",
     "moment": "^2.18.1",
     "morgan": "^1.8.0",
+    "mv": "^2.1.1",
     "mysql": "^2.13.0",
     "ngeohash": "^0.6.0",
     "npm": "^5.0.3",
@@ -27,6 +28,7 @@
     "pug": "2.0.0-beta4",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
+    "s3-website": "^3.1.0",
     "sequelize": "^3.23.6",
     "sequelize-cli": "^2.7.0",
     "serve-favicon": "^2.3.0",
@@ -155,7 +157,5 @@
     "lint": "gulp lint:scripts:server --fail"
   },
   "private": true,
-  "pre-commit": [
-
-  ]
+  "pre-commit": []
 }

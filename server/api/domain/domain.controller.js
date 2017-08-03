@@ -8,11 +8,9 @@ export function index(req, res, next) {
 }
 
 export function create(req, res, next) {
-  let domains = req.body;
-  if (!(domains instanceof Array)) domains = [domains];
-  domains = domains.map(x => Object.assign(x, { status: 1, userId: req.user.id }))
+  const { name, classkey, price, existing } = req.body;
   return db.Domain
-    .bulkCreate(domains)
+    .create({ name, classkey, price, existing, status: 1, userId: req.user.id })
     .then(data => res.json(data))
     .catch(next);
 }

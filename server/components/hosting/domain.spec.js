@@ -1,5 +1,5 @@
 
-const domain = require('./index');
+const domain = require('./domain');
 const s3 = require('./hosting');
 
 domain

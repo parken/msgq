@@ -1,5 +1,6 @@
 const create = require('s3-website').s3site;
 var AWS = require('aws-sdk')
+import FileStructure from '../fileStructure';
 import db from  '../../conn/sqldb'
 var config = {
   region: 'eu-central-1',
@@ -49,6 +50,10 @@ export function deploy (options) {
   }));
 }
 
+export function generateWebsite(domain, option) {
+  return FileStructure.writeFile(`/websites/${domain}`, option);
+}
+
 register().then(x => {
   console.log('registration success', x);
   return deploy({ domain: 'test2.w91.co' })
@@ -56,3 +61,9 @@ register().then(x => {
     .catch(err => console.log('e', err));
 })
 
+export default {
+  generate,
+  register,
+  deploy,
+  generateWebsite,
+};
