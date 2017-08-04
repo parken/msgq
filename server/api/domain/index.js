@@ -7,5 +7,6 @@ const router = express.Router();
 
 router.get('/', oauth, controller.index);
 router.post('/', oauth, controller.create);
+router.delete('/:domain', oauth, controller.destroy);
 
 module.exports = router;

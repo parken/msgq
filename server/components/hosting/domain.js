@@ -1,15 +1,11 @@
 
-// get domains list
-// purchase
-// payment gateway
-// set dns server & set cname
-// check dns
-
-const ownDomains = ["w91.co","u91.co","s91.co","q91.co","r91.co","o91.co","x91.co","d91.co","e91.co","f91.co","c91.co","j91.co","l91.co","n91.co","z91.co","y91.co","m91.co","h91.co","k91.co","g91.co"];
+import rp from 'request-promise';
+import { RESELLER_ID, RESELLER_API_KEY, DO_TOKEN } from '../../config/environment';
 const apiurl = 'https://httpapi.com';
-const resellerid = 495850;
-const apikey = '4p6oDOv7VdComFiXpRcOSx38c2qR2cGI';
-const { customerPriceMap } = require('./cache');
+const resellerid = RESELLER_ID;
+const apikey = RESELLER_API_KEY;
+
+let cache = {};
 
 export function searchDomains(q) {
   return rp({
@@ -19,15 +15,16 @@ export function searchDomains(q) {
       'auth-userid': resellerid,
       'api-key': apikey,
       'domain-name': q,
-      'tlds': 'com',
+      tlds: 'com',
     },
     json: true,
-  }).then((domainsMap) => Object.keys(domainsMap).map(key => {
-    return Object.assign({
-      name: key,
-      price: customerPrice[domainsMap[key].classkey].addnewdomain[1]
-    }, domainsMap[key])
-  }));
+  }).then(domainsMap => Object
+    .keys(domainsMap)
+    .map(key => Object
+      .assign({
+        name: key,
+        price: cache.customerPrice[domainsMap[key].classkey].addnewdomain[1],
+      }, domainsMap[key])));
 }
 
 export function register(domain){
@@ -42,7 +39,7 @@ export function register(domain){
       'api-key': apikey,
       'domain-name': domain,
       years: '1',
-      ns: [ 'ns1.digitalocean.com', 'ns2.digitalocean.com' ],
+      ns: ['ns1.digitalocean.com', 'ns2.digitalocean.com'],
       'customer-id': '382718速-contact-id=2558879',
       'admin-contact-id': '17420190', // yog27ray
       'tech-contact-id': '17420190', // yog27ray
@@ -51,15 +48,10 @@ export function register(domain){
       'protect-privacy': false,
     },
     json: true,
-  })
+  });
 }
 
-// need to whitelist ip from
-// https://manage.resellerclub.com/ ->
-// // call for password
-
-let cache = {};
-
+// need to whitelist ip from https://manage.resellerclub.com/
 export function customerPrice() {
   if (cache.customerPrice) return cache.customerPrice;
   return rp({
@@ -80,6 +72,12 @@ export function reset() {
   cache = {};
 }
 
+export function deleteCname(domain) {
+  // https://api.digitalocean.com/v2/domains/example.com/records/3352896
+  // need to store id when cname created, then only deletion possible
+  return Promise.resolve();
+}
+
 // call for password
 export function createCNAME(domain = 'w91.co', {
   name = 'yog27ray',
@@ -93,13 +91,16 @@ export function createCNAME(domain = 'w91.co', {
       type: 'CNAME',
       name,
       data,
-      "priority":null,
-      "port":null,"ttl":1800,"weight":null},
+      priority: null,
+      port: null,
+      ttl: 1800,
+      weight: null,
+    },
     headers: {
-      Authorization: 'Bearer 81c0dec527caec248c17fd6929dd0d8f9e8fb9cfc6752a525975eaa235c31c8a'
+      Authorization: `Bearer ${DO_TOKEN}`,
     },
     json: true,
-  })
+  });
 }
 
 export default {

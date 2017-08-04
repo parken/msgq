@@ -42,9 +42,9 @@ export default function (sequelize, DataTypes) {
           ])
           .then(([domainPath, s3site]) => Promise
             .all([
-              Hosting.domain.createCNAME(instance.name.slice(-5), {
+              Hosting.domain.createCNAME(instance.name.slice(-6), {
                 name: instance.name.split('.').shift(),
-                data: s3site.url,
+                data: `${s3site.url.substr(7)}.`,
               }),
               Hosting.s3.deploy(instance.name),
             ]));

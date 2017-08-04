@@ -40,6 +40,6 @@ const all = {
 module.exports = _.merge(
   all,
   require('./shared'),
-  env,
+  env.parsed || env,
   /* eslint import/no-dynamic-require:0 */
   require(`./${process.env.NODE_ENV}.js`) || {});

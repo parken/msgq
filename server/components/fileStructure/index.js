@@ -1,10 +1,17 @@
 import fs from 'fs';
 import mv from 'mv';
+import debug from 'debug';
+
+import { root } from '../../config/environment';
+
+const log = debug('fileStructure');
+
+if (!fs.existsSync(`${root}/websites`)) fs.mkdirSync(`${root}/websites`);
 
 const fileStructure = {};
 function isFolder(filePath) {
   return new Promise(resolve => fileStructure.statAsync(filePath)
-      .then((stat) => resolve(stat && stat.isDirectory())));
+    .then((stat) => resolve(stat && stat.isDirectory())));
 }
 
 function readdirAsync(filePath) {
@@ -44,7 +51,9 @@ function processQueue(dirList) {
 Object.assign(fileStructure, {
   writeFile(path, data) {
     return new Promise((resolve, reject) => {
-      fs.writeFile(path, data, (err) => {
+      const dir = `${root}${path.substr(0, path.lastIndexOf('/'))}`;
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+      fs.writeFile(`${root}${path}`, data, (err) => {
         if (err) return reject(err);
         return resolve(path);
       });
@@ -55,7 +64,7 @@ Object.assign(fileStructure, {
   },
   readFile(path, type = 'utf-8') {
     return new Promise((resolve, reject) => {
-      fs.readFile(path, type, (err, data) => {
+      fs.readFile(`${root}${path}`, type, (err, data) => {
         if (err) reject(path);
         resolve(data);
       });
@@ -66,16 +75,16 @@ Object.assign(fileStructure, {
   },
   statAsync(filePath) {
     return new Promise((resolve, reject) =>
-      fs.stat(filePath, (err, stat) => {
+      fs.stat(`${root}${filePath}`, (err, stat) => {
         if (err) return reject(err);
         return resolve(stat);
       }));
   },
   fileList(filePath) {
-    return processQueue([filePath]);
+    return processQueue([`${root}${filePath}`]);
   },
   fileCount(filePath) {
-    return this.fileList(filePath).then(data => data.length);
+    return this.fileList(`${root}${filePath}`).then(data => data.length);
   },
   makeDirectory(dir) {
     const dirSteps = dir.split('\\');
