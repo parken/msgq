@@ -1,9 +1,8 @@
 class NavigationController {
   /* @ngInject */
-  constructor($state, Session, OTP, OAuth) {
+  constructor($state, Session, OAuth) {
     this.$state = $state;
     this.Session = Session;
-    this.OTP = OTP;
     this.OAuth = OAuth;
   }
 

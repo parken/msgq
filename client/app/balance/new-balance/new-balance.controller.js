@@ -1,6 +1,6 @@
-import template from './new-plan.pug';
+import template from './new-balance.pug';
 
-class NewGroupcontroller {
+class NewBalancecontroller {
   /* @ngInject */
   constructor($http, $stateParams, $state, Session, Enum, toast) {
     this.$http = $http;
@@ -18,34 +18,23 @@ class NewGroupcontroller {
       active: 1,
       routeId: 1,
     };
-    this.get();
-  }
-
-  get() {
-    const { id } = this.$stateParams;
-    if (!id) return;
-    this
-      .$http
-      .get(`/upstreams/${id}`)
-      .then(({ data }) => this.data = data)
-      .catch(this.toast.next);
   }
 
   submit() {
     const { id } = this.$stateParams;
-    this.$http.post(`/upstreams/${id || ''}`, this.data)
-      .then(({ data = { id } }) => {
+    this.$http.post(`/upstreams/${id}/balances`, this.data)
+      .then(() => {
         this.toast.show('success');
-        this.$state.go('upstream.view', { id });
+        this.$state.go('user.view', { id });
       })
       .catch(this.toast.next);
   }
 }
 
-const NewGroupComponent = {
+const NewBalanceComponent = {
   template,
-  controller: NewGroupcontroller,
+  controller: NewBalancecontroller,
 };
 
-export default NewGroupComponent;
+export default NewBalanceComponent;
 

@@ -1,4 +1,4 @@
-import template from './profile.pug';
+import template from './user-view.pug';
 class controller {
   /* @ngInject */
   constructor($http, Session, $stateParams) {
@@ -11,8 +11,8 @@ class controller {
     this.user = this.Session.read('userinfo');
     const { id = this.user.id } = this.$stateParams;
     this.$http.get(`/users/${id}`)
-      .then(({ data: user }) => {
-        this.user = user;
+      .then(({ data }) => {
+        this.data = data;
       });
   }
 }

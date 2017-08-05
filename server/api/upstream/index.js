@@ -13,6 +13,5 @@ router.post('/:id/activate', oauth, controller.activate);
 router.post('/:id', oauth, controller.update);
 router.put('/:id', oauth, controller.update);
 router.post('/:id', oauth, controller.destroy);
-router.post('/:id/plan', oauth, controller.createPlan);
 
 module.exports = router;

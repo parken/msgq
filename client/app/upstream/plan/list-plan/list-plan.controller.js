@@ -1,5 +1,5 @@
 import template from './list-plan.pug';
-class ListGroupController {
+class ListPlanController {
   /* @ngInject */
   constructor($http, $state, $stateParams, Session, Enum, toast, util) {
     this.$stateParams = $stateParams;
@@ -30,6 +30,7 @@ class ListGroupController {
     this.params = {
       limit: 20,
       offset: 0,
+      fl: 'id,count,createdAt',
     };
     this.get();
   }
@@ -82,10 +83,10 @@ class ListGroupController {
 }
 
 
-const ListGroupComponent = {
+const ListPlanComponent = {
   template,
-  controller: ListGroupController,
+  controller: ListPlanController,
 };
 
-export default ListGroupComponent;
+export default ListPlanComponent;
 

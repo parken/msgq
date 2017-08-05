@@ -24,9 +24,29 @@ export function me(req, res, next) {
 
 
 export function index(req, res, next) {
-  return db.User
-    .findAll()
-    .then(data => res.json(data))
+  const { limit = 20, offset = 0, fl, where } = req.query;
+
+  const options = {
+    attributes: fl ? fl.split(',') : ['id'],
+    limit: Number(limit),
+    offset: Number(offset),
+  };
+
+  if (where) {
+    options.where = where.split(',').reduce((nxt, x) => {
+      const [key, value] = x.split(':');
+      return Object.assign(nxt, { [key]: value });
+    }, {});
+  }
+
+  return Promise
+    .all([
+      db.User
+        .findAll(options),
+      db.User
+        .count(),
+    ])
+    .then(([users, numFound]) => res.json({ items: users, meta: { numFound } }))
     .catch(next);
 }
 
@@ -37,16 +57,6 @@ export function show(req, res, next) {
       return db.User
         .find({
           where: { id: req.params.id },
-          attributes: [
-            'id',
-            'name',
-            'email',
-            'mobile',
-            'supportName',
-            'supportMobile',
-            'supportEmail',
-            'loginUrl',
-          ],
         })
         .then(data => res.json(data))
         .catch(next);
@@ -84,9 +94,9 @@ export function showUuid(req, res, next) {
 
 export function create(req, res, next) {
   const user = req.body;
-  if (`${user.mobile}`.length === 10) user.mobile += 910000000000;
-  if (`${user.supportMobile}`.length === 10) user.supportMobile += 910000000000;
-  user.groupId = 2;
+  if (`${user.mobile}`.length === 10) user.mobile = Number(`91${user.mobile}`);
+  if (`${user.supportMobile}`.length === 10) user.supportMobile = Number(`91${user.supportMobile}`);
+  user.roleId = user.roldeId || 2;
   user.createdBy = req.user.id;
   return db.User
     .create(user)

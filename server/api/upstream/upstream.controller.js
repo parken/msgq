@@ -75,17 +75,3 @@ export function destroy(req, res, next) {
     .then(() => res.status(201).end())
     .catch(next);
 }
-
-export function createPlan(req, res) {
-  const { count } = req.body;
-  if (!count || req.user.roleId !== 1) return res.status(404).json({ message: 'Invalid Request' });
-  return db.UpstreamPlan
-    .create({
-      upstreamId: req.params.id,
-      createdBy: req.user.id,
-      updatedBy: req.user.id,
-      count,
-    })
-    .then(() => res.status(202).end())
-    .catch(err => handleError(res, 500, err));
-}

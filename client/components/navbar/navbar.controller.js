@@ -1,10 +1,9 @@
 class NavbarController {
   /* @ngInject */
-  constructor($state, Session, OAuth, OTP) {
+  constructor($state, Session, OAuth) {
     this.$state = $state;
     this.Session = Session;
     this.OAuth = OAuth;
-    this.OTP = OTP;
   }
 
   $onInit() {

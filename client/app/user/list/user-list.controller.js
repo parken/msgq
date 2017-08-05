@@ -1,5 +1,6 @@
-import template from './list-upstream.pug';
-class ListUpstreamController {
+import template from './user-list.pug';
+
+class controller {
   /* @ngInject */
   constructor($http, $state, Session, Enum, toast, util) {
     this.$http = $http;
@@ -14,6 +15,7 @@ class ListUpstreamController {
 
   $onInit() {
     this.pages = [];
+
     this.user = this.Session.read('userinfo');
     this.rows = [20, 50, 100, 250, 500];
     this.ui = {
@@ -29,7 +31,7 @@ class ListUpstreamController {
     this.params = {
       limit: 20,
       offset: 0,
-      fl: 'id,name,provider,balance,routeId,createdAt'
+      fl: 'id,name,mobile,email,createdAt',
     };
     this.get();
   }
@@ -37,7 +39,7 @@ class ListUpstreamController {
   get() {
     this
       .$http
-      .get(`/upstreams`, { params: this.params })
+      .get('/users', { params: this.params })
       .then(({ data }) => {
         Object.assign(this.data, data);
         this.pages = this.util.pages(this.data.meta.numFound, this.params.limit);
@@ -81,11 +83,7 @@ class ListUpstreamController {
   }
 }
 
-
-const ListUpstreamComponent = {
+export default {
   template,
-  controller: ListUpstreamController,
+  controller,
 };
-
-export default ListUpstreamComponent;
-

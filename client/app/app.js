@@ -15,7 +15,6 @@ import constants from './app.constant';
 import events from './app.event';
 import setupGAnalytics from './app.ga.js';
 
-import OTPModule from '../components/otp';
 import Auth from '../components/auth';
 import AsideMenu from '../components/aside-menu';
 import Navbar from '../components/navbar';
@@ -25,6 +24,7 @@ import FileReader from '../components/file-reader';
 import Navigation from '../components/navigation';
 import AdminNavigation from '../components/admin-navigation';
 import CreateGroup from '../components/create-group';
+import Export from '../components/export';
 import Report from '../components/report';
 import service from '../components/services';
 
@@ -33,6 +33,7 @@ import Admin from './admin';
 import Home from './home';
 import User from './user';
 
+import OTPModule from './otp';
 import SendSms from './send-sms';
 import DeliveryReport from './delivery-report';
 import SenderId from './sender-id';
@@ -47,7 +48,7 @@ import Role from './role';
 import Message from './message';
 import MessageFly from './message-fly';
 import Credit from './credit';
-import Sending from './sending';
+import Balance from './balance';
 import Campaign from './campaign';
 import Contact from './contact';
 import LoginIdentifier from './loginIdentifier';
@@ -62,12 +63,12 @@ angular
     ngCookies, ngAnimate, ngSanitize, uiRouter, 'angular-oauth2', uiBootstrap,
     // - framework
     AsideMenu, Navbar, Footer, constants, Auth, UpdateTitle, FileReader,
-    Home, FourOFour, OTPModule, Navigation, service,
+    Home, FourOFour, OTPModule, Navigation, service, Export,
     // - project specific
     SenderId, DeliveryReport, Report, SendSms, User,
     AdminNavigation, CreateGroup, ContactList, Upstream, SenderIds,
     Groups, Transaction, Template, Sessions, Role, LoginIdentifier,
-    Message, MessageFly, Credit, Sending, Campaign, Contact, PriorityNumber,
+    Message, MessageFly, Credit, Balance, Campaign, Contact, PriorityNumber,
     Manage, // - admin
     Admin, // - reseller
   ])

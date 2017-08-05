@@ -1,15 +1,16 @@
 .panel.panel-default
   .panel-heading
-    .h3 Groups
-      a.btn.btn-primary.text-sm.pull-right.m-l-xs(ui-sref='groups.new') Add Groups
+    .h3 Plans
+      a.btn.btn-primary.text-sm.pull-right.m-l-xs(ui-sref='upstream.plans.new($ctrl.stateParams)') Add Plan
+      a.btn.btn-primary.text-sm.pull-right.m-l-xs(ui-sref='upstream.view($ctrl.$stateParams)') View Upstream
   .row.wrapper
     .col-md-4.col-xs-12.m-b-xs
-      .form-group
+      .form-plan
         label.text-xs(for='search') Search
         input#search.input-sm.form-control(type='text', placeholder='Search' ng-model='$ctrl.searchText')
     .col-xs-12.col-md-8
       .col-md-6.col-xs-12
-        .form-group
+        .form-plan
           label.text-xs(for='search') Pages
           ul.clear.pagination.pagination-sm.m-t-none.m-b-none
             li
@@ -32,7 +33,7 @@
               a(ng-class='{"disabled": $ctrl.ui.page === $ctrl.ui.last}' ng-click='$ctrl.last()')
                 i.fa.fa-fast-forward
       .col-md-3.col-xs-12
-        .form-group
+        .form-plan
           label.text-xs(for='search') No. of Rows
           select.input-sm.form-control.w-xs.v-middle(
             ng-model='$ctrl.params.limit'
@@ -40,7 +41,7 @@
             ng-options='row for row in $ctrl.rows'
           )
       .col-md-3.col-xs-12
-        .form-group
+        .form-plan
           label.text-xs(for='search') Total Records
             b.m-l-xs(ng-bind='$ctrl.data.meta.numFound')
           .text-md.font-bold Showing {{$ctrl.data.start}} - {{$ctrl.data.end}}
@@ -49,12 +50,15 @@
       thead
         tr
           th ID
-          th Name
+          th Count
           th Created At
           th(style='width:30px;')
       tbody
         tr(ng-repeat='item in $ctrl.data.items | filter: $ctrl.searchText')
           td
-            a(ui-sref='group.view({id: item.id})' ng-bind='item.id')
-          td(ng-bind='item.name')
+            a(ui-sref='plan.view({id: item.id})' ng-bind='item.id')
+          td(ng-bind='item.count')
           td(ng-bind='item.createdAt | date: "dd-MMM-yyyy hh:mm a"')
+
+
+

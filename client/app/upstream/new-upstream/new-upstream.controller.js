@@ -34,9 +34,11 @@ class NewUpstreamcontroller {
   submit() {
     const { id } = this.$stateParams;
     this.$http.post(`/upstreams/${id || ''}`, this.data)
-      .then(({ data = { id } }) => {
+      .then((x) => {
+        const { data = { id } } =x;
+        console.log(data, x);
         this.toast.show('success');
-        this.$state.go('upstream.view', { id });
+        this.$state.go('upstream.view', data);
       })
       .catch(this.toast.next);
   }

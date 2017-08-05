@@ -1,6 +1,6 @@
 ul.nav()
   li(ui-sref-active='active')
-    a(ng-click='$ctrl.OTP.open()')
+    a(ui-sref='login')
       a.btn(ng-click='$ctrl.isCreateGrp = !$ctrl.isCreateGrp' ng-if='!$ctrl.isCreateGrp')
         i.fa.fa-users
         span Create Group

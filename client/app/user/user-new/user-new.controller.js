@@ -1,13 +1,14 @@
-import template from './add.pug';
+import template from './user-new.pug';
 
 class UserAddController {
   /* @ngInject */
-  constructor($http, $state, $stateParams, Session, Enum) {
+  constructor($http, $state, $stateParams, Session, Enum, toast) {
     this.$http = $http;
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.Session = Session;
     this.Enum = Enum;
+    this.toast = toast;
   }
 
   $onInit() {
@@ -45,7 +46,7 @@ class UserAddController {
         this.message = 'Successfully saved.';
         this.$state.go('user.view', { id: user.id})
       })
-      .catch(() => (this.message = 'Error creating user.'));
+      .catch(this.toast.next);
   }
 }
 

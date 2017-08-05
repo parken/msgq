@@ -20,13 +20,9 @@
           input#link.form-control(type='url', placeholder='Link' name='link' required ng-model='$ctrl.data.link')
       .col-md-6.col-sm-12.col-xs-12
         .form-group
-          label(for='balance') Balance
-          input#balance.form-control(type='text', placeholder='Balance' name='balance' required ng-model='$ctrl.data.balance' ng-pattern='/[0-9]+$/')
-    .row
-      .col-md-6.col-sm-12.col-xs-12
-        .form-group
           label(for='support') Support Email
           input#support.form-control(type='email', placeholder='Support Email' name='support' required ng-model='$ctrl.data.support')
+    .row
       .col-md-6.col-sm-12.col-xs-12
         .form-group
           label(for='routeId') Route type
@@ -42,7 +38,6 @@
           span Comment
           .pull-right.ng-binding(ng-bind='"(" + ($ctrl.data.comment.length || 0) + "/300)"') (0/300)
           textarea#comment.form-control(
-            required
             name='comment'
             rows='5'
             ng-model='$ctrl.data.comment'

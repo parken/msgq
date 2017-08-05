@@ -40,7 +40,12 @@
       ul.nav.navbar-nav.navbar-right
         li.hide: a: i.fa.fa-lg.fa-comments
 
-        li.dropdown(uib-dropdown='' ng-click='$ctrl.OTP.open()' ng-class="{ open: $ctrl.app.settings.mobileHeader }" ng-if="!$ctrl.OAuth.isAuthenticated()")
+        li.dropdown(
+          uib-dropdown=''
+          ng-click='$ctrl.$state.go("login")'
+          ng-class="{ open: $ctrl.app.settings.mobileHeader }"
+          ng-if="!$ctrl.OAuth.isAuthenticated()"
+        )
           a.dropdown-toggle.clear.text-center(href='', uib-dropdown-toggle='')
             span.hidden-sm Login/Signup
         li.dropdown(uib-dropdown='' ng-class="{ open: $ctrl.app.settings.mobileHeader }" ng-if="$ctrl.OAuth.isAuthenticated()")

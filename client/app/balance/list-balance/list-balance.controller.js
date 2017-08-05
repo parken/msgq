@@ -1,7 +1,7 @@
-import template from './list-sending.pug';
-class ListSendingController {
+import template from './list-balance.pug';
+class ListBalanceController {
   /* @ngInject */
-  constructor($http, $state, Session, Enum, toast, util) {
+  constructor($http, $state, Session, Enum, toast, util, $stateParams) {
     this.$http = $http;
     this.util = util;
     this.$state = $state;
@@ -10,6 +10,7 @@ class ListSendingController {
     this.routes = this.Enum.routes;
     this.toast = toast;
     this.util = util;
+    this.$stateParams = $stateParams;
   }
 
   $onInit() {
@@ -30,13 +31,15 @@ class ListSendingController {
       limit: 20,
       offset: 0,
     };
+
+    if (this.$stateParams.id) this.params.where = `userId:${this.$stateParams.id}`;
     this.get();
   }
 
   get() {
     this
       .$http
-      .get(`/sending`, { params: this.params})
+      .get(`/balance`, { params: this.params })
       .then(({ data }) => {
         Object.assign(this.data, data);
         this.pages = this.util.pages(this.data.meta.numFound, this.params.limit);
@@ -81,10 +84,10 @@ class ListSendingController {
 }
 
 
-const ListSendingComponent = {
+const ListBalanceComponent = {
   template,
-  controller: ListSendingController,
+  controller: ListBalanceController,
 };
 
-export default ListSendingComponent;
+export default ListBalanceComponent;
 

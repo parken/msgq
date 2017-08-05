@@ -22,6 +22,7 @@ router.post('/googleLogin', controller.googleLogin);
 router.post('/otpLogin', controller.otpLogin);
 router.post('/otp', controller.otpSend);
 router.post('/otpVerify', controller.otpVerify);
+router.post('/:id', oauth, controller.update);
 router.put('/:id', oauth, controller.update);
 router.post('/:id/selling', oauth, controller.addSelling);
 router.post('/:id/sellingRoot', oauth, controller.addSellingRootUser);

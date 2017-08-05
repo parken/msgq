@@ -8,7 +8,7 @@
           a.pull-right(ui-sref='users.list()')
             span.m-r.fa.fa-list
             | Show List
-      form.form(ng-submit='$ctrl.submit()' name='addUser')
+      form.form.form-validation(ng-submit='$ctrl.submit()' name='addUser')
         .row
           .col-md-6.col-sm-12.col-xs-12
             .form-group
@@ -17,7 +17,7 @@
           .col-md-6.col-sm-12.col-xs-12
             .form-group
               label(for='mobile') Mobile
-              input#mobile.form-control(type='text' placeholder='Mobile' ng-model='$ctrl.data.mobile' required ng-pattern='/^[0-9]{10}$/')
+              input#mobile.form-control(type='text' placeholder='Mobile' ng-model='$ctrl.data.mobile' required)
         .row
           .col-md-6.col-sm-12.col-xs-12
             .form-group
@@ -31,7 +31,7 @@
           .col-md-6.col-sm-12.col-xs-12
             .form-group
               label(for='supportName') Support Person Name
-              input#supportName.form-control(placeholder='Support person name' ng-model='$ctrl.data.supportName' ng-pattern="/^[a-z \']$/i")
+              input#supportName.form-control(placeholder='Support person name' ng-model='$ctrl.data.supportName' ng-pattern="/[A-Z0-9 ]$/i")
           .col-md-6.col-sm-12.col-xs-12
             .form-group
               label(for='supportMobile') Support Person Mobile
@@ -43,8 +43,8 @@
               input#supportEmail.form-control(type='email' placeholder='Support person email' ng-model='$ctrl.data.supportEmail')
           .col-md-6.col-sm-12.col-xs-12
             .form-group
-              label(for='url') Login URL
-              input#url.form-control(type='url' placeholder='Login URL' ng-model='$ctrl.data.loginUrl')
+              label(for='domain') Domain
+              input#domain.form-control(type='text' placeholder='Domain ex: example.com' ng-model='$ctrl.data.loginUrl')
         .row
           .col-md-6.col-xs-12
             .form-group
@@ -55,11 +55,22 @@
                 ng-model='$ctrl.data.roleId'
                 ng-options='role.val as role.name for role in $ctrl.roles'
               )
-
         .row
-          .col-md-6.col-sm-12.col-xs-12(ng-if='$ctrl.message' ng-bind='$ctrl.message')
+          .col-md-12.col-sm-12.col-xs-12
+            label.col-xs-12.input-group(for='companyAddress')
+              span Company Address
+              .pull-right.ng-binding(ng-bind='"(" + ($ctrl.data.comment.length || 0) + "/1000)"') (0/1000)
+              textarea#companyAddress.form-control(
+                required
+                name='companyAddress'
+                rows='5'
+                ng-model='$ctrl.data.companyAddress'
+                maxlength='300'
+              )
         .row
           .col-md-6.col-sm-12.col-xs-12
             button.m-t-xs.btn.btn-success(type='submit' ng-disabled='addUser.$invalid')
               span(ng-if='!$ctrl.ui.loading') Save
               span(ng-if='$ctrl.ui.loading') Saving...
+
+

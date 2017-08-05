@@ -10,21 +10,17 @@ export default function routes($stateProvider) {
       url: '',
       template: '<users-list></users-list>',
     })
-    .state('users.balance', {
-      url: '/balance',
-      template: '<balance></balance>',
-    })
-    .state('users.add', {
-      url: '/add',
+    .state('users.new', {
+      url: '/new',
       template: '<user-add></user-add>',
     })
-    .state('users.profile-edit', {
+    .state('user.profile-edit', {
       url: '/profile/edit',
       template: '<user-add></user-add>',
     })
     .state('users.profile', {
       url: '/profile',
-      template: '<user-profile></user-profile>',
+      template: '<user-view></user-view>',
     })
     .state('user', {
       abstract: true,
@@ -33,7 +29,7 @@ export default function routes($stateProvider) {
     })
     .state('user.view', {
       url: '',
-      template: '<user-profile></user-profile>',
+      template: '<user-view></user-view>',
     })
     .state('user.edit', {
       url: '/edit',

@@ -1,17 +1,17 @@
 /* @ngInject */
 export default function routes($stateProvider) {
   $stateProvider
-    .state('sendings', {
+    .state('balances', {
       abstract: true,
-      url: '/sendings',
+      url: '/balances',
       template: '<div ui-view=""></div>',
     })
-    .state('sendings.list', {
+    .state('balances.list', {
       url: '',
-      template: '<list-sending></list-sending>',
+      template: '<list-balance></list-balance>',
     })
-    .state('sendings.new', {
+    .state('balances.new', {
       url: '/new',
-      template: '<new-sending></new-sending>',
+      template: '<new-balance></new-balance>',
     });
 }

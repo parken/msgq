@@ -1,5 +1,5 @@
 /* @ngInject */
-function authConfig($rootScope, $q, authService, $log, OAuthToken, OAuth, OTP) {
+function authConfig($rootScope, $q, authService, $log, OAuthToken, OAuth, $state) {
   const rootScope = $rootScope;
   let refreshingToken = false;
   rootScope.$on('oauth:error', (event, rej) => {
@@ -28,16 +28,12 @@ function authConfig($rootScope, $q, authService, $log, OAuthToken, OAuth, OTP) {
           })
           .catch(err => {
             refreshingToken = false; // reset refresh_token reuqest tracker flag
-            if (err.status === 400) OTP.open(); // show re-login modal
+            if (err.status === 400) this.$state.go('login'); // show re-login modal
           });
       default:
     }
 
-    return OTP.open({ resolve: {
-      options: {
-        error: rejection.data,
-      },
-    } });
+    return $state.go('login', { params: { error: rejection.data } });
   });
 }
 

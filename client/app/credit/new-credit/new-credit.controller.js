@@ -1,6 +1,6 @@
 import template from './new-credit.pug';
 
-class BalanceController {
+class CreditController {
   /* @ngInject */
   constructor($http, $state, $stateParams, Session, Enum) {
     this.$http = $http;
@@ -19,22 +19,14 @@ class BalanceController {
       routeId: 1,
     };
     this.roles = this.Enum.roles.filter(x => (this.user.roleId <= x.val));
-    if (this.$state.current.name === 'users.add') {
-      this.header = 'Add New User'
-    } else {
-      this.header = 'Edit Details';
-      this.id = this.$state.current.name === 'user.edit' ? this.$stateParams.id : this.user.id;
-    }
   }
-
-
 
   submit() {}
 }
 
-const BalanceComponent = {
+const CreditComponent = {
   template,
-  controller: BalanceController,
+  controller: CreditController,
 };
 
-export default BalanceComponent;
+export default CreditComponent;

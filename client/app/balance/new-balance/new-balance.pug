@@ -1,7 +1,7 @@
 .wrapper
-  .padder-v.h3 {{$ctrl.$stateParams.id ? "Edit" : "Add"}} Sending
-  a.text-primary.text-u-l.pull-right.m-l-xs(ui-sref='sendings.list') Show List
-  a.text-primary.text-u-l.pull-right.m-l-xs(ng-if='$ctrl.$stateParams.id' ui-sref='sending.view($ctrl.$stateParams)') View Sending
+  .padder-v.h3 {{$ctrl.$stateParams.id ? "Edit" : "Add"}} Balance
+  a.text-primary.text-u-l.pull-right.m-l-xs(ui-sref='balances.list') Show List
+  a.text-primary.text-u-l.pull-right.m-l-xs(ng-if='$ctrl.$stateParams.id' ui-sref='balance.view($ctrl.$stateParams)') View Balance
   .b-b.b-gray.m-b-md.m-t-md
   form.form.form-validation(name='form' ng-submit='$ctrl.submit();')
     .row

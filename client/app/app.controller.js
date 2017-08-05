@@ -1,6 +1,6 @@
 class AppController {
   /* @ngInject */
-  constructor($rootScope, $state, $http, OAuth, $window, Session, OTP, $location, AppAction) {
+  constructor($rootScope, $state, $http, OAuth, $window, Session, $location, AppAction) {
     this.$rootScope = $rootScope;
     this.$state = $state;
     this.$http = $http;
@@ -9,7 +9,6 @@ class AppController {
     this.$location = $location;
     this.Session = Session;
     this.AppAction = AppAction;
-    this.OTP = OTP;
     this.user = this.Session.read('userinfo');
     this.company = this.Session.read('company');
 

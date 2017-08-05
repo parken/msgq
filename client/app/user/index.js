@@ -1,18 +1,18 @@
 import angular from 'angular';
 import uiRouter from 'angular-ui-router';
 import routing from './user.routes';
-import UserAddComponent from './add/add.controller';
-import UserProfileComponent from './profile/profile.controller';
-import UsersListComponent from './list/list.controller';
-import Balance from '../credit/new-credit/new-credit.controller';
+import creditRouting from './credit/credit.routes';
+import balanceRouting from './balance/balance.routes';
+import UserAddComponent from './user-new/user-new.controller';
+import UserViewComponent from './user-view/user-view.controller';
+import UsersListComponent from './list/user-list.controller';
 
 export default angular
   .module('msgQueApp.user', [
-    uiRouter,
+    uiRouter, creditRouting, balanceRouting,
   ])
   .component('userAdd', UserAddComponent)
-  .component('userProfile', UserProfileComponent)
+  .component('userView', UserViewComponent)
   .component('usersList', UsersListComponent)
-  .component('balance', Balance)
   .config(routing)
   .name;

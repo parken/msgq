@@ -6,7 +6,7 @@ export function index(req, res, next) {
 
   const options = {
     where: {},
-    attributes: fl ? fl.split(',') : ['id'],
+    attributes: fl ? fl.split(',') : ['id', 'count'],
     limit: Number(limit),
     offset: Number(offset),
   };
@@ -30,3 +30,18 @@ export function index(req, res, next) {
     .then(([upstreams, numFound]) => res.json({ items: upstreams, meta: { numFound } }))
     .catch(next);
 }
+
+export function create(req, res, next) {
+  const { count } = req.body;
+  if (!count || req.user.roleId !== 1) return res.status(400).json({ message: 'Invalid Request' });
+  return db.UpstreamPlan
+    .create({
+      upstreamId: req.params.id,
+      createdBy: req.user.id,
+      updatedBy: req.user.id,
+      count,
+    })
+    .then(() => res.status(202).end())
+    .catch(next);
+}
+

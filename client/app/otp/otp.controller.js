@@ -1,8 +1,10 @@
+import template from './otp.pug';
 
 class OTPController {
   /* @ngInject */
   constructor(
-    $uibModalInstance, $http, Enum, $timeout, OAuth, $state, OAuthToken, Session, options
+    $http, Enum, $timeout, OAuth, $state, OAuthToken, Session,
+    $stateParams
   ) {
     this.$http = $http;
     this.$timeout = $timeout;
@@ -10,10 +12,9 @@ class OTPController {
     this.OAuth = OAuth;
     this.Session = Session;
     this.OAuthToken = OAuthToken;
-    this.$uibModalInstance = $uibModalInstance;
     this.Enum = Enum;
     this.Number = Number;
-    this.options = options;
+    this.$stateParams = $stateParams;
   }
 
   $onInit() {
@@ -41,14 +42,16 @@ class OTPController {
         this.OAuthToken.setToken(oAuthToken);
         return this.Session
           .update()
-          .then(u => {
-            this.$uibModalInstance.close(u);
-            if (this.options.next) this.$state.go(this.options.next, this.options.nextParams);
+          .then((user) => { console.log(user)
+            if (user && user.roleId === 1) return this.$state.go('manage.dashboard');
+            if (user && user.roleId === 2) return this.$state.go('admin.dashboard');
+            if (user && user.roleId === 3) return this.$state.go('sendSms');
+            return this.$state.go('home.dash');
+            // if (this.$stateParams.next) this.$state.go(this.$stateParams.next, this.$stateParams.nextParams);
           });
       })
       .catch(err => {
-        console.log('error');
-        this.error = err.data.error_description
+        this.error = err.data && err.data.error_description || err
           || err.statusText || 'Unexpected error contact hello@ayyayo.com';
       });
   }
@@ -92,18 +95,20 @@ class OTPController {
       .post('/users/otpVerify', data || this.data)
       .then(() => {
         this.success = 'OTP Verified';
-        this.$uibModalInstance.close({ otp: this.otp });
-        return Promise.resolve();
+        // this.$uibModalInstance.close({ otp: this.otp });
+        // return Promise.resolve();
       })
       .catch(res => {
         this.error = res.data.error_description;
         return Promise.reject();
       });
   }
-
-  cancel() {
-    this.$uibModalInstance.dismiss('cancel');
-  }
 }
 
-export default OTPController;
+const OTPComponent = {
+  template,
+  controller: OTPController,
+};
+
+export default OTPComponent;
+
