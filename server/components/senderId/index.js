@@ -2,17 +2,16 @@ import db from '../../conn/sqldb';
 import config from '../../config/environment';
 import { notifyOnUserChannel } from '../../components/notify';
 
-function notifyAdminSenderIdApproval(senderId) {
-  return db.User.find({ where: { admin: 2 } })
-    .then((user) => {
-      if (!user) return Promise.reject({ message: 'No admin user found' });
-      const text = `Request to approve ${senderId.name} - ${senderId.company}. ${
-        config.PLAY_URL}/senderId/${senderId.id}`;
-      return notifyOnUserChannel({ userId: user.id, text });
-    });
-}
-
 const SenderId = {
+  notifyAdminSenderIdApproval(senderId) {
+    return db.User.find({ where: { admin: 2 } })
+      .then((user) => {
+        if (!user) return Promise.reject({ message: 'No admin user found' });
+        const text = `Request to approve ${senderId.name} - ${senderId.company}. ${
+          config.PLAY_URL}/senderId/${senderId.id}`;
+        return notifyOnUserChannel({ userId: user.id, text });
+      });
+  },
   createSenderId(senderId, userId) {
     return db.SenderId.findAll({ where: { name: senderId } })
       .then((senderIds) => {
@@ -30,7 +29,7 @@ const SenderId = {
         if (!promise) promise = db.SenderId.create(newObj);
         return promise
           .then((data) => {
-            notifyAdminSenderIdApproval(senderId);
+            SenderId.notifyAdminSenderIdApproval(senderId);
             return Promise.resolve(data);
           });
       });

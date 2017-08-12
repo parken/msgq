@@ -7,21 +7,20 @@ export function index(req, res, next) {
     attributes: fl ? fl.split(',') : ['id', 'name'],
     limit: Number(limit),
     offset: Number(offset),
+    where: { userId: req.user.id },
   };
 
   if (where) {
     options.where = where.split(',').reduce((nxt, x) => {
       const [key, value] = x.split(':');
       return Object.assign(nxt, { [key]: value });
-    }, {});
+    }, options.where);
   }
 
   return Promise
     .all([
-      db.Campaign
-        .findAll(options),
-      db.Campaign
-        .count(),
+      db.Campaign.findAll(options),
+      db.Campaign.count(),
     ])
     .then(([routes, numFound]) => res.json({ items: routes, meta: { numFound } }))
     .catch(next);
@@ -29,8 +28,21 @@ export function index(req, res, next) {
 
 export function show(req, res, next) {
   return db.Campaign
-    .findById(req.params.id)
-    .then(route => res.json(route))
+    .find({
+      attributes: ['id', 'name'],
+      where: {
+        $or: [{ id: req.params.id }, { name: req.params.id }],
+        userId: req.user.id,
+      },
+    })
+    .then(campaign => db.MessageFly
+      .find({
+        where: { campaignId: campaign.id },
+        order: [['createdAt', 'DESC']],
+        include: [db.SenderId],
+      }).then(messageFly => Promise.resolve([campaign, messageFly])))
+    .then(([campaign, { SenderId: { name: senderId }, routeId, groupIds, numbers }]) =>
+      res.json(Object.assign(campaign.toJSON(), { groupIds, numbers, senderId, routeId })))
     .catch(next);
 }
 

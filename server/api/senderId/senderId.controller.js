@@ -1,8 +1,7 @@
 import xl from 'excel4node';
 import logger from '../../components/logger';
-import config from '../../config/environment';
 import { ROLES } from '../../config/constants';
-import { notifyOnUserChannel } from '../../components/notify';
+import { notifyAdminSenderIdApproval } from '../../components/senderId';
 import db from '../../conn/sqldb';
 
 const { ADMIN } = ROLES;
@@ -11,16 +10,6 @@ function handleError(res, argStatusCode, err) {
   logger.error('user.controller', err);
   const statusCode = argStatusCode || 500;
   res.status(statusCode).send(err);
-}
-
-function notifyAdminSenderIdApproval(senderId) {
-  return db.User.find({ where: { admin: 2 } })
-    .then((user) => {
-      if (!user) return Promise.reject({ message: 'No admin user found' });
-      const text = `Request to approve ${senderId.name} - ${senderId.company}. ${
-        config.PLAY_URL}/senderId/${senderId.id}`;
-      return notifyOnUserChannel({ userId: user.id, text });
-    });
 }
 
 export function create(req, res) {

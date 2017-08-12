@@ -186,7 +186,7 @@ export function googleLogin(req, res, next) {
           return rp(options).then(data => res.json(data));
         });
     })
-    .catch(err => console.log(err));
+    .catch(next);
 }
 
 export function login(req, res, next) {
