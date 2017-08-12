@@ -96,11 +96,11 @@ class SendSmsController {
 
   loadTemplates() {
     //load templates on focus of message field
-    this.field = 'message';
+    this.field = 'text';
     this
       .$http
       .get('/templates')
-      .then(({ data: templates }) => this.list = templates);
+      .then(({ data: templates }) => (this.list = templates.items || templates));
   }
 
   loadCampaigns() {
@@ -109,7 +109,7 @@ class SendSmsController {
     this
       .$http
       .get('/campaigns')
-      .then(({ data: campaigns }) => this.list = campaigns);
+      .then(({ data: campaigns }) => (this.list = campaigns.items || campaigns));
   }
 
   loadGroups() {
@@ -118,7 +118,7 @@ class SendSmsController {
     this
       .$http
       .get('/groups')
-      .then(({ data: groups }) => this.list = groups);
+      .then(({ data: groups }) => (this.list = groups.items || groups));
   }
 
   sendSms() {

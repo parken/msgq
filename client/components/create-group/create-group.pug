@@ -14,6 +14,6 @@ ul.nav()
           span
 
   li
-    a(ng-click='$ctrl.view(group)' ng-repeat='group in $ctrl.groups')
+    a(ng-repeat='group in $ctrl.groups' ui-sref='contact-list')
       span(ng-bind='group.name')
 

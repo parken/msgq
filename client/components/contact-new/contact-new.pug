@@ -1,12 +1,41 @@
-form.form-inline(action='/action_page.php')
-  .form-group
-    label(for='email') Email:
-    input#email.form-control(type='email', placeholder='Enter email', name='email')
-  .form-group
-    label(for='pwd') Password:
-    input#pwd.form-control(type='password', placeholder='Enter password', name='pwd')
-  .checkbox
-    label
-    input(type='checkbox', name='remember')
-    |  Remember me
-  button.btn.btn-default(type='submit') Submit
+form.form-horizontal.form-validation.form(name='contactForm' ng-submit='$ctrl.create()')
+  .panel.panel-default
+    .panel-heading
+      strong Add New Contact
+    .panel-body
+      .form-group
+        label.col-sm-3.control-label Mobile No.
+        .col-sm-9
+          input.form-control(type='number', placeholder='Mobile No.', ng-model='$ctrl.data.number', required='')
+
+      .form-group
+        label.col-sm-3.control-label Name
+        .col-sm-9
+          input.form-control(type='text', placeholder='Name', ng-model='$ctrl.data.name', required='')
+
+      .form-group
+        label.col-sm-3.control-label Expiry
+        .col-sm-9
+          input.form-control(
+          type='text'
+          uib-datepicker-popup='dd-MMMM-yyyy'
+          ng-model='$ctrl.data.expiry'
+          ng-change='$ctrl.onScheduledOn()'
+          is-open='$ctrl.ui.expiry'
+          close-text='Close'
+          ng-click='$ctrl.ui.expiry = true'
+          ng-model-options="{debounce: 300}"
+        )
+
+      .form-group
+        label.col-sm-3.control-label Add Groups
+        .col-sm-9
+          select#routeId.form-control(
+            name='routeId'
+            required
+            ng-model='$ctrl.data.groups'
+            ng-options='group.val as group.name for group in $ctrl.groups'
+          )
+
+    .panel-footer.text-right.bg-light.lter
+      button.btn.btn-success(type='submit') Add Contact

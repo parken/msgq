@@ -21,6 +21,8 @@ nav.navi(ui-nav='' )
         li.nav-sub-header
           a(ui-sref='app.dashboard')
             span Dashboard
+
+    create-group
     li.hidden-folded.padder-h.m-t.m-b-sm.text-muted.text-xs
       span Admin
     li(ui-sref-active='active' ng-repeat='menu in $ctrl.menus' ui-sref='{{menu.state}}')

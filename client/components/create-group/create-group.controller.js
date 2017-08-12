@@ -15,9 +15,9 @@ class CreateGroupController {
   createGroup(name) {
     if (!name) return;
     this.$http.post('/groups', { name })
-      .then(({ data }) => {
-        this.groupName = '';
-        this.groups.push(data);
+      .then(() => {
+        this.$http.get('/groups')
+          .then(({ data }) => (this.groups = data));
       });
   }
 

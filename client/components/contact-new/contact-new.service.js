@@ -11,8 +11,8 @@ class ContactNewService {
     return this
       .$uibModal
       .open({
-        size: 'md applicant-state-filter',
-        windowTopClass: 'bg-black-opacity',
+        size: 'lg',
+        windowTopClass: 'bg-white',
         animation: true,
         template,
         controller,

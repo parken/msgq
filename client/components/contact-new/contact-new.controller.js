@@ -1,9 +1,9 @@
 class ContactNewController {
   /* @ngInject */
-  constructor($state, Session, $uibModelInstance) {
+  constructor($state, Session, $uibModalInstance) {
     this.$state = $state;
     this.Session = Session;
-    this.$uibModelInstance = $uibModelInstance;
+    this.$uibModalInstance = $uibModalInstance;
   }
 
   $onInit() {

@@ -6,7 +6,6 @@
         ng-click='$ctrl.setRoute(route.id)'
       ) {{route.name}} ({{route.balance}})
 
-
   .col-xs-12
     .col-xs-6.b-r
       .m-b-lg: a.text-u-l.pull-right Load Previous Message
@@ -14,9 +13,9 @@
       form.validate-form(name='sendSmsForm' ng-submit='$ctrl.sendSms()')
         .form-group(ng-if='$ctrl.routeIndex === 2')
           select.form-control(
-          ng-options='sender.name as sender.name for sender in $ctrl.senderIds track by sender.name'
-          ng-model='$ctrl.data.senderId'
-          required
+            ng-options='sender.name as sender.name for sender in $ctrl.senderIds track by sender.name'
+            ng-model='$ctrl.data.senderId'
+            required
           )
         .form-group(ng-if='$ctrl.routeIndex === 1')
           .input-group
@@ -48,7 +47,7 @@
                 ng-change='$ctrl.translation($ctrl.data.unicode)'
                 ng-model='$ctrl.data.unicode'
               )
-            span#translControl(style="float:right; margin-right:2px; margin-top:2px;" ng-show='$ctrl.data.unicode')
+            span#translControl(style="float:right; margin-right:2px; margin-top:2px;opacity: {{$ctrl.data.unicode}}" ng-show='$ctrl.data.unicode')
             span.m-r-xs.padder-xs.pull-right(ng-bind='($ctrl.data.message.length || 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.message.length || 0)/160)')
           textarea#transliterateTextarea.form-control(
 
@@ -74,8 +73,9 @@
     .col-xs-6
       .col-xs-12
         ul.list-group
-          a.list-group-item(ng-repeat='item in $ctrl.list' ng-click='$ctrl.bindData(item, $ctrl.field)')
+          li.pointer.list-group-item(ng-repeat='item in $ctrl.list' ng-click='$ctrl.bindData(item, $ctrl.field)')
             label.i-checks.i-checks-sm(ng-if='$ctrl.field === "groupId"' ng-model='item.id')
               input(type='checkbox')
               i
-            span {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
+              | {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
+            spam(ng-if='$ctrl.field !== "groupId"') {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}

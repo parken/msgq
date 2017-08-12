@@ -1,10 +1,12 @@
+import template from './contact-list.pug';
+
 class ContactListController {
   /* @ngInject */
-  constructor($http, $state, Session, groupId) {
+  constructor($http, $state, Session, ContactNew) {
     this.$http = $http;
     this.$state = $state;
     this.Session = Session;
-    this.groupId = groupId;
+    this.ContactNew = ContactNew;
   }
 
   $onInit() {
@@ -13,4 +15,9 @@ class ContactListController {
   }
 }
 
-export default ContactListController;
+const ContactListComponent = {
+  template,
+  controller: ContactListController,
+};
+
+export default ContactListComponent;
