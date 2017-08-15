@@ -24,7 +24,6 @@ nav.navi(ui-nav='' )
 
     create-group
     li.hidden-folded.padder-h.m-t.m-b-sm.text-muted.text-xs
-      span Admin
     li(ui-sref-active='active' ng-repeat='menu in $ctrl.menus' ui-sref='{{menu.state}}')
       a(ui-sref='water_ag.branchs.list()')
         i.fa.fa-list-alt.icon
@@ -33,7 +32,6 @@ nav.navi(ui-nav='' )
         i.my-icon
           i
       li.hidden-folded.padder.m-t.m-b-sm.text-muted.text-xs
-        span Reseller
       li(ui-sref-active='active' ng-repeat='menu in $ctrl.rmenus' ui-sref='{{menu.state}}')
         a(ui-sref='water_ag.branchs.list()')
           i.fa.fa-list-alt.icon
@@ -42,7 +40,6 @@ nav.navi(ui-nav='' )
           i.my-icon
             i
       li.hidden-folded.padder-h.m-t.m-b-sm.text-muted.text-xs
-        span User
       li(ui-sref-active='active' ng-repeat='menu in $ctrl.umenus' ui-sref='{{menu.state}}')
         a(ui-sref='water_ag.branchs.list()')
           i.fa.fa-list-alt.icon

@@ -11,12 +11,6 @@ class SendSmsController {
   }
 
   $onInit() {
-    this.$timeout(() => {
-      // Enable transliteration in the textbox with id
-      // 'transliterateTextarea'.
-      this.TransliterationControl.makeTransliteratable(['transliterateTextarea']);
-      this.TransliterationControl.showControl('translControl');
-    }, 0);
     this.langs = [{ name: 'English', val: 0 }, { name: 'Unicode', val: 1 }];
 
     this.user = this.Session.read('userinfo');
@@ -55,8 +49,19 @@ class SendSmsController {
   }
 
   translation(unicode) {
+    console.log('unicode', unicode)
     if (unicode === 'true') {
+      console.log('unicode')
       // Load the Google Transliterate API
+      this.$timeout(() => {
+        // Enable transliteration in the textbox with id
+        // 'transliterateTextarea'.
+        this.TransliterationControl.makeTransliteratable(['transliterateTextarea']);
+        this.TransliterationControl.showControl('translControl');
+      }, 0);
+
+    } else {
+      console.log('engilsh ')
 
     }
   }

@@ -25,10 +25,6 @@ class CreateGroupController {
 
   }
 
-  viewGroup() {
-    this.contacts = this.groups[0].contacts;
-  }
-
 }
 
 export default CreateGroupController;

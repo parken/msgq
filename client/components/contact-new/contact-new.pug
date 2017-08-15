@@ -1,41 +1,51 @@
-form.form-horizontal.form-validation.form(name='contactForm' ng-submit='$ctrl.create()')
-  .panel.panel-default
-    .panel-heading
-      strong Add New Contact
-    .panel-body
-      .form-group
-        label.col-sm-3.control-label Mobile No.
-        .col-sm-9
-          input.form-control(type='number', placeholder='Mobile No.', ng-model='$ctrl.data.number', required='')
+.modal-header.bg-primary
+  .h4.inline Add New Contact
+  span.fa.fa-times-circle-o.fa-2x.pull-right.pointer(ng-click='$ctrl.$uibModalInstance.close(true)')
+.modal-body
+  uib-tabset(active='active')
+    uib-tab(index='0', heading='Add a contact')
+      form.form-horizontal.form-validation.form(name='contactForm' ng-submit='$ctrl.create()')
+        .form-group
+          label.col-sm-2.control-label Mobile No.
+          .col-sm-9
+            input.form-control(type='text', placeholder='Mobile No.', ng-model='$ctrl.data.number', required='' ng-minlength='5')
 
-      .form-group
-        label.col-sm-3.control-label Name
-        .col-sm-9
-          input.form-control(type='text', placeholder='Name', ng-model='$ctrl.data.name', required='')
+        .form-group
+          label.col-sm-2.control-label Name
+          .col-sm-9
+            input.form-control(type='text', placeholder='Name', ng-model='$ctrl.data.name', required='' ng-minlength='3')
 
-      .form-group
-        label.col-sm-3.control-label Expiry
-        .col-sm-9
-          input.form-control(
-          type='text'
-          uib-datepicker-popup='dd-MMMM-yyyy'
-          ng-model='$ctrl.data.expiry'
-          ng-change='$ctrl.onScheduledOn()'
-          is-open='$ctrl.ui.expiry'
-          close-text='Close'
-          ng-click='$ctrl.ui.expiry = true'
-          ng-model-options="{debounce: 300}"
-        )
+        .form-group
+          label.col-sm-2.control-label Expiry
+          .col-sm-9
+            input.form-control(
+              type='text'
+              uib-datepicker-popup='dd-MMMM-yyyy'
+              ng-model='$ctrl.data.expiry'
+              ng-change='$ctrl.onScheduledOn()'
+              is-open='$ctrl.ui.expiry'
+              close-text='Close'
+              ng-click='$ctrl.ui.expiry = true'
+              ng-model-options="{debounce: 300}"
+            )
 
-      .form-group
-        label.col-sm-3.control-label Add Groups
-        .col-sm-9
-          select#routeId.form-control(
-            name='routeId'
-            required
-            ng-model='$ctrl.data.groups'
-            ng-options='group.val as group.name for group in $ctrl.groups'
-          )
+        .form-group
+          label.col-sm-2.control-label Add Groups
+          .col-sm-9
+            .col-sm-12.no-padder.m-b-xs
+              a.b-a.b-primary.pull-left.m-xs(ng-repeat='group in $ctrl.selectedGroups' style='padding: 0 5px;')
+                span(ng-bind='group.name')
+                i.fa.fa-times.m-xs(ng-click='$ctrl.removeGroup($index)')
+            select.form-control(
+              name='group'
+              ng-model='$ctrl.group'
+              ng-options='group.id as group.name for group in $ctrl.groups'
+              ng-change='$ctrl.addToGroup($ctrl.group)'
+            )
+              option(value='') Select group
+      hr
+      .text-right
+        button.btn.btn-success(type='submit') Add Contact
 
-    .panel-footer.text-right.bg-light.lter
-      button.btn.btn-success(type='submit') Add Contact
+    uib-tab(index='1' heading='Import')
+      | TBD

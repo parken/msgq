@@ -7,7 +7,7 @@ export default function routes($stateProvider) {
       template: '<div ui-view=""></div>',
     })
     .state('credits.list', {
-      url: '',
+      url: '/',
       template: '<list-credit></list-credit>',
     })
     .state('credits.new', {

@@ -31,7 +31,7 @@
             )
             .input-group-addon(ng-bind='($ctrl.data.senderId.length || 0) + "/6"')
         .form-group
-          label(ng-if='')
+          label
           textarea.form-control(
             rows='5'
             ng-model='$ctrl.numbers'
@@ -48,9 +48,19 @@
                 ng-model='$ctrl.data.unicode'
               )
             span#translControl(style="float:right; margin-right:2px; margin-top:2px;opacity: {{$ctrl.data.unicode}}" ng-show='$ctrl.data.unicode')
-            span.m-r-xs.padder-xs.pull-right(ng-bind='($ctrl.data.message.length || 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.message.length || 0)/160)')
+            span.m-r-xs.padder-xs.pull-right(ng-bind='($ctrl.data.text.length || 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.text.length || 0)/160)')
           textarea#transliterateTextarea.form-control(
-
+            style='opacity: {{$ctrl.data.unicode}}'
+            rows='5'
+            ng-hide='!$ctrl.data.unicode'
+            ng-model='$ctrl.data.text'
+            placeholder='You are delivering crucial information. Keep it to-the-point.'
+            ng-focus='$ctrl.loadTemplates()'
+            required
+          )
+          textarea.form-control(
+            style='opacity: {{$ctrl.data.unicode}}'
+            ng-hide='$ctrl.data.unicode'
             rows='5'
             ng-model='$ctrl.data.text'
             placeholder='You are delivering crucial information. Keep it to-the-point.'

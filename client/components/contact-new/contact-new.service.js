@@ -17,6 +17,7 @@ class ContactNewService {
         template,
         controller,
         controllerAs: '$ctrl',
+        backdrop: 'static',
       })
       .result;
   }

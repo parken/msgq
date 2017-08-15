@@ -66,6 +66,7 @@ class AppController {
       .then(() => {
         this.Session.destroy();
         if (this.$state.current.auth) this.$state.go('home.dash');
+        else this.$state.go('login');
         return this.$window.location.reload();
       });
   }
