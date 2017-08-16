@@ -86,7 +86,7 @@ export function showUuid(req, res, next) {
       }],
     })
     .then((loginIdentifier) => {
-      if (!loginIdentifier) return res.status(404).json({ message: 'Invalid Request' });
+      if (!loginIdentifier) return res.status(400).json({ message: 'Invalid Request' });
       return res.json(loginIdentifier.User);
     })
     .catch(next);
@@ -121,13 +121,13 @@ export function createCustomer(req, res, next) {
 
 export function signup(req, res, next) {
   const authorization = req.get('authorization');
-  if (!authorization) return res.status(404).json({ message: 'Unauthorized Access.' });
+  if (!authorization) return res.status(403).json({ message: 'Unauthorized Access.' });
   const [clientId, clientSecret] = Buffer.from(authorization.split(' ')[1], 'base64')
     .toString('ascii').split(':');
   return db.App
     .find({ attributes: ['id'], where: { clientId, clientSecret } })
     .then(app => {
-      if (!app) return res.status(500).json({ message: 'Invalid Authentication.' });
+      if (!app) return res.status(403).json({ message: 'Invalid Authentication.' });
       const { name, email, mobile } = req.body;
       let { roleId } = req.body;
       if (!roleId) roleId = 4;
@@ -153,18 +153,18 @@ function getApp(code) {
 
 export function googleLogin(req, res, next) {
   const authorization = req.get('authorization');
-  if (!authorization) return res.status(404).json({ message: 'Unauthorized Access.' });
+  if (!authorization) return res.status(403).json({ message: 'Unauthorized Access.' });
   const [clientId, clientSecret] = Buffer.from(authorization.split(' ')[1], 'base64')
     .toString('ascii').split(':');
   return db.App
     .find({ attributes: ['id', 'clientId', 'clientSecret'], where: { clientId, clientSecret } })
     .then(app => {
-      if (!app) return res.status(500).json({ message: 'Invalid Authentication.' });
+      if (!app) return res.status(400).json({ message: 'Invalid Authentication.' });
       const { email } = req.body;
       return db.User
         .find({ attributes: ['email', 'otp'], where: { email, appId: app.id } })
         .then(user => {
-          if (!user) return res.status(500).json({ message: 'user not found' });
+          if (!user) return res.status(400).json({ message: 'user not found' });
           const options = {
             method: 'POST',
             uri: `${config.OAUTH_SERVER}${config.OAUTH_ENDPOINT}`,
@@ -246,7 +246,7 @@ export function refresh(req, res, next) {
       };
       return request
         .post(options, (err, apires, body) => {
-          if (err) return res.status(500).send(err);
+          if (err) return next(err)
           return res.status(apires.statusCode).send(body);
         });
     });
@@ -391,7 +391,7 @@ export function sendLogin(req, res, next) {
   return db.User
     .find({ where: { id: req.params.id } })
     .then((user) => {
-      if (!user) return res.status(404).end();
+      if (!user) return res.status(400).end();
       const otp = user.otpStatus === 1 && user.otp
         ? user.otp
         : Math.floor(Math.random() * 90000) + 10000;
@@ -415,7 +415,7 @@ export function loginUid(req, res, next) {
 export function addSellingRootUser(req, res, next) {
   const { userId, routeId, limit } = req.body;
   if (!userId || !routeId || !limit || req.user.roleId !== 1) {
-    return res.status(404).json({ message: 'Invalid Request.' });
+    return res.status(400).json({ message: 'Invalid Request.' });
   }
   return db.Selling.create({ userId,
     routeId,
@@ -429,10 +429,10 @@ export function addSellingRootUser(req, res, next) {
 export function addSelling(req, res, next) {
   const { userId, sendingUserId, routeId, limit, fromUserId } = req.body;
   if (!userId || !sendingUserId || !routeId || !limit) {
-    return res.status(404).json({ message: 'Invalid Request.' });
+    return res.status(400).json({ message: 'Invalid Request.' });
   }
   if (req.user[`sellingBalance${getRouteType(routeId)}`] < limit) {
-    return res.status(404).json({ message: 'Limit Exceeded.' });
+    return res.status(400).json({ message: 'Limit Exceeded.' });
   }
   return db.Selling.create({ userId,
     sendingUserId,

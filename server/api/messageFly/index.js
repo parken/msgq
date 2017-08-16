@@ -6,6 +6,7 @@ import oauth from '../../components/oauth/auth';
 const router = express.Router();
 
 router.get('/', oauth, controller.index);
+router.get('/last', oauth, controller.last);
 router.get('/:id', oauth, controller.show);
 router.post('/', oauth, controller.create);
 router.post('/:id', oauth, controller.update);
