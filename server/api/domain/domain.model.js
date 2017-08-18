@@ -32,6 +32,7 @@ export default function (sequelize, DataTypes) {
     },
     hooks: {
       afterCreate(instance) {
+        if (instance.existing) return Promise.resolve();
         if (!Hosting.ownDomains.some(x => instance.name.endsWith(x))) {
           return Promise.resolve();
         }
