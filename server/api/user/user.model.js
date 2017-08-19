@@ -15,6 +15,7 @@ export default function (sequelize, DataTypes) {
     name: DataTypes.STRING,
     mobile: DataTypes.INTEGER,
     email: DataTypes.STRING,
+    signature: DataTypes.STRING,
     otp: DataTypes.STRING,
     otpStatus: DataTypes.INTEGER,
     password: DataTypes.STRING,

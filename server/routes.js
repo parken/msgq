@@ -5,6 +5,7 @@
 import path from 'path';
 
 import errors from './components/errors';
+import oauth from './components/oauth/auth';
 
 import user from './api/user';
 import sms from './api/sms';
@@ -28,6 +29,18 @@ import credit from './api/selling';
 import sending from './api/sending';
 import session from './api/session';
 import domain from './api/domain';
+import { ROLES } from './config/constants';
+
+const { ADMIN, RESELLER } = ROLES;
+
+const only = function (roleIds) {
+  return (req, res, next) => {
+    console.log(req.user.roleId)
+    return roleIds.includes(req.user.roleId)
+      ? next()
+      : res.status(400).end();
+  };
+}
 
 export default function (app) {
   // Insert routes below
@@ -43,16 +56,16 @@ export default function (app) {
   app.use('/api/groups', group);
   app.use('/api/templates', template);
   app.use('/api/campaigns', campaign);
-  app.use('/api/upstreams', upstream, upstreamPlan);
+  app.use('/api/upstreams', oauth, only([ADMIN, RESELLER]), upstream, upstreamPlan);
   app.use('/api/messageFly', messageFly);
   app.use('/api/messageFlies', messageFly, messageFlyMessage);
-  app.use('/api/transactions', transaction);
+  app.use('/api/transactions', oauth, only([ADMIN, RESELLER]), transaction);
   app.use('/api/loginIdentifiers', loginIdentifier);
-  app.use('/api/priorityNumbers', priorityNumber);
+  app.use('/api/priorityNumbers', oauth, only([ADMIN, RESELLER]), priorityNumber);
 
-  app.use('/api/sending', sending);
-  app.use('/api/credits', credit);
-  app.use('/api/sessions', session);
+  app.use('/api/sending', oauth, only([ADMIN, RESELLER]), sending);
+  app.use('/api/credits', oauth, only([ADMIN, RESELLER]), credit);
+  app.use('/api/sessions', oauth, only([ADMIN, RESELLER]), session);
   app.use('/api/domains', domain);
 
   // All undefined asset or api routes should return a 404

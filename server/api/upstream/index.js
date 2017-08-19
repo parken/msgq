@@ -1,17 +1,16 @@
 import express from 'express';
 
-import oauth from '../../components/oauth/auth';
 import * as controller from './upstream.controller';
 
 const router = express.Router();
 
-router.get('/', oauth, controller.index);
-router.get('/:id', oauth, controller.show);
+router.get('/', controller.index);
+router.get('/:id', controller.show);
 
-router.post('/', oauth, controller.create);
-router.post('/:id/activate', oauth, controller.activate);
-router.post('/:id', oauth, controller.update);
-router.put('/:id', oauth, controller.update);
-router.post('/:id', oauth, controller.destroy);
+router.post('/', controller.create);
+router.post('/:id/activate', controller.activate);
+router.post('/:id', controller.update);
+router.put('/:id', controller.update);
+router.post('/:id', controller.destroy);
 
 module.exports = router;

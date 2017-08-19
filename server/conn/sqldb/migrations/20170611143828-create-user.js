@@ -12,6 +12,7 @@ module.exports = {
       name: DataTypes.STRING,
       mobile: DataTypes.BIGINT,
       email: DataTypes.STRING(50),
+      signature: DataTypes.STRING,
       transactionalStartFrom: DataTypes.INTEGER,
       transactionalPercent: DataTypes.INTEGER,
       promotionalStartFrom: DataTypes.INTEGER,

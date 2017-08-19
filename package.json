@@ -17,6 +17,7 @@
     "express": "^4.13.3",
     "fs-promise": "^2.0.3",
     "geoip-lite": "^1.2.1",
+    "gulp-watch": "^4.3.11",
     "lodash": "^4.6.1",
     "method-override": "^2.3.5",
     "moment": "^2.18.1",
