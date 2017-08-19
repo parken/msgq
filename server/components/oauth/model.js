@@ -52,9 +52,10 @@ const model = {
         if (!accessToken) return callback(null, false);
         const token = accessToken.toJSON();
         token.user = token.User;
-        return callback(null, token);
+        callback(null, token);
+        return accessToken;
       })
-      .catch(callback);
+      .catch(err => callback(err));
   },
 
   // serialize App accessing api

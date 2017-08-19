@@ -20,6 +20,8 @@ export default function (sequelize, DataTypes) {
           foreignKey: 'userId',
           allowNull: false,
         });
+
+        Contact.hasMany(db.GroupContact);
       },
     },
   });

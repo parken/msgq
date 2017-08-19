@@ -57,7 +57,7 @@ export function update(req, res, next) {
 
 export function destroy(req, res, next) {
   return db.Role
-    .destory({ where: { id: req.params.id } })
+    .destroy({ where: { id: req.params.id } })
     .then(() => res.status(201).end())
     .catch(next);
 }

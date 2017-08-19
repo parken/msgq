@@ -76,12 +76,61 @@ export function show(req, res, next) {
 }
 
 export function create(req, res, next) {
-  return db.Contact
-    .create(Object.assign({}, req.body, {
-      createdBy: req.user.id,
-      updatedBy: req.user.id,
-    }))
-    .then(({ id }) => res.status(201).json({ id }))
+  const others = {
+    userId: req.user.id,
+    GroupContacts: req.params.groupId ? [{ groupId: req.params.groupId }]: req.body.GroupContacts
+  };
+
+  return Promise
+    .all([
+      db.Contact
+      .find({
+        attributes: ['id'],
+        where: {
+          $or: {
+            email: req.body.email,
+            number: req.body.number,
+          },
+          userId: req.user.id,
+        },
+        include: [{
+          model: db.GroupContact,
+          where: {
+            groupId: others.GroupContacts.map(x => x.groupId),
+          },
+          // include: [{
+          //   model: db.Group,
+          //   where: {
+          //     userId: req.userId,
+          //   },
+          // }]
+        }]
+      }),
+      db.Group
+        .findAll({
+          where: {
+            id: others.GroupContacts.map(x => x.groupId),
+          },
+          attributes: ['id'],
+          raw: true,
+        })
+    ])
+    .then(([contact, groups]) => {
+      const ownGroupsMap = groups.reduce((nxt, x) => Object.assign(nxt, { [x.id]: true }), {});
+      const groupContacts = others.GroupContacts.filter(x => ownGroupsMap[x.groupId]);
+      return contact
+        ? db.GroupContact
+        .bulkCreate(others
+          .GroupContacts
+          .map(x => Object
+            .assign(x, { contactId: contact.id })), { updateOnDuplicate: true })
+        .then(() => res
+          .status(409)
+          .json({ message: 'Duplicate' }))
+        : db.Contact
+        .create(Object.assign({}, req.body, others), { include: [db.GroupContact]})
+        .then(({ id }) => res.status(201).json({ id }))
+    })
     .catch(next);
 }
 
@@ -99,7 +148,7 @@ export function update(req, res, next) {
 
 export function destroy(req, res, next) {
   return db.Contact
-    .destory({ where: { id: req.params.id } })
+    .destroy({ where: { id: req.params.id } })
     .then(() => res.status(201).end())
     .catch(next);
 }

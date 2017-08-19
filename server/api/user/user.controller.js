@@ -8,7 +8,7 @@ import { getRouteType } from '../../conn/sqldb/helper';
 
 import db from '../../conn/sqldb';
 
-export function me(req, res, next) { console.log('req.query.fl', req.query.fl)
+export function me(req, res, next) {
   if (req.query.fl.includes('sign')) {
     return db.User
       .findById(req.user.id, { attributes: ['signature'], raw: true })
@@ -26,6 +26,15 @@ export function me(req, res, next) { console.log('req.query.fl', req.query.fl)
     db.Route.findAll(),
   ])
     .then(([u, upstreams]) => res.json(Object.assign(u, { upstreams })))
+    .catch(next);
+}
+
+export function meUpdate(req, res, next) {
+  if (req.query.fl.includes('sign')) return next();
+
+  return db.User
+    .update({ signature: req.body.signature }, { where: { id: req.user.id } })
+    .then(user => res.json(user))
     .catch(next);
 }
 

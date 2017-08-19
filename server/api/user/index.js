@@ -8,6 +8,7 @@ const router = express.Router();
 router.get('/', oauth, controller.index);
 
 router.get('/me', oauth, controller.me);
+router.post('/me', oauth, controller.meUpdate);
 router.get('/duplicate', controller.duplicate);
 router.get('/checkExists', controller.checkExists);
 router.get('/uuid/:uuid', controller.showUuid);

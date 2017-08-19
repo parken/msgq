@@ -86,14 +86,14 @@ export function update(req, res, next) {
   return db.Group
     .update(
       Object.assign({}, req.body),
-      { where: { id: req.params.id } })
+      { where: { id: req.params.id, userId: req.user.id } })
     .then(() => res.status(201).end())
     .catch(next);
 }
 
 export function destroy(req, res, next) {
   return db.Group
-    .destory({ where: { id: req.params.id } })
+    .destroy({ where: { id: req.params.id, userId: req.user.id } })
     .then(() => res.status(201).end())
     .catch(next);
 }

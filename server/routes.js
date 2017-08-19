@@ -13,6 +13,7 @@ import senderId from './api/senderId';
 import company from './api/company';
 import contact from './api/contact';
 import group from './api/group';
+import groupContact from './api/group/contact';
 import template from './api/template';
 import campaign from './api/campaign';
 import upstream from './api/upstream';
@@ -33,14 +34,9 @@ import { ROLES } from './config/constants';
 
 const { ADMIN, RESELLER } = ROLES;
 
-const only = function (roleIds) {
-  return (req, res, next) => {
-    console.log(req.user.roleId)
-    return roleIds.includes(req.user.roleId)
+const only = (roleIds) => (req, res, next) => (roleIds.includes(req.user.roleId)
       ? next()
-      : res.status(400).end();
-  };
-}
+      : res.status(400).end());
 
 export default function (app) {
   // Insert routes below
@@ -53,7 +49,7 @@ export default function (app) {
   app.use('/api/company', company);
   app.use('/api/contacts', contact);
   app.use('/api/routes', route);
-  app.use('/api/groups', group);
+  app.use('/api/groups', group, groupContact);
   app.use('/api/templates', template);
   app.use('/api/campaigns', campaign);
   app.use('/api/upstreams', oauth, only([ADMIN, RESELLER]), upstream, upstreamPlan);
