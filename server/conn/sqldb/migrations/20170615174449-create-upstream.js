@@ -15,13 +15,17 @@ module.exports = {
       support: DataTypes.STRING,
       comment: DataTypes.STRING,
       active: DataTypes.BOOLEAN,
+      routeId: DataTypes.STRING,
+      default: DataTypes.STRING,
+      parameter: DataTypes.STRING,
+      routeMap: DataTypes.STRING,
+      method: DataTypes.STRING,
       balance: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
       },
       createdBy: keys('users'),
       updatedBy: keys('users'),
-      routeId: keys('routes'),
     }, timestamps(3)), engine);
   },
 
