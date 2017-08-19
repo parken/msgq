@@ -50,7 +50,6 @@ module.exports = {
       sellingBalanceOTP: { type: DataTypes.INTEGER, defaultValue: 0 },
       sendingBalanceOTP: { type: DataTypes.INTEGER, defaultValue: 0 },
       roleId: keys('roles'),
-      appId: keys('apps'),
     }, timestamps(3)), engine)
       .then(() => queryInterface.addColumn('users', 'createdBy', keys('users')))
       .then(() => queryInterface.addColumn('users', 'resellerId', keys('users')));

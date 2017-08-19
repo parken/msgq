@@ -15,7 +15,8 @@ module.exports = {
       clientId: DataTypes.STRING(64),
       clientSecret: DataTypes.STRING(64),
       redirectUri: DataTypes.STRING,
-    }, timestamps(3)), engine);
+    }, timestamps(3)), engine)
+      .then(() => queryInterface.addColumn('users', 'appId', keys('apps')));
   },
   down(queryInterface) {
     return queryInterface.dropTable('apps');

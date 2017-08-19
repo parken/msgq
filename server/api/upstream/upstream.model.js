@@ -10,9 +10,15 @@ export default function (sequelize, DataTypes) {
     name: DataTypes.STRING,
     provider: DataTypes.STRING,
     link: DataTypes.STRING,
+    support: DataTypes.STRING,
     comment: DataTypes.STRING,
     active: DataTypes.BOOLEAN,
-    support: DataTypes.STRING,
+    routeId: DataTypes.STRING,
+    default: DataTypes.STRING,
+    parameter: DataTypes.STRING,
+    routeMap: DataTypes.STRING,
+    joinKey: DataTypes.STRING,
+    method: DataTypes.STRING,
   }, {
     tableName: 'upstreams',
     timestamps: true,
@@ -33,10 +39,6 @@ export default function (sequelize, DataTypes) {
         });
         Upstream.belongsTo(db.User, {
           foreignKey: 'updatedBy',
-          allowNull: false,
-        });
-        Upstream.belongsTo(db.Route, {
-          foreignKey: 'routeId',
           allowNull: false,
         });
       },

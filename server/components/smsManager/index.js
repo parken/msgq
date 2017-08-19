@@ -12,42 +12,73 @@ const log = debug('components/smsManager');
 const SmsManager = {
   messageFly: { queue: [], processing: false },
   processItem({ list, reject = false }) {
-    const message = list.shift();
-    if (message) {
-      const {
-        number,
-        unicode,
-        flash,
-        routeId: route,
-        MessageFly: { text },
-        SenderId: { name: sender },
-      } = message;
-      log('unicode, flash', unicode, flash);
-      return rp({
-        method: 'POST',
-        uri: 'http://sms.parkentechnology.com/httpapi/httpapi',
-        qs: {
-          token: 'b9a7fc874a245e0f5e1cf46bb0455015',
-          sender,
-          number,
-          route,
-          type: 1,
-          sms: text,
-        },
-        json: true,
-      })
-        .then(body => message.update({ messageStatusId: 4, comment: body, operatorOn: moment() }))
-        .then(() => SmsManager.processItem({ list, reject }))
-        .catch(() => SmsManager.processItem({ list, reject: true }));
-    }
-    if (reject) return Promise.reject('Rejecting on request');
-    return Promise.resolve();
+    if (!list.length) return Promise.resolve();
+    const {
+      upstreamId,
+      routeId,
+      SenderId: { id: senderId, name: SenderIdName },
+      MessageFly: { id: messageFlyId, text },
+    } = list[0];
+    return db.Upstream
+      .find({ where: { id: upstreamId } })
+      .then(upstream => {
+        const messages = [];
+        const newList = [];
+        list.forEach(x => {
+          if (x.upstreamId === upstreamId && x.routeId === routeId && x.senderId === senderId
+            && x.messageFlyId === messageFlyId) {
+            return messages.push(x);
+          }
+          return newList.push(x);
+        });
+        const data = JSON.parse(upstream.default);
+        const routeMap = JSON.parse(upstream.routeMap);
+        upstream.parameter.split(',').forEach(key => {
+          switch (key) {
+            case 'smsc': {
+              data[key] = routeMap[routeId];
+              break;
+            }
+            case 'to': {
+              data[key] = messages.map(x => x.number).join(upstream.joinKey);
+              break;
+            }
+            case 'from': {
+              data[key] = SenderIdName;
+              break;
+            }
+            case 'text': {
+              data[key] = text;
+              break;
+            }
+            case 'dlr-url': {
+              data[key] = `http://dlr.msgque.com/routesms/?dlr=%d&answer=%A&to=%p&ts=%T&smsID=${messageFlyId}`;
+              break;
+            }
+            default:
+          }
+        });
+        return rp({
+          method: 'GET',
+          uri: upstream.link,
+          qs: data,
+          json: true,
+        }).then(body => db.Message
+          .update({ messageStatusId: 4, comment: body, operatorOn: moment() }, {
+            where: { id: messages.map(x => x.id) },
+          }))
+          .then(() => SmsManager.processItem({ list: newList, reject }))
+          .catch(() => SmsManager.processItem({ list: newList, reject: true }));
+      });
   },
   processOperatorSelection({ list }) {
     if (!list.length) return Promise.resolve();
     const { routeId, messageFlyId } = list[0];
     return db.Upstream
-      .findAll({ where: { routeId, balance: { $gt: 0 } } })
+      .findAll({ where: {
+        routeId: db.Sequelize.literal(`find_in_set('${routeId}',routeId) <> 0`),
+        balance: { $gt: 0 },
+      } })
       .then((upstreams) => {
         const upstreamMessageMap = {};
         for (let i = 0; i < upstreams.length; i += 1) {
