@@ -4,9 +4,11 @@ import angular from 'angular';
 import ngAnimate from 'angular-animate';
 import ngSanitize from 'angular-sanitize';
 import ngCookies from 'angular-cookies';
+import toaster from 'angularjs-toaster';
 
 import uiRouter from 'angular-ui-router';
 import uiBootstrap from 'angular-ui-bootstrap';
+import base64File from 'angular-base64-upload';
 
 import { routeConfig } from './app.config';
 
@@ -27,6 +29,8 @@ import CreateGroup from '../components/create-group';
 import Export from '../components/export';
 import Report from '../components/report';
 import service from '../components/services';
+import Notepad from '../components/notepad';
+import ScheduleSmsService from '../components/schedule-sms';
 
 import Manage from './manage';
 import Admin from './admin';
@@ -60,10 +64,10 @@ import 'angular-oauth2';
 setupGAnalytics('UA-98313820-1');  // Google Analytics
 angular
   .module('msgQueApp', [
-    ngCookies, ngAnimate, ngSanitize, uiRouter, 'angular-oauth2', uiBootstrap,
+    ngCookies, ngAnimate, ngSanitize, uiRouter, 'angular-oauth2', uiBootstrap, toaster, base64File,
     // - framework
     AsideMenu, Navbar, Footer, constants, Auth, UpdateTitle, FileReader,
-    Home, FourOFour, OTPModule, Navigation, service, Export,
+    Home, FourOFour, OTPModule, Navigation, service, Export, Notepad, ScheduleSmsService,
     // - project specific
     SenderId, DeliveryReport, Report, SendSms, User,
     AdminNavigation, CreateGroup, ContactList, Upstream, SenderIds,

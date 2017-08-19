@@ -1,6 +1,7 @@
 class AppController {
   /* @ngInject */
-  constructor($rootScope, $state, $http, OAuth, $window, Session, $location, AppAction) {
+  constructor($interval, $rootScope, $state, $http, OAuth, $window, Session, $location, AppAction) {
+    this.$interval = $interval;
     this.$rootScope = $rootScope;
     this.$state = $state;
     this.$http = $http;
@@ -34,6 +35,9 @@ class AppController {
   $onInit() {
     // keeps track of state change and hides sidebar view for mobile
 
+    this.showNotepad = false;
+    this.showDateTime();
+
     this.$rootScope.$on('$stateChangeStart', () => {
       this.app.settings.offScreen = false;
       this.app.settings.mobileHeader = false;
@@ -58,6 +62,12 @@ class AppController {
           this.$state.current.name,
           Object.assign(this.$state.params, { uid: undefined })));
     }
+  }
+
+  showDateTime() {
+    this.$interval(() => {
+      this.dayTime = new Date();
+    },500);
   }
 
   logout() {

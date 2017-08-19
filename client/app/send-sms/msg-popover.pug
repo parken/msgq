@@ -1,0 +1,9 @@
+script(type='text/ng-template' id='msg-popover-template.html'): .wrapper-xs
+  label.text-xs.i-checks.i-checks-sm
+    input(type='checkbox' ng-model='$ctrl.data.flash' ng-true-value='1' ng-false-value='0')
+    i
+    | Send as a Flash SMS
+  label.text-xs.i-checks.i-checks-sm
+    input(type='checkbox' ng-model='$ctrl.data.encrypt' ng-true-value='1' ng-false-value='0')
+    i
+    | Send with Encryption

@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "main": "server/index.js",
   "dependencies": {
+    "angular-base64-upload": "^0.1.22",
+    "angularjs-toaster": "^2.1.0",
     "body-parser": "^1.13.3",
     "bowser": "^1.7.0",
     "composable-middleware": "^0.3.0",

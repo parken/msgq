@@ -16,15 +16,16 @@ class CreateGroupController {
     if (!name) return;
     this.$http.post('/groups', { name })
       .then(() => {
+        this.groupName = '';
+        this.isCreateGrp = false;
         this.$http.get('/groups')
           .then(({ data }) => (this.groups = data));
       });
   }
 
-  deleteGroup() {
-
+  esc(event) {
+    if (event.keyCode === 27) this.isCreateGrp = false;
   }
-
 }
 
 export default CreateGroupController;

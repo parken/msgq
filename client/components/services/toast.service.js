@@ -1,10 +1,14 @@
 class toastService {
+  /*  @ngInject  */
+  constructor(toaster) {
+    this.toaster = toaster;
+  }
   show(type,message) {
-    alert(message || (type ? 'Action Completed' : 'Error Occured'));
+    this.toaster.pop(type, 'Success!',message || (type ? 'Action Completed' : 'Error Occured'));
   }
 
   next(err) {
-    alert(err.message || err.data.message || 'Error Occured');
+    this.toaster.pop('error', 'Error!',err.message || err.data.message || 'Error Occured');
   }
 
 }

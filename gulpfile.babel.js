@@ -35,7 +35,7 @@ const paths = {
     ],
     styles: [`${clientPath}/{app,components}/**/*.scss`],
     mainStyle: `${clientPath}/app/app.scss`,
-    views: `${clientPath}/{app,components}/**/*.pug`,
+    views: `${clientPath}/**/**/*.pug`,
     mainView: `${clientPath}/index.html`,
     test: [`${clientPath}/{app,components}/**/*.{spec,mock}.js`],
     e2e: ['e2e/**/*.spec.js']

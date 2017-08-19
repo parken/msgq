@@ -1,18 +1,22 @@
 class SendSmsController {
   /* @ngInject */
-  constructor($http, $state, Session, $scope, $timeout, TransliterationControl) {
+  constructor($http, $state, $stateParams,Session, $scope, $timeout, TransliterationControl, ScheduleSms) {
     this.$http = $http;
     this.$state = $state;
+    this.$stateParams = $stateParams;
     this.Session = Session;
     this.Math = Math;
     this.$scope = $scope;
     this.$timeout = $timeout;
     this.TransliterationControl = TransliterationControl;
+    this.ScheduleSms = ScheduleSms;
   }
 
   $onInit() {
     this.langs = [{ name: 'English', val: 0 }, { name: 'Unicode', val: 1 }];
-
+    this.numbers = this.$stateParams.contacts || '';
+    this.selectedGroups = '';
+    this.contactCounts = 0;
     this.user = this.Session.read('userinfo');
     this.data = {
       numbersList: [],
@@ -141,13 +145,15 @@ class SendSmsController {
   }
 
   bindData(item, field) {
+    this.contactCounts = 0;
     switch (field) {
       case 'groupId': {
-        if (!this.data.groupId) this.data.groupId = '';
-        const groupIds = this.data.groupId.split(',');
-        if (!groupIds.includes(`${item.id}`)) groupIds.push(`${item.id}`);
-        else groupIds.splice(groupIds.indexOf(`${item.id}`), 1);
-        this.data.groupId = groupIds.filter(x => x).join(',');
+        const selectedGrps = this.list.filter(x => x.isChecked);
+        this.data.groupId = selectedGrps.map(x => x.id).join(',');
+        this.selectedGroups = selectedGrps.map((x) => {
+          this.contactCounts+= x.count;
+          return x.name;
+        });
         break;
       }
       default:

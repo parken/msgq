@@ -1,9 +1,11 @@
+include msg-popover.pug
 .row
   .col-xs-12
     .wrapper-xs
-      a.btn.w.padder.b-a(
+      a.btn.w.padder.b-a.bg-white-only.text-info(
         ng-repeat='route in $ctrl.routes track by $index'
-        ng-click='$ctrl.setRoute(route.id)'
+        ng-click='$ctrl.setRoute(route.id);$ctrl.data.routeId = route.id;'
+        ng-class='{"active_link font-bold": ($ctrl.data.routeId - 1) === $index}'
       ) {{route.name}} ({{route.balance}})
 
   .col-xs-12
@@ -30,8 +32,16 @@
               required
             )
             .input-group-addon(ng-bind='($ctrl.data.senderId.length || 0) + "/6"')
+        div(ng-if='$ctrl.file')
+          span.nav-pills(ng-repeat="group in $ctrl.groups") {{$ctrl.groupnames[group]}}
+        div(ng-if='$ctrl.file') file selected
+
         .form-group
-          label
+          div
+            .inline(ng-repeat='sg in $ctrl.selectedGroups')
+              i.fa.fa-user.text-muted.m-r-xs
+              b(ng-bind='sg')
+              span(ng-if='(!$last)') ,&nbsp;
           textarea.form-control(
             rows='5'
             ng-model='$ctrl.numbers'
@@ -48,9 +58,10 @@
                 ng-model='$ctrl.data.unicode'
               )
             span#translControl(style="float:right; margin-right:2px; margin-top:2px;opacity: {{$ctrl.data.unicode}}" ng-show='$ctrl.data.unicode')
-            span.m-r-xs.padder-xs.pull-right(ng-bind='($ctrl.data.text.length || 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.text.length || 0)/160)')
+            span.m-r-xs.padder-xs.pull-right(
+              ng-bind='($ctrl.data.text.length || 0) + ($ctrl.isSignature ? $ctrl.signature.length : 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.text.length || 0)/160)'
+            )
           textarea#transliterateTextarea.form-control(
-            style='opacity: {{$ctrl.data.unicode}}'
             rows='5'
             ng-hide='!$ctrl.data.unicode'
             ng-model='$ctrl.data.text'
@@ -59,7 +70,6 @@
             required
           )
           textarea.form-control(
-            style='opacity: {{$ctrl.data.unicode}}'
             ng-hide='$ctrl.data.unicode'
             rows='5'
             ng-model='$ctrl.data.text'
@@ -76,16 +86,42 @@
           )
         div
           button.col-xs-4.btn.btn-info(type='submit') Send SMS Now
-          span.col-xs-1.padder-xs Or
-          a.col-xs-6.padder-xs Schedule SMS
-          a.col-xs-1.pull-right.padder-xs
+          span.col-xs-2.padder-xs.text-center Or
+          a.col-xs-5.padder-xs.text-center(ng-click='$ctrl.ScheduleSms.open()') Schedule SMS
+          a.col-xs-1.pull-right.padder-xs.text-center(
+            uib-popover-template='"msg-popover-template.html"'
+            popover-trigger='"outsideClick"'
+            popover-is-open='$ctrl.isOpen'
+            popover-placement='top'
+            popover-class='{{$ctrl.user.admin_flag ? "w-lg" : "w"}}'
+          )
             i.fa.fa-cog
     .col-xs-6
       .col-xs-12
+        div.hbox.m-b-sm(ng-if='$ctrl.field === "text"')
+          label.col.v-middle.i-checks.i-checks-sm(style='width: 112px;')
+            input(type='checkbox' ng-model='$ctrl.isSignature')
+            i
+            | Add Signature
+          input.col.inline.form-control(ng-model='$ctrl.signature')
+        div(ng-if='$ctrl.field === "groupId"')
+          label.i-checks.i-checks-sm
+            input(type='checkbox' ng-model='$ctrl.file')
+            i
+          span Browse a file (Upload CSV file only.) Max file size : 20 MB
+            a.text-xsforn-bold.text-primary(target='_blank' href="https://www.ablebits.com/office-addins-blog/2014/04/24/convert-excel-csv/") (Convert Excel to Csv)
+          input.form-control(type='file' ng-model='$ctrl.data.csv' base-sixty-four-input accept=".csv")
+        hr(ng-if='["text", "groupId"].includes($ctrl.field)' style='border-color: #ccc')
         ul.list-group
           li.pointer.list-group-item(ng-repeat='item in $ctrl.list' ng-click='$ctrl.bindData(item, $ctrl.field)')
-            label.i-checks.i-checks-sm(ng-if='$ctrl.field === "groupId"' ng-model='item.id')
-              input(type='checkbox')
+            label.i-checks.i-checks-sm(ng-if='$ctrl.field === "groupId"')
+              input(type='checkbox' ng-model='item.isChecked')
               i
               | {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
             spam(ng-if='$ctrl.field !== "groupId"') {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
+
+.bg-white-only.b-a.b-success.pull-right.wrapper(style='height: auto;width: 150px;z-index: 10;right: 25px;position: fixed;top: 130px;' ng-if='$ctrl.field === "groupId" && $ctrl.selectedGroups.length')
+  .text-lg(ng-bind='$ctrl.selectedGroups.length + " Groups"')
+  .text-xs(ng-bind='"Total Contact : " + $ctrl.contactCounts')
+  .text-lg Preview
+  .text-xc none

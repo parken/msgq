@@ -21,9 +21,6 @@
           //&nbsp;{{$ctrl.company.name}}
           img(ng-if='$ctrl.company.logo' ng-src='{{$ctrl.company.logo}}', alt='{{$ctrl.company.name}}')
 
-
-
-
       // / brand
     // / navbar header
     // navbar collapse
@@ -39,7 +36,14 @@
       // nabar right
       ul.nav.navbar-nav.navbar-right
         li.hide: a: i.fa.fa-lg.fa-comments
-
+        li
+          div
+            a.m-t-sm.btn-sm.btn.btn-primary.m-r-xs(href='' target='_blank') Buy Credits
+        li
+          .inline.m-t.font-bold.m-r-xs.m-l-sm.text-md(ng-bind='$ctrl.dayTime | date : "EEE,  HH:mm:ss"')
+        li(ng-class='{"active": $ctrl.showNotepad}')
+          a(ng-click='$ctrl.showNotepad = !$ctrl.showNotepad')
+            i.fa.fa-book
         li.dropdown(
           uib-dropdown=''
           ng-click='$ctrl.$state.go("login")'
@@ -120,7 +124,10 @@
         navigation(ng-if='$ctrl.user.roleId === 3 || !$ctrl.OAuth.isAuthenticated()')
 
   .app-content
+    toaster-container
     div(ui-butterbar='')
     a.off-screen-toggle.hide(href='', ui-toggle-class='off-screen', data-target='.app-aside')
     .app-content-body.fade-in-up(ui-view='')
+    .w.bg-white-only.b-a(style='height: 90%;position: fixed;z-index: 100;right: 0;top: 50px;' ng-if='$ctrl.showNotepad')
+      notepad
 
