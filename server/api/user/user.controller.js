@@ -9,7 +9,7 @@ import { getRouteType } from '../../conn/sqldb/helper';
 import db from '../../conn/sqldb';
 
 export function me(req, res, next) {
-  if (req.query.fl.includes('sign')) {
+  if (req.query.fl && req.query.fl.includes('sign')) {
     return db.User
       .findById(req.user.id, { attributes: ['signature'], raw: true })
       .then(user => res.json(user))
