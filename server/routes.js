@@ -28,9 +28,11 @@ import credit from './api/selling';
 import sending from './api/sending';
 import session from './api/session';
 import domain from './api/domain';
+import auth from './components/auth';
 
 export default function (app) {
   // Insert routes below
+  app.use('/api/auth', auth);
   app.use('/api/users', user);
   app.use('/api/roles', role);
   app.use('/api/messages', message);
