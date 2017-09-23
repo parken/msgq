@@ -37,9 +37,11 @@ const { ADMIN, RESELLER } = ROLES;
 const only = (roleIds) => (req, res, next) => (roleIds.includes(req.user.roleId)
       ? next()
       : res.status(400).end());
+import auth from './components/auth';
 
 export default function (app) {
   // Insert routes below
+  app.use('/api/auth', auth);
   app.use('/api/users', user);
   app.use('/api/roles', role);
   app.use('/api/messages', message);
