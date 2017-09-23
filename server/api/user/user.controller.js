@@ -79,6 +79,7 @@ export function show(req, res, next) {
     case 2: {
       return db.User
         .find({
+          attributes: ['id', 'name', 'email', 'mobile'],
           where: { id: req.params.id },
         })
         .then(data => res.json(data))
@@ -90,11 +91,10 @@ export function show(req, res, next) {
           where: { id: req.params.id },
           attributes: ['id', 'name', 'email', 'mobile'],
         })
-        .then(data => res.json(data))
+        .then(data => res.json(_.omit(data, ['password'])))
         .catch(next);
     }
   }
-
 }
 
 export function showUuid(req, res, next) {
