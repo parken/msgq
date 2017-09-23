@@ -51,8 +51,6 @@ import Sessions from './session';
 import Role from './role';
 import Message from './message';
 import MessageFly from './message-fly';
-import Credit from './credit';
-import Balance from './balance';
 import Campaign from './campaign';
 import Contact from './contact';
 import LoginIdentifier from './loginIdentifier';
@@ -72,7 +70,7 @@ angular
     SenderId, DeliveryReport, Report, SendSms, User,
     AdminNavigation, CreateGroup, ContactList, Upstream, SenderIds,
     Groups, Transaction, Template, Sessions, Role, LoginIdentifier,
-    Message, MessageFly, Credit, Balance, Campaign, Contact, PriorityNumber,
+    Message, MessageFly, Campaign, Contact, PriorityNumber,
     Manage, // - admin
     Admin, // - reseller
   ])

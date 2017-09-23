@@ -20,8 +20,8 @@ export function index(req, res, next) {
     return db.Route.findAll()
       .then(routes => res.json(routes.map(x => x.toJSON()).filter(x => {
         const route = x;
-        route.balance = req.user[`${req.user.roleId === 4 ? 'selling' : 'sending'
-        }Balance${getRouteType(x.id)}`];
+        route.balance = req.user[`sendingBalance${getRouteType(x.id)}`];
+        route.credits = req.user[`sellingBalance${getRouteType(x.id)}`];
         return route.balance;
       })))
       .catch(next);

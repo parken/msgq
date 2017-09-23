@@ -13,6 +13,14 @@ class AppController {
     this.user = this.Session.read('userinfo');
     this.company = this.Session.read('company');
 
+    // load initial routes on top
+    this
+      .$http
+      .get('/routes')
+      .then(({ data: routes }) => {
+        this.routes = routes.length ? routes : [{ id: 1, name: 'Promotional', balance: 50 }];
+      });
+
     this.app = {
       name: 'MSGQue',
       version: '1.0.0',

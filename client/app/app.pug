@@ -101,27 +101,18 @@
         <div class="navi-wrap" ui-jq="slimScroll" ui-options="{height:'100%', size:'8px'}">
       .navi-wrap
         // user
-        #aside-user.clearfix.hidden-xs.text-center(ng-if='[1, 2].includes($ctrl.user.roleId)')
+        #aside-user.clearfix.hidden-xs.text-center(ng-if='!$ctrl.$state.is("sendSms")')
           .padder-h.text-left
             span.font-bold.m-b Credits
 
             table(style='width:100%')
-              tr
-                th P
-                td.text-right 5000(200)
-              tr
-                th T
-                td.text-right 5000(200)
-              tr
-                th S
-                td.text-right 5000(2000)
-              tr
-                th O
-                td.text-right 5000(20)
+              tr(ng-repeat="route in $ctrl.routes")
+                th(ng-bind='route.name')
+                td.text-right(ng-bind="route.credits + '(' + route.balance + ')'")
           .line.dk.hidden-folded
 
-        admin-navigation(ng-if='[1, 2].includes($ctrl.user.roleId)')
-        navigation(ng-if='$ctrl.user.roleId === 3 || !$ctrl.OAuth.isAuthenticated()')
+        admin-navigation(ng-if='[1, 2].includes($ctrl.user.roleId) && !$ctrl.$state.is("sendSms")')
+        navigation(ng-if='$ctrl.OAuth.isAuthenticated() && $ctrl.$state.is("sendSms")')
 
   .app-content
     toaster-container

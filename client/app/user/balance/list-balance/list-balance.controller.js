@@ -39,7 +39,7 @@ class ListBalanceController {
   get() {
     this
       .$http
-      .get(`/balance`, { params: this.params })
+      .get(`/sending`, { params: this.params })
       .then(({ data }) => {
         Object.assign(this.data, data);
         this.pages = this.util.pages(this.data.meta.numFound, this.params.limit);
@@ -50,7 +50,7 @@ class ListBalanceController {
           ? this.data.meta.numFound
           : this.ui.page * this.params.limit;
       })
-      .catch(this.toast.next);
+      .catch(err => this.toast.next(err));
   }
 
   forward() {

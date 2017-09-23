@@ -49,12 +49,19 @@
       thead
         tr
           th ID
-          th Name
+          th From
+          th To
+          th Limit
+          th Type
           th Created At
           th(style='width:30px;')
       tbody
         tr(ng-repeat='item in $ctrl.data.items | filter: $ctrl.searchText')
+          td(ng-bind='item.id')
           td
-            a(ui-sref='balance.view({id: item.id})' ng-bind='item.id')
-          td(ng-bind='item.name')
+            a(ui-sref='user.view({ id: item.FromUser.id })' ng-bind='item.FromUser.name + " - " + item.FromUser.email')
+          td
+            a(ui-sref='user.view({ id: item.User.id })' ng-bind='item.User.name + " - " + item.User.email')
+          td(ng-bind='item.limit')
+          td(ng-bind='item.Route.name')
           td(ng-bind='item.createdAt | date: "dd-MMM-yyyy hh:mm a"')

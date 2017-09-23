@@ -1,6 +1,7 @@
 import request from 'request';
 import rp from 'request-promise';
 import config from '../../config/environment';
+import { ROLES } from '../../config/constants';
 import logger from '../../components/logger';
 import { sms, slack } from '../../components/notify';
 import oAuthModel from '../../components/oauth/model';
@@ -8,6 +9,7 @@ import { getRouteType } from '../../conn/sqldb/helper';
 
 import db from '../../conn/sqldb';
 
+const { ADMIN } = ROLES;
 export function me(req, res, next) {
   if (req.query.fl && req.query.fl.includes('sign')) {
     return db.User
@@ -43,7 +45,8 @@ export function index(req, res, next) {
   const { limit = 20, offset = 0, fl, where } = req.query;
 
   const options = {
-    attributes: fl ? fl.split(',') : ['id'],
+    where: {},
+    attributes: fl ? fl.split(',') : ['id', 'name'],
     limit: Number(limit),
     offset: Number(offset),
   };
@@ -53,6 +56,10 @@ export function index(req, res, next) {
       const [key, value] = x.split(':');
       return Object.assign(nxt, { [key]: value });
     }, {});
+  }
+
+  if (req.user.roleId !== ADMIN) {
+    options.where.resellerId = req.user.id;
   }
 
   return Promise
@@ -112,8 +119,13 @@ export function create(req, res, next) {
   const user = req.body;
   if (`${user.mobile}`.length === 10) user.mobile = Number(`91${user.mobile}`);
   if (`${user.supportMobile}`.length === 10) user.supportMobile = Number(`91${user.supportMobile}`);
-  user.roleId = user.roldeId || 2;
+  user.roleId = req.user.roleId + 1;
   user.createdBy = req.user.id;
+
+  if (req.user.roleId !== ADMIN) {
+    user.resellerId = req.user.resellerId || req.user.id;
+  }
+
   return db.User
     .create(user)
     .then(data => res.json(data))

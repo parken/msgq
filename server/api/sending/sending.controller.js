@@ -8,6 +8,15 @@ export function index(req, res, next) {
     attributes: fl ? fl.split(',') : ['id', 'routeId', 'limit', 'userId'],
     limit: Number(limit),
     offset: Number(offset),
+    include: [{
+      model: db.User,
+      attributes: ['id', 'name', 'email'],
+      as: 'FromUser',
+    }, {
+      model: db.User,
+      attributes: ['id', 'name', 'email'],
+      as: 'User',
+    }],
   };
 
   if (where) {
@@ -33,6 +42,7 @@ export function create(req, res, next) {
     .create(Object.assign({}, req.body, {
       createdBy: req.user.id,
       updatedBy: req.user.id,
+      fromUserId: req.user.id,
     }))
     .then(({ id }) => res.status(201).json({ id }))
     .catch(next);

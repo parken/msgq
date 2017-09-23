@@ -13,8 +13,8 @@ class NavigationController {
     this.menus = [
       { name: 'Upstreams', state: 'upstreams.list', icon: 'fa fa-cloud' },
       { name: 'Users', state: 'users.list', icon: 'fa fa-users' },
-      { name: 'Credits', state: 'credits.list', icon: 'fa fa-envelope-open-o ' },
-      { name: 'Balance', state: 'sendings.list', icon: 'fa fa-money' },
+      /*{ name: 'Credits', state: 'credits.list', icon: 'fa fa-envelope-open-o ' },
+      { name: 'Balance', state: 'sendings.list', icon: 'fa fa-money' },*/
 
       //{name: 'SenderID Approval', state: 'home.sendSms', icon: 'fa fa-chat'},
       // {name: 'Actual Consumption', state: 'home.sendSms', icon: 'fa fa-chat'},
@@ -39,7 +39,7 @@ class NavigationController {
       // {name: 'HTTP API', state: 'admin.users.list', icon: 'fa fa-user'},
       // // user level features
       // {name: '----- User', state: 'home.sendSms', icon: 'fa fa-chat'},
-      {name: 'Send SMS', state: 'home.sendSms', icon: 'fa fa-chat'},
+      {name: 'Send SMS', state: 'sendSms', icon: 'fa fa-envelope'},
     ];
   }
 

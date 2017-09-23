@@ -1,6 +1,6 @@
-import template from './new-balance.pug';
+import template from './new-credit.pug';
 
-class NewBalancecontroller {
+class CreditController {
   /* @ngInject */
   constructor($http, $stateParams, $state, Session, Enum, toast) {
     this.$http = $http;
@@ -15,14 +15,23 @@ class NewBalancecontroller {
   $onInit() {
     this.user = this.Session.read('userinfo');
     this.data = {
-      active: 1,
+      limit:1000,
       routeId: 1,
+      userId: 2,
     };
+    this.getUsers();
+  }
+
+  getUsers() {
+    this.$http.get(`/users`)
+      .then(({ data: { items } }) => {
+        this.users = items;
+      });
   }
 
   submit() {
     const { id } = this.$stateParams;
-    this.$http.post(`/upstreams/${id}/balances`, this.data)
+    this.$http.post(`/credits`, this.data)
       .then(() => {
         this.toast.show('success');
         this.$state.go('user.view', { id });
@@ -31,10 +40,9 @@ class NewBalancecontroller {
   }
 }
 
-const NewBalanceComponent = {
+const CreditComponent = {
   template,
-  controller: NewBalancecontroller,
+  controller: CreditController,
 };
 
-export default NewBalanceComponent;
-
+export default CreditComponent;

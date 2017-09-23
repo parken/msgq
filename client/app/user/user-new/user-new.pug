@@ -26,7 +26,7 @@
           .col-md-6.col-sm-12.col-xs-12
             .form-group
               label(for='password') Password
-              input#password.form-control(type='password' placeholder='Password' ng-model='$ctrl.data.password')
+              input#password.form-control(type='password' placeholder='Password' ng-model='$ctrl.data.password' ng-disabled='$ctrl.$state.is("user.edit")' value='')
         .row
           .col-md-6.col-sm-12.col-xs-12
             .form-group
@@ -45,7 +45,7 @@
             .form-group
               label(for='domain') Domain
               input#domain.form-control(type='text' placeholder='Domain ex: example.com' ng-model='$ctrl.data.loginUrl')
-        .row
+        //.row
           .col-md-6.col-xs-12
             .form-group
               label(for='routeId') User Role

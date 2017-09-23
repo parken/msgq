@@ -22,17 +22,17 @@ class UserAddController {
       roleId: roleIdMap[this.user.roleId],
     };
     this.roles = this.Enum.roles.filter(x => (this.user.roleId <= x.val));
-    if (this.$state.current.name === 'users.add') {
+    if (this.$state.is('users.new')) {
       this.header = 'Add New User'
     } else {
       this.header = 'Edit Details';
-      this.id = this.$state.current.name === 'user.edit' ? this.$stateParams.id : this.user.id;
       this.getUser();
     }
   }
 
   getUser() {
-    this.$http.get(`/users/${this.id}`)
+    if (this.$state.is('user.new')) return;
+    this.$http.get(`/users/${this.$stateParams.id}`)
       .then(({ data: user }) => {
         this.data = user;
       });

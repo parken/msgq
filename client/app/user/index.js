@@ -6,6 +6,10 @@ import balanceRouting from './balance/balance.routes';
 import UserAddComponent from './user-new/user-new.controller';
 import UserViewComponent from './user-view/user-view.controller';
 import UsersListComponent from './list/user-list.controller';
+import NewCreditComponent from './credit/new-credit/new-credit.controller';
+import ListCreditComponent from './credit/list-credit/list-credit.controller';
+import NewBalanceComponent from './balance/new-balance/new-balance.controller';
+import ListBalanceComponent from './balance/list-balance/list-balance.controller';
 
 export default angular
   .module('msgQueApp.user', [
@@ -14,5 +18,9 @@ export default angular
   .component('userAdd', UserAddComponent)
   .component('userView', UserViewComponent)
   .component('usersList', UsersListComponent)
+  .component('listCredit', ListCreditComponent)
+  .component('newCredit', NewCreditComponent)
+  .component('listBalance', ListBalanceComponent)
+  .component('newBalance', NewBalanceComponent)
   .config(routing)
   .name;
