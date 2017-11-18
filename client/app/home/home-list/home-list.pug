@@ -1,0 +1,33 @@
+.panel.panel-default.m-t-sm
+  .panel-body
+    .col-md-8
+      .panel
+        .col-xs-12
+          button.btn.btn-success(ui-sref='senderId.list') SenderID
+        .panel-heading
+          form.form(ng-submit='$ctrl.sendMessage()' name='smsForm')
+            .col-xs-12
+              select.pull-left.col-xs.m-t-xs.form.form-control(
+                ng-options="item.value as item.name for item in $ctrl.list.type"
+                ng-model="$ctrl.data.type" ng-change='$ctrl.fetchResumeCount()')
+            .col-xs-12.m-t-xs
+              label.i-checks.small-check.m-r-md.i-checks-sea-green.pull-left
+                input(type='checkbox' ng-checked='$ctrl.data.mode === 0'
+                ng-click='$ctrl.data.mode = 0' value='0')
+                i.m-r-none
+                | &nbsp;&nbsp; Mobile
+              label.i-checks.small-check.m-r-md.i-checks-sea-green.pull-left
+                input(type='checkbox' ng-checked='$ctrl.data.mode === 1'
+                ng-click='$ctrl.data.mode = 1' value='1')
+                i.m-r-none
+                | &nbsp;&nbsp; CSV
+            .col-xs-12(ng-if='$ctrl.data.mode === 0')
+              input.pull-left.col-xs.m-t-xs.form.form-control(ng-model='$ctrl.data.mobile' placeholder='mobile' required)
+            .col-xs-12(ng-if='$ctrl.data.mode === 1')
+              input.pull-left.col-xs.m-t-xs.form.form-control(type="file" file-reader="$ctrl.file.content" required)
+            .col-xs-12
+              textarea.pull-left.col-xs.m-t-xs.form.form-control(ng-model='$ctrl.data.message' placeholder='Type your message.' required)
+            .col-xs-12(ng-if='$ctrl.message')
+              .pull-left.col-xs.m-t-xs(ng-bind='$ctrl.message')
+            .col-xs-12
+              button.btn-success.btn.m-t-xs(type='submit' ng-disabled='!smsForm.$valid') Send

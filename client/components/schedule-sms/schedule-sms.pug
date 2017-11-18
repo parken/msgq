@@ -1,0 +1,31 @@
+.modal-header.bg-primary
+  .h4.inline Schedule SMS
+  span.fa.fa-times-circle-o.fa-2x.pull-right.pointer(ng-click='$ctrl.$uibModalInstance.close(true)')
+.modal-body(style='height: 250px;')
+  form.form-validation.form(ng-submit='$ctrl.schedule()')
+    .form-group.col-xs-8
+      label(for='date') Schedule Date:
+      input#date.form-control(
+        style='margin-top: 35px;'
+        type='text'
+        placeholder='Schedule Date'
+        uib-datepicker-popup='dd-MMMM-yyyy'
+        ng-model='$ctrl.date'
+        is-open='$ctrl.ui.startDate'
+        close-text='Close'
+        ng-click='$ctrl.ui.startDate = true'
+      )
+    .form-group.col-xs-4
+      label Schedule Time:
+      div(
+        uib-timepicker=''
+        ng-model='$ctrl.time'
+        hour-step='1'
+        minute-step='15'
+        show-meridian='true'
+        ng-model-options="{debounce: 300}"
+        required
+      )
+
+    .col-xs-12.text-center
+      button.btn.btn-success(type='submit' ng-click='$ctrl.$uibModalInstance.close(true)') Schedule

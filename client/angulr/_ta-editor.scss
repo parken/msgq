@@ -1,0 +1,9 @@
+/**
+ * Override Default css of angularText module
+ */
+.ta-editor,
+.ta-scroll-window > .ta-bind,
+.ta-editor.ta-html,
+.ta-scroll-window.form-control {
+  min-height: 200px; // sets default text area size
+}

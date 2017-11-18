@@ -1,0 +1,21 @@
+ul.nav
+  li(ui-sref-active='active')
+    a.btn(ng-click='$ctrl.isCreateGrp = !$ctrl.isCreateGrp' ng-if='!$ctrl.isCreateGrp')
+      i.fa.fa-users
+      span Create Group
+    form(ng-submit='$ctrl.createGroup($ctrl.groupName)' name='createGrpForm')
+      .input-group(ng-if='$ctrl.isCreateGrp')
+        input.form-control(
+          ng-model='$ctrl.groupName'
+          placeholder='Group Name'
+          ng-keydown='$ctrl.esc($event)'
+        )
+        .input-group-addon(ng-click='$ctrl.createGroup($ctrl.groupName)' )
+          i.fa.fa-plus
+          span
+        button.ng-hide(type='submit')
+  li
+    a(ng-repeat='group in $ctrl.groups' ui-sref='contact-list')
+      span(ng-bind='group.name')
+      b.pull-right(ng-bind='group.count' title='{{group.count}} contacts in this group')
+

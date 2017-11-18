@@ -1,0 +1,13 @@
+{
+  "name": "Play MSGQue",
+  "short_name": "msgque",
+  "icons": [{
+    "src": "assets/images/logo.svg",
+    "sizes": "192x192",
+    "type": "image/svg+xml"
+  }],
+  "start_url": "/",
+  "display": "standalone",
+  "gcm_sender_id": "",
+  "gcm_user_visible_only": true
+}

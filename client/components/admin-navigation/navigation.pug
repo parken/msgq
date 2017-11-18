@@ -1,0 +1,21 @@
+nav.navi(ui-nav='' )
+  ul.nav(ng-if='!$ctrl.OAuth.isAuthenticated()')
+    li
+      create-group
+    li.hidden-folded.padder-h.m-t.m-b-sm.text-muted.text-xs
+      span Quick Links
+    li(ui-sref-active='active' ng-repeat='menu in $ctrl.menus' ui-sref='{{menu.state}}')
+      a(ui-sref='login')
+        i.fa.fa-sign-in.icon
+        span &nbsp;&nbsp;&nbsp;&nbsp;
+        span Login / Signup
+        i.my-icon
+          i
+  ul.nav(ng-if='$ctrl.OAuth.isAuthenticated()')
+    li(ui-sref-active='active' ng-repeat='menu in $ctrl.menus' ui-sref='{{menu.state}}')
+      a(ui-sref='#')
+        i.fa(class="{{menu.icon}}")
+        span &nbsp;&nbsp;&nbsp;&nbsp;
+        span(ng-bind='menu.name')
+        i.my-icon
+          i

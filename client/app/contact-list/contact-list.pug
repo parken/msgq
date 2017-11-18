@@ -1,0 +1,56 @@
+.col-xs-12
+  .wrapper-sm.bg-white-only(ng-if='$ctrl.contacts.length')
+    a.btn.bg-light(ng-click='$ctrl.ContactNew.open()') Add Contact
+    .btn-group.dropdown(uib-dropdown='', dropdown-append-to-body='')
+      button.btn.bg-light.dropdown-toggle(type='button', uib-dropdown-toggle='', aria-haspopup='true', aria-expanded='false')
+        | More &nbsp;
+        span.caret
+      ul.dropdown-menu(uib-dropdown-menu='', role='menu', aria-labelledby='btn-append-to-body1')
+        li(role='menuitem')
+          a Export
+        li(role='menuitem')
+          a Delete Group
+    .btn-group.dropdown(uib-dropdown='', dropdown-append-to-body='')
+      button.btn.bg-light.dropdown-toggle(type='button', uib-dropdown-toggle='', aria-haspopup='true', aria-expanded='false')
+        | Move To &nbsp;
+        span.caret
+      ul.dropdown-menu(uib-dropdown-menu='', role='menu', aria-labelledby='btn-append-to-body1')
+        li(role='menuitem' ng-repeat='item in $ctrl.groups')
+          a(ng-bind='item.name')
+    .btn-group.dropdown(uib-dropdown='', dropdown-append-to-body='')
+      button.btn.bg-light.dropdown-toggle(type='button', uib-dropdown-toggle='', aria-haspopup='true', aria-expanded='false')
+        | Copy To &nbsp;
+        span.caret
+      ul.dropdown-menu(uib-dropdown-menu='', role='menu', aria-labelledby='btn-append-to-body1')
+        li(role='menuitem' ng-repeat='item in $ctrl.groups' ng-click='$event.stopPropagation()')
+          a(ng-click='$event.stopPropagation();')
+            label.i-checks.i-checks-sm
+              input(type='checkbox' ng-model='item.id')
+              i
+              | {{item.name}}
+    a.btn.bg-light(ng-click='$ctrl.delete()') Delete Contact
+
+  .wrapper-sm(ng-if='!$ctrl.contacts.length')
+    h4.padder-v.text-center.font-bold It's time to add some contacts
+    div.text-center
+      a.btn.btn-success(ng-click='$ctrl.ContactNew.open()') Add Contact
+  .wrapper-sm.bg-white-only.ng-hide(ng-if='!$ctrl.contacts.length')
+    table.table.table-striped
+      tr
+        td
+          label.i-checks.i-checks-sm
+            input(type='checkbox' ng-model='selectAll')
+            i
+        td.font-bold Number
+        td.font-bold Name
+        td.font-bold Expiry
+        td.font-bold Groups
+      tr(ng-repeat='item in $ctrl.contacts')
+        td
+          label.i-checks.i-checks-sm
+            input(type='checkbox' ng-model='item.groupId')
+            i
+        td(ng-bind='item.number')
+        td(ng-bind='item.name')
+        td(ng-bind='item.expiry')
+        td(ng-bind='item.group')

@@ -1,0 +1,124 @@
+.app#app(ng-class="{'app-header-fixed': $ctrl.app.settings.headerFixed,\
+'app-aside-fixed': $ctrl.app.settings.asideFixed,\
+'app-aside-folded': $ctrl.app.settings.asideFolded,\
+'app-aside-dock': $ctrl.app.settings.asideDock,\
+'container': $ctrl.app.settings.container}")
+  //- navigation bar
+  .app-header.navbar
+    // navbar header
+    .navbar-header(class='{{$ctrl.app.settings.navbarHeaderColor}}')
+      button.pull-right.visible-xs.dk(ui-toggle-class='show', data-target='.navbar-collapse' ng-click='$ctrl.app.settings.mobileHeader = !$ctrl.app.settings.mobileHeader')
+        i.fa.fa-cog
+      button.pull-right.visible-xs(ui-toggle-class='off-screen', data-target='.app-aside', ui-scroll='app'
+      ng-click='$ctrl.app.settings.offScreen = !$ctrl.app.settings.offScreen'
+      )
+        i.fa.fa-align-justify
+      // brand
+      a.navbar-brand.text-lt(ui-sref='home')
+        i.fa.fa-envelope-o
+        span.m-l-xs(ng-if='!$ctrl.app.settings.asideFolded')
+        span.hidden-folded.m-l-xs
+          //&nbsp;{{$ctrl.company.name}}
+          img(ng-if='$ctrl.company.logo' ng-src='{{$ctrl.company.logo}}', alt='{{$ctrl.company.name}}')
+
+      // / brand
+    // / navbar header
+    // navbar collapse
+    .collapse.pos-rlt.navbar-collapse.box-shadow(class='{{$ctrl.app.settings.navbarCollapseColor}}' ng-class="{ show: $ctrl.app.settings.mobileHeader }")
+      // buttons
+      .nav.navbar-nav.hidden-xs
+        a.btn.no-shadow.navbar-btn(href='', ng-click='$ctrl.app.settings.asideFolded = !$ctrl.app.settings.asideFolded')
+          i.fa.fa-fw(ng-class='$ctrl.app.settings.asideFolded ? "fa-indent": "fa-dedent"')
+        a.btn.no-shadow.navbar-btn(href='', style="cursor: default")
+          h1.m-n.font-normal.h4(ng-bind="$ctrl.Page.header()",style="display:inline-block")
+
+      // / buttons
+      // nabar right
+      ul.nav.navbar-nav.navbar-right
+        li.hide: a: i.fa.fa-lg.fa-comments
+        li
+          div
+            a.m-t-sm.btn-sm.btn.btn-primary.m-r-xs(href='' target='_blank') Buy Credits
+        li
+          .inline.m-t.font-bold.m-r-xs.m-l-sm.text-md(ng-bind='$ctrl.dayTime | date : "EEE,  HH:mm:ss"')
+        li(ng-class='{"active": $ctrl.showNotepad}')
+          a(ng-click='$ctrl.showNotepad = !$ctrl.showNotepad')
+            i.fa.fa-book
+        li.dropdown(
+          uib-dropdown=''
+          ng-click='$ctrl.$state.go("login")'
+          ng-class="{ open: $ctrl.app.settings.mobileHeader }"
+          ng-if="!$ctrl.OAuth.isAuthenticated()"
+        )
+          a.dropdown-toggle.clear.text-center(href='', uib-dropdown-toggle='')
+            span.hidden-sm Login/Signup
+        li.dropdown(uib-dropdown='' ng-class="{ open: $ctrl.app.settings.mobileHeader }" ng-if="$ctrl.OAuth.isAuthenticated()")
+          a.dropdown-toggle.clear.text-center(href='', uib-dropdown-toggle='')
+            span.hidden-sm {{$ctrl.user.name}}
+            span.pull-right
+              b.caret.m-r-xs.m-l-xs
+              i.fa.fa-lg.fa-user
+
+          //- dropdown
+          ul.dropdown-menu.animated.fadeInRight.w
+            li.hide
+              a(ui-sref='help')
+                span.label.bg-info.pull-right new
+                | Help
+
+            li
+              a(ui-sref='help')
+                | Technical Support
+                br
+                | +91 99999 99999
+                br
+                | support@msgq.com
+              .line.line-dashed.b-b.line-xxs.no-margin
+            li
+              a(ui-sref='help')
+                | Account Manager
+                br
+                | +91 99999 99999
+                br
+                | support@msgq.com
+              .line.line-dashed.b-b.line-xxs.no-margin
+            li(ng-if='$ctrl.user.admin')
+              a(ui-sref='users.add') Add User
+            li
+              a(ui-sref='users.profile') Profile
+            li.hide.divider
+            //li
+              a(ui-sref='access.password_reset') Change Password
+            li
+              a(ng-click='$ctrl.logout()') Logout
+          // / dropdown
+      // / navbar right
+    // / navbar collapse
+  .app-aside.hidden-xs(class='{{$ctrl.app.settings.asideColor}}')
+    .aside-wrap
+      //
+        if you want to use a custom scroll when aside fixed, use the slimScroll
+        <div class="navi-wrap" ui-jq="slimScroll" ui-options="{height:'100%', size:'8px'}">
+      .navi-wrap
+        // user
+        #aside-user.clearfix.hidden-xs.text-center(ng-if='!$ctrl.$state.is("sendSms")')
+          .padder-h.text-left
+            span.font-bold.m-b Credits
+
+            table(style='width:100%')
+              tr(ng-repeat="route in $ctrl.routes")
+                th(ng-bind='route.name')
+                td.text-right(ng-bind="route.credits + '(' + route.balance + ')'")
+          .line.dk.hidden-folded
+
+        admin-navigation(ng-if='[1, 2].includes($ctrl.user.roleId) && !$ctrl.$state.is("sendSms")')
+        navigation(ng-if='$ctrl.OAuth.isAuthenticated() && $ctrl.$state.is("sendSms")')
+
+  .app-content
+    toaster-container
+    div(ui-butterbar='')
+    a.off-screen-toggle.hide(href='', ui-toggle-class='off-screen', data-target='.app-aside')
+    .app-content-body.fade-in-up(ui-view='')
+    .w.bg-white-only.b-a(style='height: 90%;position: fixed;z-index: 100;right: 0;top: 50px;' ng-if='$ctrl.showNotepad')
+      notepad
+

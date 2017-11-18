@@ -1,0 +1,35 @@
+.wrapper
+  .padder-v.h3 {{$ctrl.$stateParams.id ? "Edit" : "Add"}} Balance
+  a.text-primary.text-u-l.pull-right.m-l-xs(ui-sref='balances.list') Show List
+  a.text-primary.text-u-l.pull-right.m-l-xs(ng-if='$ctrl.$stateParams.id' ui-sref='balance.view($ctrl.$stateParams)') View Balance
+  .b-b.b-gray.m-b-md.m-t-md
+  form.form.form-validation(name='form' ng-submit='$ctrl.submit();')
+    .row
+      .col-md-6.col-sm-12.col-xs-12
+        .form-group
+          label(for='routeId') Route type
+          select#routeId.form-control(
+            name='routeId'
+            required
+            ng-model='$ctrl.data.routeId'
+            ng-options='route.val as route.name for route in $ctrl.routes'
+          )
+      .col-md-6.col-sm-12.col-xs-12
+        .form-group
+          label Balance
+          input.form-control(type='number', placeholder='Balance' name='balance' required ng-model='$ctrl.data.limit' step='1000')
+    .row
+      .col-md-6.col-sm-12.col-xs-12
+        .form-group
+          label User
+          select.form-control(
+            name='user'
+            required
+            ng-model='$ctrl.data.userId'
+            ng-options='user.id as user.name for user in $ctrl.users'
+          )
+    .row
+      .col-xs-12
+        button.btn.btn-success(type='submit' ng-disabled='form.$invalid')
+          span(ng-if='!$ctrl.ui.loading') Submit
+          span(ng-if='$ctrl.ui.loading') Submitting...

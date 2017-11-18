@@ -1,0 +1,127 @@
+include msg-popover.pug
+.row
+  .col-xs-12
+    .wrapper-xs
+      a.btn.w.padder.b-a.bg-white-only.text-info(
+        ng-repeat='route in $ctrl.routes track by $index'
+        ng-click='$ctrl.setRoute(route.id);$ctrl.data.routeId = route.id;'
+        ng-class='{"active_link font-bold": ($ctrl.data.routeId - 1) === $index}'
+      ) {{route.name}} ({{route.balance}})
+
+  .col-xs-12
+    .col-xs-6.b-r
+      .m-b-lg: a.text-u-l.pull-right Load Previous Message
+      .clearfix
+      form.validate-form(name='sendSmsForm' ng-submit='$ctrl.sendSms()')
+        .form-group(ng-if='$ctrl.routeIndex === 2')
+          select.form-control(
+            ng-options='sender.name as sender.name for sender in $ctrl.senderIds track by sender.name'
+            ng-model='$ctrl.data.senderId'
+            required
+          )
+        .form-group(ng-if='$ctrl.routeIndex === 1')
+          .input-group
+            input#senderId.form-control(
+              type='text'
+              maxlength='6'
+              ng-model='$ctrl.data.senderId'
+              placeholder='Sender ID'
+              ng-pattern='/[A-Z0-9]{6}/i'
+              watch-change='$ctrl.change()'
+              ng-focus='$ctrl.loadSenderIds()'
+              required
+            )
+            .input-group-addon(ng-bind='($ctrl.data.senderId.length || 0) + "/6"')
+        div(ng-if='$ctrl.file')
+          span.nav-pills(ng-repeat="group in $ctrl.groups") {{$ctrl.groupnames[group]}}
+        div(ng-if='$ctrl.file') file selected
+
+        .form-group
+          div
+            .inline(ng-repeat='sg in $ctrl.selectedGroups')
+              i.fa.fa-user.text-muted.m-r-xs
+              b(ng-bind='sg')
+              span(ng-if='(!$last)') ,&nbsp;
+          textarea.form-control(
+            rows='5'
+            ng-model='$ctrl.numbers'
+            placeholder='Enter mobile numbers here 1234567890, 0123456789, 9012345678 8901234567 7890123456'
+            ng-blur='$ctrl.validateNumbers()'
+            ng-focus='$ctrl.loadGroups()'
+          )
+        .form-group
+          div
+            .col-md-3.col-sm-4.no-padder
+              select.form-control(
+                ng-options='item.val as item.name for item in $ctrl.langs'
+                ng-change='$ctrl.translation($ctrl.data.unicode)'
+                ng-model='$ctrl.data.unicode'
+              )
+            span#translControl(style="float:right; margin-right:2px; margin-top:2px;opacity: {{$ctrl.data.unicode}}" ng-show='$ctrl.data.unicode')
+            span.m-r-xs.padder-xs.pull-right(
+              ng-bind='($ctrl.data.text.length || 0) + ($ctrl.isSignature ? $ctrl.signature.length : 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.text.length || 0)/160)'
+            )
+          textarea#transliterateTextarea.form-control(
+            rows='5'
+            ng-hide='!$ctrl.data.unicode'
+            ng-model='$ctrl.data.text'
+            placeholder='You are delivering crucial information. Keep it to-the-point.'
+            ng-focus='$ctrl.loadTemplates()'
+            required
+          )
+          textarea.form-control(
+            ng-hide='$ctrl.data.unicode'
+            rows='5'
+            ng-model='$ctrl.data.text'
+            placeholder='You are delivering crucial information. Keep it to-the-point.'
+            ng-focus='$ctrl.loadTemplates()'
+            required
+          )
+        .form-group
+          input.form-control(
+            type='text'
+            ng-model='$ctrl.data.campaign'
+            placeholder='Campaign Name'
+            ng-focus='$ctrl.loadCampaigns()'
+          )
+        div
+          button.col-xs-4.btn.btn-info(type='submit') Send SMS Now
+          span.col-xs-2.padder-xs.text-center Or
+          a.col-xs-5.padder-xs.text-center(ng-click='$ctrl.ScheduleSms.open()') Schedule SMS
+          a.col-xs-1.pull-right.padder-xs.text-center(
+            uib-popover-template='"msg-popover-template.html"'
+            popover-trigger='"outsideClick"'
+            popover-is-open='$ctrl.isOpen'
+            popover-placement='top'
+            popover-class='{{$ctrl.user.admin_flag ? "w-lg" : "w"}}'
+          )
+            i.fa.fa-cog
+    .col-xs-6
+      .col-xs-12
+        div.hbox.m-b-sm(ng-if='$ctrl.field === "text"')
+          label.col.v-middle.i-checks.i-checks-sm(style='width: 112px;')
+            input(type='checkbox' ng-model='$ctrl.isSignature')
+            i
+            | Add Signature
+          input.col.inline.form-control(ng-model='$ctrl.signature')
+        div(ng-if='$ctrl.field === "groupId"')
+          label.i-checks.i-checks-sm
+            input(type='checkbox' ng-model='$ctrl.file')
+            i
+          span Browse a file (Upload CSV file only.) Max file size : 20 MB
+            a.text-xsforn-bold.text-primary(target='_blank' href="https://www.ablebits.com/office-addins-blog/2014/04/24/convert-excel-csv/") (Convert Excel to Csv)
+          input.form-control(type='file' ng-model='$ctrl.data.csv' base-sixty-four-input accept=".csv")
+        hr(ng-if='["text", "groupId"].includes($ctrl.field)' style='border-color: #ccc')
+        ul.list-group
+          li.pointer.list-group-item(ng-repeat='item in $ctrl.list' ng-click='$ctrl.bindData(item, $ctrl.field)')
+            label.i-checks.i-checks-sm(ng-if='$ctrl.field === "groupId"')
+              input(type='checkbox' ng-model='item.isChecked')
+              i
+              | {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
+            spam(ng-if='$ctrl.field !== "groupId"') {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
+
+.bg-white-only.b-a.b-success.pull-right.wrapper(style='height: auto;width: 150px;z-index: 10;right: 25px;position: fixed;top: 130px;' ng-if='$ctrl.field === "groupId" && $ctrl.selectedGroups.length')
+  .text-lg(ng-bind='$ctrl.selectedGroups.length + " Groups"')
+  .text-xs(ng-bind='"Total Contact : " + $ctrl.contactCounts')
+  .text-lg Preview
+  .text-xc none
