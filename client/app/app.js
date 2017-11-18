@@ -14,7 +14,6 @@ import { routeConfig } from './app.config';
 
 import AppComponent from './app.component';
 import constants from './app.constant';
-import events from './app.event';
 import setupGAnalytics from './app.ga.js';
 
 import Auth from '../components/auth';
@@ -56,6 +55,7 @@ import Contact from './contact';
 import LoginIdentifier from './loginIdentifier';
 import PriorityNumber from './priorityNumber';
 import SenderIds from './senderId';
+import Provider from './provider';
 
 import 'angular-oauth2';
 
@@ -73,10 +73,10 @@ angular
     Message, MessageFly, Campaign, Contact, PriorityNumber,
     Manage, // - admin
     Admin, // - reseller
+    Provider, //Provider send SMS
   ])
   .component('msgqueApp', AppComponent)
   .config(routeConfig)
-  .run(events)
   .directive('watchChange', () => {
     return {
       scope: {

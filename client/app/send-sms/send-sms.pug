@@ -9,7 +9,7 @@ include msg-popover.pug
       ) {{route.name}} ({{route.balance}})
 
   .col-xs-12
-    .col-xs-6.b-r
+    .col-xs-3.b-r
       .m-b-lg: a.text-u-l.pull-right Load Previous Message
       .clearfix
       form.validate-form(name='sendSmsForm' ng-submit='$ctrl.sendSms()')
@@ -22,6 +22,7 @@ include msg-popover.pug
         .form-group(ng-if='$ctrl.routeIndex === 1')
           .input-group
             input#senderId.form-control(
+              name='senderId'
               type='text'
               maxlength='6'
               ng-model='$ctrl.data.senderId'
@@ -43,6 +44,7 @@ include msg-popover.pug
               b(ng-bind='sg')
               span(ng-if='(!$last)') ,&nbsp;
           textarea.form-control(
+            name='numbers'
             rows='5'
             ng-model='$ctrl.numbers'
             placeholder='Enter mobile numbers here 1234567890, 0123456789, 9012345678 8901234567 7890123456'
@@ -56,12 +58,14 @@ include msg-popover.pug
                 ng-options='item.val as item.name for item in $ctrl.langs'
                 ng-change='$ctrl.translation($ctrl.data.unicode)'
                 ng-model='$ctrl.data.unicode'
+                name='unicode'
               )
             span#translControl(style="float:right; margin-right:2px; margin-top:2px;opacity: {{$ctrl.data.unicode}}" ng-show='$ctrl.data.unicode')
             span.m-r-xs.padder-xs.pull-right(
               ng-bind='($ctrl.data.text.length || 0) + ($ctrl.isSignature ? $ctrl.signature.length : 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.text.length || 0)/160)'
             )
           textarea#transliterateTextarea.form-control(
+            name='text'
             rows='5'
             ng-hide='!$ctrl.data.unicode'
             ng-model='$ctrl.data.text'
@@ -70,6 +74,7 @@ include msg-popover.pug
             required
           )
           textarea.form-control(
+            name='unicode'
             ng-hide='$ctrl.data.unicode'
             rows='5'
             ng-model='$ctrl.data.text'
@@ -80,6 +85,7 @@ include msg-popover.pug
         .form-group
           input.form-control(
             type='text'
+            name='campaign'
             ng-model='$ctrl.data.campaign'
             placeholder='Campaign Name'
             ng-focus='$ctrl.loadCampaigns()'
@@ -96,7 +102,7 @@ include msg-popover.pug
             popover-class='{{$ctrl.user.admin_flag ? "w-lg" : "w"}}'
           )
             i.fa.fa-cog
-    .col-xs-6
+    .col-xs-9
       .col-xs-12
         div.hbox.m-b-sm(ng-if='$ctrl.field === "text"')
           label.col.v-middle.i-checks.i-checks-sm(style='width: 112px;')
@@ -117,8 +123,8 @@ include msg-popover.pug
             label.i-checks.i-checks-sm(ng-if='$ctrl.field === "groupId"')
               input(type='checkbox' ng-model='item.isChecked')
               i
-              | {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
-            spam(ng-if='$ctrl.field !== "groupId"') {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
+              .inline(ng-bind="item.name + ' ' + (item.count >= 0 ? '('+item.count+')' : '')")
+            span(ng-if='$ctrl.field !== "groupId"' ng-bind="item.name + (item.count >= 0 ? '('+item.count+')' : '')")
 
 .bg-white-only.b-a.b-success.pull-right.wrapper(style='height: auto;width: 150px;z-index: 10;right: 25px;position: fixed;top: 130px;' ng-if='$ctrl.field === "groupId" && $ctrl.selectedGroups.length')
   .text-lg(ng-bind='$ctrl.selectedGroups.length + " Groups"')
