@@ -5,14 +5,21 @@ class DefaultService {
     this.$q = $q;
     this.Session = Session;
   }
-  send(config) {
-    const { domain, token, number, route, type, sms, sender } = config;
-    return this
-      .$http
-      .get(`http://${domain}/httpapi/httpapi` , {
-        params: { token, number, route, type, sms: encodeURIComponent(sms), sender },
-      })
-      .then(res => res.data);
+
+  createDefaultStorate() {
+    if (!this.Session.read(this.getServiceName())) {
+      this.Session.create(this.getServiceName(), {
+        lists: {
+          senderId: [],
+          text: [],
+          campaign: [],
+        }
+      });
+    }
+  }
+
+  getServiceName() {
+    return 'default';
   }
 
   loadCredits(token, domain) {
@@ -38,7 +45,7 @@ class DefaultService {
   }
 
   loadConfig(field) {
-    this.config = this.Session.read('default');
+    this.config = this.Session.read(this.getServiceName());
     return {
       field: field,
       list: this.config.lists[field] || [],

@@ -14,7 +14,6 @@ class SendSmsController {
   }
 
   $onInit() {
-    this.DEFAULT = 'default';
     this.langs = [{ name: 'English', val: 0 }, { name: 'Unicode', val: 1 }];
     this.numbers = this.$stateParams.contacts || '9844717202';
     this.selectedGroups = '';
@@ -27,6 +26,7 @@ class SendSmsController {
       text: 'HEllo' + new Date(),
       campaign: 'MyCampaign' + new Date(),
       unicode: 0,
+      routeId: 2,
     }; //body of Api
 
     this.senderIdLength = 0;
@@ -38,8 +38,9 @@ class SendSmsController {
     this.routeIndex = 1;
     this.numberPattern = /[987]{1}\d{9}/;
     this.routes = [];
+    //create default list in local storage
+    this.defaultService.createDefaultStorate();
     this.getRoutes();
-
     this.translation('true');
   }
 
@@ -73,8 +74,7 @@ class SendSmsController {
   }
 
   loadPreviousMsg() {
-    const lastMsg = this.Session.read('default').lastMsg;
-    debugger;
+    const lastMsg = this.Session.read(this.defaultService.getServiceName()).lastMsg;
     Object.assign(this.data, lastMsg);
   }
 
@@ -98,7 +98,7 @@ class SendSmsController {
   }
 
   sendSms() {
-    const config = this.Session.read(this.DEFAULT) || {};
+    const config = this.Session.read(this.defaultService.getServiceName()) || {};
     const { senderId, text, campaign, routeId } = this.data;
     Object.assign(config, {
       sender: this.data.senderId,
@@ -110,24 +110,39 @@ class SendSmsController {
       token: this.user.token,
     });
     config.lastMsg = { senderId, text, campaign, signature: this.signature };
-    this.Session.create(this.DEFAULT, config);
-    this
-      .defaultService
-      .send(config)
-      .then(() => {
-        this.toast.show('success', '', `Message send successfully to ${config.number}`);
-        [ 'senderId', 'campaign', 'text' ].forEach(x => {
-          let current = config.lists[x] || [];
-          const found = !current.some(y => (y.name === this.data[x]));
-          const skip = found && ['senderId', 'campaign'].includes(x);
-          if (!skip) {
-            current.push({ name: this.data[x] });
-            config.lists[x] = current;
-            this.Session.create(this.DEFAULT, config);
-          }
-        });
+    this.Session.create(this.defaultService.getServiceName(), config);
+    this.saveMessageDetails(config);
+    const { domain, token, number, route, type, sms, sender } = config;
+    return this
+      .$http
+      .get(`http://${domain}/httpapi/httpapi` , {
+        params: { token, number, route, type, sender, sms: encodeURIComponent(sms) },
       })
-      .catch(err => this.toast.show('', '', `Could not send message to ${config.number}`));
+      .then(() => {
+        this.toast.show('success', `Message send successfully to ${config.number}`);
+        this.saveMessageDetails(config);
+      })
+      .catch(err => {
+        const isCode = isNaN(Number(err));
+        if (!isCode) {
+          this.saveMessageDetails(config);
+          return this.toast.show('success', `SMS sent successfully`);
+        }
+        return this.toast.show('error',  `Could not send message`)
+      });
+  }
+
+  saveMessageDetails() {
+    [ 'senderId', 'campaign', 'text' ].forEach(x => {
+      const config = this.Session.read(this.defaultService.getServiceName());
+      let current = config.lists[x] || [];
+      const found = current.some(y => (y.name === this.data[x]));
+      if (!found) {
+        current.push({ name: this.data[x] });
+        config.lists[x] = current;
+        this.Session.create(this.defaultService.getServiceName(), config);
+      }
+    });
   }
 
   loadSenderIds() {

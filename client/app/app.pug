@@ -16,7 +16,7 @@
       // brand
       a.navbar-brand.text-lt(ui-sref='home')
         i.fa.fa-envelope-o
-        span.text-md.m-l-xs MSGQUE
+        span.text-md.m-l-xs(ng-if='!$ctrl.app.settings.asideFolded') MSGQUE
         span.m-l-xs(ng-if='!$ctrl.app.settings.asideFolded')
         span.hidden-folded.m-l-xs
           //&nbsp;{{$ctrl.company.name}}
