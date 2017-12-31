@@ -5,7 +5,7 @@ module.exports = {
       name: 'X Client',
       clientId: 'xclientid',
       clientSecret: 'xclientsecret',
-      redirectUri: 'http://localhost:3000',
+      redirectUri: 'http://msgq.test',
       userId: 1,
     }], {});
   },

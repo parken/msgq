@@ -16,6 +16,7 @@
       // brand
       a.navbar-brand.text-lt(ui-sref='home')
         i.fa.fa-envelope-o
+        span.text-md.m-l-xs MSGQUE
         span.m-l-xs(ng-if='!$ctrl.app.settings.asideFolded')
         span.hidden-folded.m-l-xs
           //&nbsp;{{$ctrl.company.name}}
@@ -48,11 +49,11 @@
           uib-dropdown=''
           ng-click='$ctrl.$state.go("login")'
           ng-class="{ open: $ctrl.app.settings.mobileHeader }"
-          ng-if="!$ctrl.OAuth.isAuthenticated()"
+          ng-if="!$ctrl.user"
         )
           a.dropdown-toggle.clear.text-center(href='', uib-dropdown-toggle='')
             span.hidden-sm Login/Signup
-        li.dropdown(uib-dropdown='' ng-class="{ open: $ctrl.app.settings.mobileHeader }" ng-if="$ctrl.OAuth.isAuthenticated()")
+        li.dropdown(uib-dropdown='' ng-class="{ open: $ctrl.app.settings.mobileHeader }" ng-if="$ctrl.user")
           a.dropdown-toggle.clear.text-center(href='', uib-dropdown-toggle='')
             span.hidden-sm {{$ctrl.user.name}}
             span.pull-right

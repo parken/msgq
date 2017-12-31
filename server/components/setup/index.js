@@ -83,7 +83,7 @@ function setup() {
       MYSQL_PASS,
       MYSQL_HOST,
       MYSQL_TZ,
-      PORT = 3000,
+      PORT = 4500,
       SERVER_IDENTIFIER = 'msgque',
       SERVER_NAME = 'MSGQUE',
       SERVER_USER = 'root',

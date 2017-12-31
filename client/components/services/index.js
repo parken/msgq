@@ -3,7 +3,7 @@ import toaster from 'angularjs-toaster';
 import toastService from './toast.service'
 import utilService from './util.service'
 import liveAirService from './providers/liveair.service';
-import plivoService from './providers/plivo.service';
+import defaultService from './providers/default.service';
 
 
 export default angular
@@ -11,4 +11,5 @@ export default angular
   .service('toast', toastService)
   .service('util', utilService)
   .service('liveair', liveAirService)
+  .service('defaultService', defaultService)
   .name;

@@ -1,29 +1,57 @@
 class DefaultService {
   /*  @ngInject  */
-  constructor($http) {
+  constructor($http, $q, Session) {
     this.$http = $http;
+    this.$q = $q;
+    this.Session = Session;
   }
   send(config) {
-    alert('send method missing')
-  }
-  loadSenderIds() {
-    const senderIds = localStorage.get('senderIds');
-    return senderIds ? JSON.parse(senderIds) : [];
-  }
-
-  loadTemplates() {
-    const templates = localStorage.get('templates');
-    return templates ? JSON.parse(templates) : [];
+    const { domain, token, number, route, type, sms, sender } = config;
+    return this
+      .$http
+      .get(`http://${domain}/httpapi/httpapi` , {
+        params: { token, number, route, type, sms: encodeURIComponent(sms), sender },
+      })
+      .then(res => res.data);
   }
 
-  loadCampaigns() {
-    const campaigns = localStorage.get('campaigns');
-    return campaigns ? JSON.parse(campaigns) : [];
+  loadCredits(token, domain) {
+    const map = {
+      Promotional: 1,
+      Transactional: 2,
+      'Sender ID': 3,
+      'Trans  OTP': 4,
+    };
+
+    // load initial routes on top
+    const promiseArr = Object.keys(map).map(x => (this
+      .$http
+      .get(`http://${domain}/httpapi/credits`, {
+        params: { token, route: map[x] },
+      })));
+
+
+    return this
+      .$q
+      .all(promiseArr)
+      .then(data => data.map(x => ({ id: map[x.data[1]], name: x.data[1], balance: x.data[3]})));
+  }
+
+  loadConfig(field) {
+    this.config = this.Session.read('default');
+    return {
+      field: field,
+      list: this.config.lists[field] || [],
+    };
   }
 
   loadGroups() {
-    const groups = localStorage.get('groups');
-    return groups ? JSON.parse(groups) : [];
+    //load initial Groups
+    this.field = 'groupId';
+    this
+      .$http
+      .get('/groups')
+      .then(({ data: groups }) => (this.list = groups.items || groups));
   }
 }
 

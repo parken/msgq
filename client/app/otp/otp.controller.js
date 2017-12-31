@@ -4,7 +4,7 @@ class OTPController {
   /* @ngInject */
   constructor(
     $http, Enum, $timeout, OAuth, $state, OAuthToken, Session,
-    $stateParams
+    $stateParams, $rootScope
   ) {
     this.$http = $http;
     this.$timeout = $timeout;
@@ -15,6 +15,7 @@ class OTPController {
     this.Enum = Enum;
     this.Number = Number;
     this.$stateParams = $stateParams;
+    this.$rootScope = $rootScope;
   }
 
   $onInit() {
@@ -25,7 +26,6 @@ class OTPController {
       otp: false, // oto|login|signup
     };
     this.otpButton = true;
-
     this.data = {};
   }
 
@@ -87,6 +87,23 @@ class OTPController {
   otpLogin(data) {
     return this.otpVerify({ mobile: `${this.countryCode}${data.mobile}`, otp: data.password })
       .then(() => this.loginNow(data));
+  }
+
+  directLogin(creds) {
+    this
+      .$http
+      .post('http://parken.msgque.com/login/', creds)
+      .then(({ data }) => {
+        if (!data) return alert('An Error Occured please try again');
+        const { token } = data;
+        let imagePrefix = 'uploads/logo/';
+        const domain = 'sms.parkentechnology.com';
+        const username = '';
+        const logo = '';
+        this.Session.create('userinfo', { username, token, domain, logo, imagePrefix });
+        this.$rootScope.$broadcast('sessionUpdated', { username, token, domain, logo, imagePrefix });
+        this.$state.go('sendSms');
+      });
   }
 
   otpVerify(data) {

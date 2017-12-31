@@ -1,20 +1,20 @@
 class SendSmsController {
   /* @ngInject */
-  constructor($http, $state, $stateParams,Session, $scope, $timeout, TransliterationControl, ScheduleSms, liveair, toast) {
+  constructor($http, $state, $stateParams,Session, $timeout, TransliterationControl, ScheduleSms, defaultService, toast) {
     this.$http = $http;
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.Session = Session;
     this.Math = Math;
-    this.$scope = $scope;
     this.$timeout = $timeout;
     this.TransliterationControl = TransliterationControl;
     this.ScheduleSms = ScheduleSms;
-    this.liveair = liveair;
+    this.defaultService = defaultService;
     this.toast = toast;
   }
 
   $onInit() {
+    this.DEFAULT = 'default';
     this.langs = [{ name: 'English', val: 0 }, { name: 'Unicode', val: 1 }];
     this.numbers = this.$stateParams.contacts || '9844717202';
     this.selectedGroups = '';
@@ -44,9 +44,9 @@ class SendSmsController {
   }
 
   getRoutes() {
-    const { token, domain } = this.Session.read('liveair');
+    const { token, domain } = this.Session.read('userinfo');
     this
-      .liveair
+      .defaultService
       .loadCredits(token, domain)
       .then(routes => {
         this.routes = routes;
@@ -72,6 +72,12 @@ class SendSmsController {
     }
   }
 
+  loadPreviousMsg() {
+    const lastMsg = this.Session.read('default').lastMsg;
+    debugger;
+    Object.assign(this.data, lastMsg);
+  }
+
   validateNumbers() {
     if (!this.numbers) return;
     const numbers = this.numbers.replace(/\n/g, ',').split(',');
@@ -92,45 +98,48 @@ class SendSmsController {
   }
 
   sendSms() {
-    const config = this.Session.read('liveair');
-    const { text, routeId } = this.data;
+    const config = this.Session.read(this.DEFAULT) || {};
+    const { senderId, text, campaign, routeId } = this.data;
     Object.assign(config, {
       sender: this.data.senderId,
       type: 1,
       sms: text,
       number: this.numbers,
-      route: routeId,
+      route: routeId || 2,
+      domain: this.user.domain,
+      token: this.user.token,
     });
-
+    config.lastMsg = { senderId, text, campaign, signature: this.signature };
+    this.Session.create(this.DEFAULT, config);
     this
-      .liveair
+      .defaultService
       .send(config)
-      .then(data => {
+      .then(() => {
+        this.toast.show('success', '', `Message send successfully to ${config.number}`);
         [ 'senderId', 'campaign', 'text' ].forEach(x => {
           let current = config.lists[x] || [];
           const found = !current.some(y => (y.name === this.data[x]));
-          const allowed = found && ['senderId', 'campaign'].includes(x);
-          if (!allowed) {
+          const skip = found && ['senderId', 'campaign'].includes(x);
+          if (!skip) {
             current.push({ name: this.data[x] });
             config.lists[x] = current;
-            this.Session.create('liveair', config);
+            this.Session.create(this.DEFAULT, config);
           }
         });
-        this.toast.show('success', '', `Message send successfully to ${config.number}`);
       })
       .catch(err => this.toast.show('', '', `Could not send message to ${config.number}`));
   }
 
   loadSenderIds() {
-    Object.assign(this, this.liveair.loadConfig('senderId'));
+    Object.assign(this, this.defaultService.loadConfig('senderId'));
   }
 
   loadTemplates() {
-    Object.assign(this, this.liveair.loadConfig('text'));
+    Object.assign(this, this.defaultService.loadConfig('text'));
   }
 
   loadCampaigns() {
-    Object.assign(this, this.liveair.loadConfig('campaign'));
+    Object.assign(this, this.defaultService.loadConfig('campaign'));
   }
 
   saveAsDraft() {

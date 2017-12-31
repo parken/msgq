@@ -10,7 +10,7 @@ include msg-popover.pug
 
   .col-xs-12
     .col-xs-3.b-r
-      .m-b-lg: a.text-u-l.pull-right Load Previous Message
+      .m-b-lg: a.text-u-l.pull-right(ng-click='$ctrl.loadPreviousMsg()') Load Previous Message
       .clearfix
       form.validate-form(name='sendSmsForm' ng-submit='$ctrl.sendSms()')
         .form-group(ng-if='$ctrl.routeIndex === 2')

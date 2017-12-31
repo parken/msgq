@@ -7,7 +7,6 @@ class LiveAirService {
   }
   send(config) {
     const { domain, token, number, route, type, sms, sender } = config;
-    // this.localstaorage.sender.push(sender)
     return this
       .$http
       .get(`http://${domain}/httpapi/httpapi` , {
