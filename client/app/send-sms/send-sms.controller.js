@@ -23,10 +23,10 @@ class SendSmsController {
       numbersList: [],
       senderId: 'PARKEN',
       message: '',
-      text: 'HEllo' + new Date(),
-      campaign: 'MyCampaign' + new Date(),
+      text: 'Hello Parken on ' + new Date(),
+      campaign: 'My Campaign on ' + new Date(),
       unicode: 0,
-      routeId: 2,
+      routeId: 1,
     }; //body of Api
 
     this.senderIdLength = 0;
@@ -52,6 +52,9 @@ class SendSmsController {
       .then(routes => {
         this.routes = routes;
         this.data.routeId = this.routes[0].id;
+      })
+      .catch((err) => {
+
       })
   }
 
@@ -105,7 +108,7 @@ class SendSmsController {
       type: 1,
       sms: text,
       number: this.numbers,
-      route: routeId || 2,
+      route: routeId,
       domain: this.user.domain,
       token: this.user.token,
     });
@@ -116,7 +119,7 @@ class SendSmsController {
     return this
       .$http
       .get(`http://${domain}/httpapi/httpapi` , {
-        params: { token, number, route, type, sender, sms: encodeURIComponent(sms) },
+        params: { token, number, route, type, sender, sms },
       })
       .then(() => {
         this.toast.show('success', `Message send successfully to ${config.number}`);

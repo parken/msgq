@@ -113,7 +113,7 @@
           .line.dk.hidden-folded
 
         admin-navigation(ng-if='[1, 2].includes($ctrl.user.roleId) && !$ctrl.$state.is("sendSms")')
-        navigation(ng-if='$ctrl.OAuth.isAuthenticated() && $ctrl.$state.is("sendSms")')
+        navigation(ng-if='$ctrl.user && $ctrl.$state.is("sendSms")')
 
   .app-content
     toaster-container

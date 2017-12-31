@@ -1,15 +1,19 @@
 nav.navi(ui-nav='' )
-  ul.nav(ng-if='!$ctrl.OAuth.isAuthenticated()')
+  ul.nav
     li.hidden-folded.padder-h.m-t.m-b-sm.text-muted.text-xs
       span Quick Links
-    li(ui-sref-active='active' ng-repeat='menu in $ctrl.menus' ui-sref='{{menu.state}}')
+    li(ui-sref-active='active' ng-repeat='menu in $ctrl.menus' ui-sref='{{menu.state}}' ng-if='!$ctrl.user')
       a(ui-sref='login')
         i.fa.fa-sign-in.icon
         span &nbsp;&nbsp;&nbsp;&nbsp;
         span Login / Signup
         i.my-icon
           i
+    li(ui-sref-active='active' ng-repeat='menu in $ctrl.menus' ui-sref='{{menu.state}}' ng-if='$ctrl.user')
+      a(ui-sref='sendSms') Send SMS
   //- list
+  ul.nav(ng-if='$ctrl.user')
+    create-group
   ul.nav(ng-if='$ctrl.OAuth.isAuthenticated()')
     //li(ui-sref-active='active')
       a(ui-sref='water_ag.dashboard')
@@ -22,7 +26,7 @@ nav.navi(ui-nav='' )
           a(ui-sref='app.dashboard')
             span Dashboard
 
-    create-group
+    //create-group
     li.hidden-folded.padder-h.m-t.m-b-sm.text-muted.text-xs
     li(ui-sref-active='active' ng-repeat='menu in $ctrl.menus' ui-sref='{{menu.state}}')
       a(ui-sref='water_ag.branchs.list()')

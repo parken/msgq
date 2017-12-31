@@ -1,10 +1,11 @@
 class ContactNewController {
   /* @ngInject */
-  constructor($http, $state, Session, $uibModalInstance) {
+  constructor($http, $state, Session, $uibModalInstance, defaultService) {
     this.$http = $http;
     this.$state = $state;
     this.Session = Session;
     this.$uibModalInstance = $uibModalInstance;
+    this.defaultService = defaultService;
   }
 
   $onInit() {
@@ -12,31 +13,28 @@ class ContactNewController {
     this.data = {};
     this.selectedGroups = [];
     this.hiddenIds = [];
-    this.$http.get('/groups')
-      .then(({ data }) => (this.groups = data));
+    this.getGroups();
   }
 
-  addToGroup(gid) {
-    const [objArr] = this.groups.filter((g) => (g.id === gid && g));
-    if (!objArr) return;
-    this.hiddenIds.push(gid);
-    this.selectedGroups.push(objArr);
-    this.groups = this.groups.filter((g) => (g.id !== gid && g));
+  getGroups() {
+    const config = this.Session.read(this.defaultService.getServiceName());
+    this.groups = config.groups || [];
+  }
+
+  create(gid) {
+    if (!name) return;
+    const config = this.Session.read(this.defaultService.getServiceName());
+    const id = (config.groups.contacts && config.contacts.length) || 0;
+    Object.assign($ctrl.data, { id });
+    this.groups.contacts.push(this.data);
+    config.groups = this.groups;
+    this.Session.create(this.defaultService.getServiceName(), config);
   }
 
   removeGroup(index) {
     const obj = this.selectedGroups[index];
     this.selectedGroups.splice(index, 1);
     this.groups.push(obj);
-  }
-
-  create() {
-    this
-      .$http
-      .post(`/`, this.data)
-      .then((data) => {
-
-      });
   }
 }
 

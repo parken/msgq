@@ -1,11 +1,11 @@
 include msg-popover.pug
 .row
   .col-xs-12
-    .wrapper-xs
-      a.btn.w.padder.b-a.bg-white-only.text-info(
+    div(style='padding-left: 15px;')
+      a.btn.w.b-a.bg-white-only.padder(
         ng-repeat='route in $ctrl.routes track by $index'
         ng-click='$ctrl.setRoute(route.id);$ctrl.data.routeId = route.id;'
-        ng-class='{"active_link font-bold": ($ctrl.data.routeId - 1) === $index}'
+        ng-class='{"text-dark": ($ctrl.data.routeId - 1) === $index, "non-active-link": ($ctrl.data.routeId - 1) !== $index }'
       ) {{route.name}} ({{route.balance}})
 
   .col-xs-12
@@ -128,6 +128,8 @@ include msg-popover.pug
             a.text-xsforn-bold.text-primary(target='_blank' href="https://www.ablebits.com/office-addins-blog/2014/04/24/convert-excel-csv/") (Convert Excel to Csv)
           input.form-control(type='file' ng-model='$ctrl.data.csv' base-sixty-four-input accept=".csv")
         hr(ng-if='["text", "groupId"].includes($ctrl.field)' style='border-color: #ccc')
+        .m-t-xs.m-b-xs(ng-if='$ctrl.isFocused')
+          h4.text-muted Templates
         ul.list-group
           li.pointer.list-group-item(ng-repeat='item in $ctrl.list' ng-click='$ctrl.bindData(item, $ctrl.field)')
             label.i-checks.i-checks-sm(ng-if='$ctrl.field === "groupId"')
