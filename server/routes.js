@@ -41,30 +41,7 @@ import auth from './components/auth';
 
 export default function (app) {
   // Insert routes below
-  app.use('/api/auth', auth);
-  app.use('/api/users', user);
-  app.use('/api/roles', role);
-  app.use('/api/messages', message);
-  app.use('/api/sms', sms);
-  app.use('/api/senderId', senderId);
-  app.use('/api/senderIds', senderId);
-  app.use('/api/company', company);
-  app.use('/api/contacts', contact);
-  app.use('/api/routes', route);
-  app.use('/api/groups', group, groupContact);
-  app.use('/api/templates', template);
-  app.use('/api/campaigns', campaign);
-  app.use('/api/upstreams', oauth, only([ADMIN, RESELLER]), upstream, upstreamPlan);
-  app.use('/api/messageFly', messageFly);
-  app.use('/api/messageFlies', messageFly, messageFlyMessage);
-  app.use('/api/transactions', oauth, only([ADMIN, RESELLER]), transaction);
-  app.use('/api/loginIdentifiers', loginIdentifier);
-  app.use('/api/priorityNumbers', oauth, only([ADMIN, RESELLER]), priorityNumber);
 
-  app.use('/api/sending', oauth, only([ADMIN, RESELLER]), sending);
-  app.use('/api/credits', oauth, only([ADMIN, RESELLER]), credit);
-  app.use('/api/sessions', oauth, only([ADMIN, RESELLER]), session);
-  app.use('/api/domains', domain);
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')

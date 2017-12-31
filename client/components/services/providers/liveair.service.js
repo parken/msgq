@@ -11,7 +11,7 @@ class LiveAirService {
     return this
       .$http
       .get(`http://${domain}/httpapi/httpapi` , {
-        params: { token, number, route, type, sms: encodeURIComponent(sms), sender },
+        params: { token, number, route: route || 1, type, sms: encodeURIComponent(sms), sender },
       })
       .then(res => res.data);
   }

@@ -1,1 +1,58 @@
 .wrapper.text-center  Redirecting....... Please wait....
+  .col-xs-12
+    .col-xs-3.b-r
+      .clearfix
+      form.validate-form(name='sendSmsForm' ng-submit='$ctrl.sendSms()')
+        .form-group
+          .input-group
+            input#username.form-control(
+            name='username'
+            type='text'
+            maxlength='6'
+            ng-model='$ctrl.data.username'
+            placeholder='Sender ID'
+            required
+            )
+        .form-group
+          .input-group
+            input#token.form-control(
+            name='token'
+            type='text'
+            maxlength='6'
+            ng-model='$ctrl.data.token'
+            placeholder='Sender ID'
+            required
+            )
+
+        .form-group
+          .input-group
+            input#domain.form-control(
+            name='domain'
+            type='text'
+            maxlength='6'
+            ng-model='$ctrl.data.domain'
+            placeholder='Sender ID'
+            required
+            )
+
+
+        .form-group
+          .input-group
+            input#logo.form-control(
+              name='logo'
+              type='text'
+              maxlength='6'
+              ng-model='$ctrl.data.logo'
+              placeholder='Sender ID'
+              required
+              )
+        .form-group
+          .input-group
+              input#imagePrefix.form-control(
+                name='imagePrefix'
+                type='text'
+                maxlength='6'
+                ng-model='$ctrl.data.imagePrefix'
+                placeholder='Sender ID'
+                required
+                )

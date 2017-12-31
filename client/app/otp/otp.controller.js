@@ -4,9 +4,10 @@ class OTPController {
   /* @ngInject */
   constructor(
     $http, Enum, $timeout, OAuth, $state, OAuthToken, Session,
-    $stateParams
+    $stateParams, $sce
   ) {
     this.$http = $http;
+    this.$sce = $sce;
     this.$timeout = $timeout;
     this.$state = $state;
     this.OAuth = OAuth;
@@ -18,6 +19,10 @@ class OTPController {
   }
 
   $onInit() {
+    if(localStorage.token) {
+      console.log('moved to sendsms')
+      return this.$state.go('sendSms')
+    }
     this.countryCode = 91;
     this.delay = 15;
     this.login = 1;
@@ -26,29 +31,37 @@ class OTPController {
     };
     this.otpButton = true;
 
-    this.data = {};
+    this.data = {
+      mobile: 'demo1234',
+      password: '123456'
+    };
   }
+  LiveAirLogin(user){
+    return this
+      .$http({
+        method: 'POST',
+        url: 'http://parken.msgque.com/login/',
+        data: {username: user.mobile, password:   user.password}
+      })
 
+  }
   loginNow(user) {
     if (this.ui.newUser) return this.signup(user);
     this.error = '';
     const options = {};
-    return this.OAuth
-      .getAccessToken({
-        username: `${Number(user.mobile) ? this.countryCode : ''}${user.mobile}`,
-        password: user.password,
-      }, options)
-      .then(({ data: oAuthToken }) => {
-        this.OAuthToken.setToken(oAuthToken);
-        return this.Session
-          .update()
-          .then((user) => { console.log(user)
-            if (user && user.roleId === 1) return this.$state.go('manage.dashboard');
-            if (user && user.roleId === 2) return this.$state.go('admin.dashboard');
-            if (user && user.roleId === 3) return this.$state.go('sendSms');
-            return this.$state.go('home.dash');
-            // if (this.$stateParams.next) this.$state.go(this.$stateParams.next, this.$stateParams.nextParams);
-          });
+    return this.LiveAirLogin(user)
+      .then(({ data }) => {
+        const name = "liveair";
+        this.Session.create(name, {
+          username: 'demo',
+          token: data.token,
+          domain: 'liveair.msgque.com',
+          logo: 'http://sms.parkentechnology.com/uploads/logo/1444035526_66.png',
+          imagePrefix: 'uploads/logo/',
+          lists: {} });
+
+         return this.$state.go('sendSms');
+
       })
       .catch(err => {
         this.error = err.data && err.data.error_description || err

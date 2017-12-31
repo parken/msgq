@@ -44,7 +44,10 @@ class SendSmsController {
   }
 
   getRoutes() {
-    const { token, domain } = this.Session.read('liveair');
+    const provider = this.Session.read('liveair');
+    if(!provider || !provider.token) return this.$state.go('login');
+    const { token, domain } = provider;
+
     this
       .liveair
       .loadCredits(token, domain)

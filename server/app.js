@@ -33,13 +33,8 @@ function startServer() {
   });
 }
 
-SmsManager
-  .addPendingMessagesToQueue()
-  .then(() => startServer())
-  .catch((err) => {
-    console.log(err);
-    return startServer();
-  });
+startServer();
+
 
 // Expose app
 exports = module.exports = app;

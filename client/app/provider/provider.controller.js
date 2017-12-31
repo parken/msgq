@@ -10,6 +10,7 @@ class ProviderController {
 
   $onInit() {
     const { name, username, token, domain, logo } = this.$stateParams;
+    if(!token) return
     let imagePrefix = '';
     if(name === 'liveair') imagePrefix = 'uploads/logo/';
     this.Session.create(name, { username, token, domain, logo, imagePrefix, lists: {} });

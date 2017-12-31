@@ -1,6 +1,6 @@
 class AppController {
   /* @ngInject */
-  constructor($interval, $rootScope, $state, $http, OAuth, $window, Session, $location, AppAction) {
+  constructor($interval, $rootScope, $state, $http, OAuth, $window, Session, $location) {
     this.$interval = $interval;
     this.$rootScope = $rootScope;
     this.$state = $state;
@@ -9,17 +9,16 @@ class AppController {
     this.$window = $window;
     this.$location = $location;
     this.Session = Session;
-    this.AppAction = AppAction;
     this.user = this.Session.read('userinfo');
     this.company = this.Session.read('company');
-
-    // load initial routes on top
-    this
-      .$http
-      .get('/routes')
-      .then(({ data: routes }) => {
-        this.routes = routes.length ? routes : [{ id: 1, name: 'Promotional', balance: 50 }];
-      });
+    //
+    // // load initial routes on top
+    // this
+    //   .$http
+    //   .get('/routes')
+    //   .then(({ data: routes }) => {
+    //     this.routes = routes.length ? routes : [{ id: 1, name: 'Promotional', balance: 50 }];
+    //   });
 
     this.app = {
       name: 'MSGQue',
@@ -61,14 +60,6 @@ class AppController {
           this.company = company;
           this.Session.create('company', company);
         });
-    }
-
-    if (this.$location.search().uid) {
-      this.AppAction
-        .loginUUID(this.$location.search().uid)
-        .then(() => this.$state.go(
-          this.$state.current.name,
-          Object.assign(this.$state.params, { uid: undefined })));
     }
   }
 

@@ -23,7 +23,6 @@ import Footer from '../components/footer';
 import UpdateTitle from '../components/update-title';
 import FileReader from '../components/file-reader';
 import Navigation from '../components/navigation';
-import AdminNavigation from '../components/admin-navigation';
 import CreateGroup from '../components/create-group';
 import Export from '../components/export';
 import Report from '../components/report';
@@ -31,30 +30,10 @@ import service from '../components/services';
 import Notepad from '../components/notepad';
 import ScheduleSmsService from '../components/schedule-sms';
 
-import Manage from './manage';
-import Admin from './admin';
-import Home from './home';
-import User from './user';
+import SendSms from './send-sms';
+import FourOFour from './four-o-four';
 
 import OTPModule from './otp';
-import SendSms from './send-sms';
-import DeliveryReport from './delivery-report';
-import SenderId from './sender-id';
-import FourOFour from './four-o-four';
-import ContactList from './contact-list';
-import Upstream from './upstream';
-import Groups from './group';
-import Transaction from './transaction';
-import Template from './template';
-import Sessions from './session';
-import Role from './role';
-import Message from './message';
-import MessageFly from './message-fly';
-import Campaign from './campaign';
-import Contact from './contact';
-import LoginIdentifier from './loginIdentifier';
-import PriorityNumber from './priorityNumber';
-import SenderIds from './senderId';
 import Provider from './provider';
 
 import 'angular-oauth2';
@@ -65,14 +44,9 @@ angular
     ngCookies, ngAnimate, ngSanitize, uiRouter, 'angular-oauth2', uiBootstrap, toaster, base64File,
     // - framework
     AsideMenu, Navbar, Footer, constants, Auth, UpdateTitle, FileReader,
-    Home, FourOFour, OTPModule, Navigation, service, Export, Notepad, ScheduleSmsService,
+    FourOFour, OTPModule, Navigation,service, Export, Notepad, ScheduleSmsService,
     // - project specific
-    SenderId, DeliveryReport, Report, SendSms, User,
-    AdminNavigation, CreateGroup, ContactList, Upstream, SenderIds,
-    Groups, Transaction, Template, Sessions, Role, LoginIdentifier,
-    Message, MessageFly, Campaign, Contact, PriorityNumber,
-    Manage, // - admin
-    Admin, // - reseller
+    Report, SendSms, CreateGroup,
     Provider, //Provider send SMS
   ])
   .component('msgqueApp', AppComponent)

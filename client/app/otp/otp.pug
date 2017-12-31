@@ -32,7 +32,7 @@
           .wrapper-lg(ng-if='!$ctrl.ui.otp')
             .h4.text-info
               span.no-padder-left.m-t-md.m-r.pointer(ng-class="$ctrl.login ? 'b-b padder-v padder-lg' : ''" ng-click="$ctrl.login = true") Login
-              span.m-t-md.pointer(ng-class="!$ctrl.login ? 'b-b padder-v padder-lg' : ''" ng-click="$ctrl.login= false") Signup
+              //span.m-t-md.pointer(ng-class="!$ctrl.login ? 'b-b padder-v padder-lg' : ''" ng-click="$ctrl.login= false") Signup
 
             div.m-t-lg.m-b.sm.text-danger &nbsp;{{$ctrl.error}}
 
