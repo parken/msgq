@@ -19,6 +19,7 @@ $fa-font-path: "/assets/fonts/font-awesome";
 
 // Component styles are injected through grunt
 /* inject:scss */
+@import 'send-sms/send-sms';
 @import '../components/footer/footer';
 @import '../components/modal/modal';
 @import '../components/navbar/navbar';

@@ -145,6 +145,24 @@ class SendSmsController {
     });
   }
 
+  addSignature() {
+    const config = this.Session.read(this.defaultService.getServiceName());
+    config.isSignature = this.isSignature;
+    this.Session.create(this.defaultService.getServiceName(), config);
+  }
+
+  saveSignature() {
+    const config = this.Session.read(this.defaultService.getServiceName());
+    config.signature = this.signature;
+    this.Session.create(this.defaultService.getServiceName(), config);
+  }
+
+  getSignature() {
+    const config = this.Session.read(this.defaultService.getServiceName());
+    this.signature = config.signature;
+    this.isSignature = config.isSignature;
+  }
+
   loadSenderIds() {
     Object.assign(this, this.defaultService.loadConfig('senderId'));
   }

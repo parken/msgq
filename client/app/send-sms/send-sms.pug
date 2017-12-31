@@ -9,8 +9,8 @@ include msg-popover.pug
       ) {{route.name}} ({{route.balance}})
 
   .col-xs-12
-    .col-xs-3.b-r
-      .m-b-lg: a.text-u-l.pull-right(ng-click='$ctrl.loadPreviousMsg()') Load Previous Message
+    .col-lg-4.col-xs-12.col-md-4.col-sm-12.b-r
+      .m-b-lg: a.text-u-l.pull-right(ng-click='$ctrl.loadPreviousMsg()' style='color: #999;') Load Previous Message
       .clearfix
       form.validate-form(name='sendSmsForm' ng-submit='$ctrl.sendSms()')
         .form-group(ng-if='$ctrl.routeIndex === 2')
@@ -50,15 +50,20 @@ include msg-popover.pug
             placeholder='Enter mobile numbers here 1234567890, 0123456789, 9012345678 8901234567 7890123456'
             ng-blur='$ctrl.validateNumbers()'
             ng-focus='$ctrl.loadGroups()'
+            style='resize: none;'
           )
         .form-group
-          div
-            .col-md-3.col-sm-4.no-padder
+          .col-xs-12.no-padder.bg-white-only(
+            style='border-left: 1px solid #cfdadd;border-right: 1px solid #cfdadd;border-top: 1px solid #cfdadd;'
+            ng-class='{"msg-focus": $ctrl.isFocused }'
+          )
+            .col-sm-4.no-padder
               select.form-control(
                 ng-options='item.val as item.name for item in $ctrl.langs'
                 ng-change='$ctrl.translation($ctrl.data.unicode)'
                 ng-model='$ctrl.data.unicode'
                 name='unicode'
+                style='border: none;padding-left: 8px;'
               )
             span#translControl(style="float:right; margin-right:2px; margin-top:2px;opacity: {{$ctrl.data.unicode}}" ng-show='$ctrl.data.unicode')
             span.m-r-xs.padder-xs.pull-right(
@@ -70,8 +75,10 @@ include msg-popover.pug
             ng-hide='!$ctrl.data.unicode'
             ng-model='$ctrl.data.text'
             placeholder='You are delivering crucial information. Keep it to-the-point.'
-            ng-focus='$ctrl.loadTemplates()'
+            ng-focus='$ctrl.loadTemplates();$ctrl.isFocused = true;$ctrl.getSignature()'
+            ng-blur='$ctrl.isFocused = false;'
             required
+            style='border-top: none;resize:none;overflow: auto;'
           )
           textarea.form-control(
             name='unicode'
@@ -79,8 +86,10 @@ include msg-popover.pug
             rows='5'
             ng-model='$ctrl.data.text'
             placeholder='You are delivering crucial information. Keep it to-the-point.'
-            ng-focus='$ctrl.loadTemplates()'
+            ng-focus='$ctrl.loadTemplates();$ctrl.isFocused = true;$ctrl.getSignature()'
+            ng-blur='$ctrl.isFocused = false;'
             required
+            style='border-top: none;resize:none;overflow: auto;'
           )
         .form-group
           input.form-control(
@@ -91,10 +100,11 @@ include msg-popover.pug
             ng-focus='$ctrl.loadCampaigns()'
           )
         div
-          button.col-xs-4.btn.btn-info(type='submit') Send SMS Now
-          span.col-xs-2.padder-xs.text-center Or
-          a.col-xs-5.padder-xs.text-center(ng-click='$ctrl.ScheduleSms.open()') Schedule SMS
-          a.col-xs-1.pull-right.padder-xs.text-center(
+          button.btn.btn-info.pull-left(type='submit' style='width: 120px;') Send SMS Now
+          span.col-xs-2.padder-xs.text-center.m-l-xs(style='width: 10px;') Or
+          a.col-xs-5.padder-xs.text-center.m-l-xs(ng-click='$ctrl.ScheduleSms.open()' style='width: 100px;') Schedule SMS
+          a.col-xs-1.pull-right.padder-xs.text-center.m-r-sm(
+            style='width: 10px;'
             uib-popover-template='"msg-popover-template.html"'
             popover-trigger='"outsideClick"'
             popover-is-open='$ctrl.isOpen'
@@ -102,14 +112,14 @@ include msg-popover.pug
             popover-class='{{$ctrl.user.admin_flag ? "w-lg" : "w"}}'
           )
             i.fa.fa-cog
-    .col-xs-9
-      .col-xs-12
+    .col-xs-12.col-sm-12.col-md-8.col-lg-8.col.m-t-sm
+      .col-xs-12.no-padder
         div.hbox.m-b-sm(ng-if='$ctrl.field === "text"')
           label.col.v-middle.i-checks.i-checks-sm(style='width: 112px;')
-            input(type='checkbox' ng-model='$ctrl.isSignature')
+            input(type='checkbox' ng-model='$ctrl.isSignature' ng-change='$ctrl.addSignature()')
             i
             | Add Signature
-          input.col.inline.form-control(ng-model='$ctrl.signature')
+          input.col.inline.form-control(ng-model='$ctrl.signature' ng-change='$ctrl.saveSignature()' ng-model-options='{ debounce: 400 }')
         div(ng-if='$ctrl.field === "groupId"')
           label.i-checks.i-checks-sm
             input(type='checkbox' ng-model='$ctrl.file')
