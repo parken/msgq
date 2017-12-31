@@ -15,10 +15,6 @@ import path from 'path';
 
 import config from './environment';
 import * as routes from './../routes';
-import logger from '../components/logger';
-import * as setup from '../components/setup';
-import rssFeed from './../components/feed/express';
-import oauthComponent from './../components/oauth/express';
 
 
 const log = debug('server/config');
@@ -35,7 +31,7 @@ export default function (a) {
   if (env === 'production') {
     app.use(favicon(path.join(config.root, 'client', 'favicon.ico')));
   }
-  setup.init(app);
+
   app.set('appPath', path.join(config.root, 'client'));
   app.use(express.static(app.get('appPath')));
   app.use(cors());
@@ -52,14 +48,13 @@ export default function (a) {
     if (req.headers.origin) req.origin = req.headers.origin.split('://')[1];
     next();
   });
-  rssFeed(app);
-  oauthComponent(app, routes);
+  routes.default(app);
   // errors passed using next(err)
   app.use((e, req, res, next) => {
     const err = e;
     const { body, headers, user } = req;
 
-    logger.error(err.message, err, {
+    console.error(err.message, err, {
       url: req.originalUrl,
       body,
       headers,

@@ -10,9 +10,7 @@ class HomeListController {
   }
 
   $onInit() {
-    this.$http
-      .get('/feed')
-      .then(({ data: rss }) => (this.items = rss.items));
+
   }
 }
 
