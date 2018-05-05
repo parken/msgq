@@ -12,7 +12,7 @@ if (fs.existsSync(envFile)) {
   config = env.parsed || env;
 } else {
   console.log(`.env file not found.
-  Please create manually or visit http://localhost:3000
+  Please create manually or visit http://msgq.test
   Learn more at check installation docs at https://github.com/parken/msgque/blob/${pkg.version}/docs/Installation.md
   Trying to connect with default settings.
   `);

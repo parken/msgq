@@ -13,14 +13,6 @@ class AppController {
     this.user = this.Session.read('userinfo');
     this.company = this.Session.read('company');
 
-    // load initial routes on top
-    this
-      .$http
-      .get('/routes')
-      .then(({ data: routes }) => {
-        this.routes = routes.length ? routes : [{ id: 1, name: 'Promotional', balance: 50 }];
-      });
-
     this.app = {
       name: 'MSGQue',
       version: '1.0.0',
@@ -54,14 +46,6 @@ class AppController {
     this.$rootScope.$on('sessionUpdated', (e, d) => {
       this.user = d;
     });
-
-    if (!this.company) {
-      this.$http.get('/company')
-        .then(({ data: company }) => {
-          this.company = company;
-          this.Session.create('company', company);
-        });
-    }
 
     if (this.$location.search().uid) {
       this.AppAction

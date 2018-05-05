@@ -86,6 +86,11 @@ a.text-info {
   cursor: pointer;
 }
 
-.active_link {
-  text-decoration: underline;
+.non-active-link {
+  background: #eee;
+  color: #888 !important;
+}
+
+a.non-active-link:hover {
+  font-weight: normal !important;
 }

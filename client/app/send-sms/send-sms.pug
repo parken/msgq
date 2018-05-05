@@ -1,16 +1,16 @@
 include msg-popover.pug
 .row
   .col-xs-12
-    .wrapper-xs
-      a.btn.w.padder.b-a.bg-white-only.text-info(
+    div(style='padding-left: 15px;')
+      a.btn.w.b-a.bg-white-only.padder(
         ng-repeat='route in $ctrl.routes track by $index'
         ng-click='$ctrl.setRoute(route.id);$ctrl.data.routeId = route.id;'
-        ng-class='{"active_link font-bold": ($ctrl.data.routeId - 1) === $index}'
+        ng-class='{"text-dark": ($ctrl.data.routeId - 1) === $index, "non-active-link": ($ctrl.data.routeId - 1) !== $index }'
       ) {{route.name}} ({{route.balance}})
 
   .col-xs-12
-    .col-xs-6.b-r
-      .m-b-lg: a.text-u-l.pull-right Load Previous Message
+    .col-lg-4.col-xs-12.col-md-4.col-sm-12.b-r
+      .m-b-lg: a.text-u-l.pull-right(ng-click='$ctrl.loadPreviousMsg()' style='color: #999;') Load Previous Message
       .clearfix
       form.validate-form(name='sendSmsForm' ng-submit='$ctrl.sendSms()')
         .form-group(ng-if='$ctrl.routeIndex === 2')
@@ -22,6 +22,7 @@ include msg-popover.pug
         .form-group(ng-if='$ctrl.routeIndex === 1')
           .input-group
             input#senderId.form-control(
+              name='senderId'
               type='text'
               maxlength='6'
               ng-model='$ctrl.data.senderId'
@@ -43,52 +44,67 @@ include msg-popover.pug
               b(ng-bind='sg')
               span(ng-if='(!$last)') ,&nbsp;
           textarea.form-control(
+            name='numbers'
             rows='5'
             ng-model='$ctrl.numbers'
             placeholder='Enter mobile numbers here 1234567890, 0123456789, 9012345678 8901234567 7890123456'
             ng-blur='$ctrl.validateNumbers()'
             ng-focus='$ctrl.loadGroups()'
+            style='resize: none;'
           )
         .form-group
-          div
-            .col-md-3.col-sm-4.no-padder
+          .col-xs-12.no-padder.bg-white-only(
+            style='border-left: 1px solid #cfdadd;border-right: 1px solid #cfdadd;border-top: 1px solid #cfdadd;'
+            ng-class='{"msg-focus": $ctrl.isFocused }'
+          )
+            .col-sm-4.no-padder
               select.form-control(
                 ng-options='item.val as item.name for item in $ctrl.langs'
                 ng-change='$ctrl.translation($ctrl.data.unicode)'
                 ng-model='$ctrl.data.unicode'
+                name='unicode'
+                style='border: none;padding-left: 8px;'
               )
             span#translControl(style="float:right; margin-right:2px; margin-top:2px;opacity: {{$ctrl.data.unicode}}" ng-show='$ctrl.data.unicode')
             span.m-r-xs.padder-xs.pull-right(
               ng-bind='($ctrl.data.text.length || 0) + ($ctrl.isSignature ? $ctrl.signature.length : 0) + "/"+ $ctrl.Math.ceil(($ctrl.data.text.length || 0)/160)'
             )
           textarea#transliterateTextarea.form-control(
+            name='text'
             rows='5'
             ng-hide='!$ctrl.data.unicode'
             ng-model='$ctrl.data.text'
             placeholder='You are delivering crucial information. Keep it to-the-point.'
-            ng-focus='$ctrl.loadTemplates()'
+            ng-focus='$ctrl.loadTemplates();$ctrl.isFocused = true;$ctrl.getSignature()'
+            ng-blur='$ctrl.isFocused = false;'
             required
+            style='border-top: none;resize:none;overflow: auto;'
           )
           textarea.form-control(
+            name='unicode'
             ng-hide='$ctrl.data.unicode'
             rows='5'
             ng-model='$ctrl.data.text'
             placeholder='You are delivering crucial information. Keep it to-the-point.'
-            ng-focus='$ctrl.loadTemplates()'
+            ng-focus='$ctrl.loadTemplates();$ctrl.isFocused = true;$ctrl.getSignature()'
+            ng-blur='$ctrl.isFocused = false;'
             required
+            style='border-top: none;resize:none;overflow: auto;'
           )
         .form-group
           input.form-control(
             type='text'
+            name='campaign'
             ng-model='$ctrl.data.campaign'
             placeholder='Campaign Name'
             ng-focus='$ctrl.loadCampaigns()'
           )
         div
-          button.col-xs-4.btn.btn-info(type='submit') Send SMS Now
-          span.col-xs-2.padder-xs.text-center Or
-          a.col-xs-5.padder-xs.text-center(ng-click='$ctrl.ScheduleSms.open()') Schedule SMS
-          a.col-xs-1.pull-right.padder-xs.text-center(
+          button.btn.btn-info.pull-left(type='submit' style='width: 120px;') Send SMS Now
+          span.col-xs-2.padder-xs.text-center.m-l-xs(style='width: 10px;') Or
+          a.col-xs-5.padder-xs.text-center.m-l-xs(ng-click='$ctrl.ScheduleSms.open()' style='width: 100px;') Schedule SMS
+          a.col-xs-1.pull-right.padder-xs.text-center.m-r-sm(
+            style='width: 10px;'
             uib-popover-template='"msg-popover-template.html"'
             popover-trigger='"outsideClick"'
             popover-is-open='$ctrl.isOpen'
@@ -96,14 +112,14 @@ include msg-popover.pug
             popover-class='{{$ctrl.user.admin_flag ? "w-lg" : "w"}}'
           )
             i.fa.fa-cog
-    .col-xs-6
-      .col-xs-12
+    .col-xs-12.col-sm-12.col-md-8.col-lg-8.col.m-t-sm
+      .col-xs-12.no-padder
         div.hbox.m-b-sm(ng-if='$ctrl.field === "text"')
           label.col.v-middle.i-checks.i-checks-sm(style='width: 112px;')
-            input(type='checkbox' ng-model='$ctrl.isSignature')
+            input(type='checkbox' ng-model='$ctrl.isSignature' ng-change='$ctrl.addSignature()')
             i
             | Add Signature
-          input.col.inline.form-control(ng-model='$ctrl.signature')
+          input.col.inline.form-control(ng-model='$ctrl.signature' ng-change='$ctrl.saveSignature()' ng-model-options='{ debounce: 400 }')
         div(ng-if='$ctrl.field === "groupId"')
           label.i-checks.i-checks-sm
             input(type='checkbox' ng-model='$ctrl.file')
@@ -112,13 +128,15 @@ include msg-popover.pug
             a.text-xsforn-bold.text-primary(target='_blank' href="https://www.ablebits.com/office-addins-blog/2014/04/24/convert-excel-csv/") (Convert Excel to Csv)
           input.form-control(type='file' ng-model='$ctrl.data.csv' base-sixty-four-input accept=".csv")
         hr(ng-if='["text", "groupId"].includes($ctrl.field)' style='border-color: #ccc')
+        .m-t-xs.m-b-xs(ng-if='$ctrl.isFocused')
+          h4.text-muted Templates
         ul.list-group
           li.pointer.list-group-item(ng-repeat='item in $ctrl.list' ng-click='$ctrl.bindData(item, $ctrl.field)')
             label.i-checks.i-checks-sm(ng-if='$ctrl.field === "groupId"')
               input(type='checkbox' ng-model='item.isChecked')
               i
-              | {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
-            spam(ng-if='$ctrl.field !== "groupId"') {{item.name}} {{item.count >= 0 ? '('+item.count+')' : ''}}
+              .inline(ng-bind="item.name + ' ' + (item.count >= 0 ? '('+item.count+')' : '')")
+            span(ng-if='$ctrl.field !== "groupId"' ng-bind="item.name + (item.count >= 0 ? '('+item.count+')' : '')")
 
 .bg-white-only.b-a.b-success.pull-right.wrapper(style='height: auto;width: 150px;z-index: 10;right: 25px;position: fixed;top: 130px;' ng-if='$ctrl.field === "groupId" && $ctrl.selectedGroups.length')
   .text-lg(ng-bind='$ctrl.selectedGroups.length + " Groups"')

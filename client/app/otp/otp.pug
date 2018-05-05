@@ -12,14 +12,14 @@
             .h4.text-info
               span.no-padder-left.m-t-md.m-r.pointer.b-b.padder-v.padder-lg OTP
             div.m-t-lg.m-b.sm.text-danger &nbsp;{{$ctrl.error}}
-            form.form.form-validation.m-t-lg(ng-submit="$ctrl.otpSend($ctrl.data)" name="otpForm")
+            form.form.form-validation.m-t-lg(ng-submit="$ctrl.directLogin($ctrl.data)" name="otpForm")
               input.form-control.m-b-sm(type='text' name="mobile" placeholder='Enter email or mobile' ng-model='$ctrl.data.mobile' required autofocus="true")
               select.form-control.m-b-sm(ng-options='c.id as c.name for c in $ctrl.Enum.countries' ng-model="$ctrl.countryCode" ng-if="$ctrl.Number($ctrl.data.mobile)")
               a.pull-right.text-info(ng-click="$ctrl.otp = false") Login with Password
               button.btn.btn-lg.btn-info.btn-block.m-t-lg(type='submit' ng-disabled="!$ctrl.otpButton || otpForm.$invalid")
                 .fa.fa-phone.m-r
                 | {{ $ctrl.otpSent ? 'Resend in '+$ctrl.delay+' Seconds' : 'Send OTP' }}
-            form.form-validation.m-t-lg(name="form" ng-submit='$ctrl.otpLogin($ctrl.data)' ng-show="$ctrl.otpSent")
+            form.form-validation.m-t-lg(name="form" ng-submit='$ctrl.directLogin()' ng-show="$ctrl.otpSent")
               input.form-control.m-b-sm(type='password' placeholder='{{$ctrl.otpSent ? "Enter OTP" : "Your password"}}' ng-model='$ctrl.data.password' required)
               input.form-control.m-b-sm(type='text' name='name', placeholder='Name' ng-model="$ctrl.data.name" ng-if='$ctrl.ui.newUser' required)
               button.btn.btn-lg.btn-info.btn-block.m-t-xxl(type='submit' ng-disabled="form.$invalid")
@@ -37,7 +37,7 @@
             div.m-t-lg.m-b.sm.text-danger &nbsp;{{$ctrl.error}}
 
             // - signup
-            form.form-validation(name="form" ng-submit='$ctrl.loginNow($ctrl.data)' ng-show="$ctrl.login")
+            form.form-validation(name="form" ng-submit='$ctrl.directLogin($ctrl.data)' ng-show="$ctrl.login")
 
               input.form-control.m-b-sm(type='text' name="mobile" placeholder='Enter email or mobile' ng-model='$ctrl.data.mobile' required autofocus="true")
               select.form-control.m-b-sm(ng-options='c.id as c.name for c in $ctrl.Enum.countries' ng-model="$ctrl.countryCode" ng-if="$ctrl.Number($ctrl.data.mobile)")
@@ -51,7 +51,7 @@
                 .fa.fa-lock.m-r
                 | Secure Login
               span.m-t By Logging in you agree to our T&C and Privacy Policy.
-            form.form.form-validation.m-t-lg(ng-submit="$ctrl.otpSend($ctrl.data)" name="otpForm" ng-show="!$ctrl.login")
+            form.form.form-validation.m-t-lg(ng-submit="$ctrl.directLogin($ctrl.data)" name="otpForm" ng-show="!$ctrl.login")
               select.form-control.m-b-sm(ng-options='c.id as c.name for c in $ctrl.Enum.countries' ng-model="$ctrl.countryCode")
               div.text-danger(ng-if="otpForm.mobile.$error.unique && otpForm.mobile.$dirty" )
                 | Mobile {{'+'+$ctrl.countryCode+ '-'+$ctrl.data.mobile}} already exist. Please &nbsp;

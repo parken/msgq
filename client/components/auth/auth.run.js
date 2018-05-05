@@ -33,7 +33,7 @@ function authConfig($rootScope, $q, authService, $log, OAuthToken, OAuth, $state
       default:
     }
 
-    return $state.go('login', { params: { error: rejection.data } });
+    // return $state.go('login', { params: { error: rejection.data } });
   });
 }
 

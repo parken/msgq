@@ -1,28 +1,32 @@
 class SendSmsController {
   /* @ngInject */
-  constructor($http, $state, $stateParams,Session, $scope, $timeout, TransliterationControl, ScheduleSms) {
+  constructor($http, $state, $stateParams,Session, $timeout, TransliterationControl, ScheduleSms, defaultService, toast) {
     this.$http = $http;
     this.$state = $state;
     this.$stateParams = $stateParams;
     this.Session = Session;
     this.Math = Math;
-    this.$scope = $scope;
     this.$timeout = $timeout;
     this.TransliterationControl = TransliterationControl;
     this.ScheduleSms = ScheduleSms;
+    this.defaultService = defaultService;
+    this.toast = toast;
   }
 
   $onInit() {
     this.langs = [{ name: 'English', val: 0 }, { name: 'Unicode', val: 1 }];
-    this.numbers = this.$stateParams.contacts || '';
+    this.numbers = this.$stateParams.contacts || '9844717202';
     this.selectedGroups = '';
     this.contactCounts = 0;
     this.user = this.Session.read('userinfo');
     this.data = {
       numbersList: [],
-      senderId: '',
+      senderId: 'PARKEN',
       message: '',
-      unicode: 1,
+      text: 'Hello Parken on ' + new Date(),
+      campaign: 'My Campaign on ' + new Date(),
+      unicode: 0,
+      routeId: 1,
     }; //body of Api
 
     this.senderIdLength = 0;
@@ -34,28 +38,32 @@ class SendSmsController {
     this.routeIndex = 1;
     this.numberPattern = /[987]{1}\d{9}/;
     this.routes = [];
-
-    // load initial routes on top
-    this
-      .$http
-      .get('/routes')
-      .then(({ data: routes }) => {
-        this.routes = routes.length ? routes : [{ id: 1, name: 'Promotional', balance: 50 }];
-        this.data.routeId = this.routes[0].id;
-      });
+    //create default list in local storage
+    this.defaultService.createDefaultStorate();
+    this.getRoutes();
     this.translation('true');
   }
 
-  setRoute(routeId) {
-    this.data.routeId = routeId;
-    if (routeId === 1) return this.loadSenderIds();
-    return (this.senderId = '');
+  getRoutes() {
+    const { token, domain } = this.Session.read('userinfo');
+    this
+      .defaultService
+      .loadCredits(token, domain)
+      .then(routes => {
+        this.routes = routes;
+        this.data.routeId = this.routes[0].id;
+      })
+      .catch((err) => {
+
+      })
+  }
+
+  setRoute(id) {
+    this.data.routeId = id;
   }
 
   translation(unicode) {
-    console.log('unicode', unicode)
     if (unicode === 'true') {
-      console.log('unicode')
       // Load the Google Transliterate API
       this.$timeout(() => {
         // Enable transliteration in the textbox with id
@@ -63,11 +71,14 @@ class SendSmsController {
         this.TransliterationControl.makeTransliteratable(['transliterateTextarea']);
         this.TransliterationControl.showControl('translControl');
       }, 0);
-
     } else {
-      console.log('engilsh ')
-
+      console.log('engilsh')
     }
+  }
+
+  loadPreviousMsg() {
+    const lastMsg = this.Session.read(this.defaultService.getServiceName()).lastMsg;
+    Object.assign(this.data, lastMsg);
   }
 
   validateNumbers() {
@@ -89,52 +100,82 @@ class SendSmsController {
     } else this.data.numbers = numbersList.join(',');
   }
 
-  loadSenderIds() {
-    //load SenderIds on focus of message field
-    this.field = 'senderId';
-    this
+  sendSms() {
+    const config = this.Session.read(this.defaultService.getServiceName()) || {};
+    const { senderId, text, campaign, routeId } = this.data;
+    Object.assign(config, {
+      sender: this.data.senderId,
+      type: 1,
+      sms: text,
+      number: this.numbers,
+      route: routeId,
+      domain: this.user.domain,
+      token: this.user.token,
+    });
+    config.lastMsg = { senderId, text, campaign, signature: this.signature };
+    this.Session.create(this.defaultService.getServiceName(), config);
+    this.saveMessageDetails(config);
+    const { domain, token, number, route, type, sms, sender } = config;
+    return this
       .$http
-      .get('/senderId', { params: { fl: 'id,name,senderIdStatusId', status: '1,2' } })
-      .then(({ data: senderIds }) => {
-        this.list = this.senderIds = senderIds;
-        if (!this.data.senderId && this.senderIds.length) {
-          this.data.senderId = this.senderIds[0].name;
+      .get(`http://${domain}/httpapi/httpapi` , {
+        params: { token, number, route, type, sender, sms },
+      })
+      .then(() => {
+        this.toast.show('success', `Message send successfully to ${config.number}`);
+        this.saveMessageDetails(config);
+      })
+      .catch(err => {
+        const isCode = isNaN(Number(err));
+        if (!isCode) {
+          this.saveMessageDetails(config);
+          return this.toast.show('success', `SMS sent successfully`);
         }
+        return this.toast.show('error',  `Could not send message`)
       });
   }
 
+  saveMessageDetails() {
+    [ 'senderId', 'campaign', 'text' ].forEach(x => {
+      const config = this.Session.read(this.defaultService.getServiceName());
+      let current = config.lists[x] || [];
+      const found = current.some(y => (y.name === this.data[x]));
+      if (!found) {
+        current.push({ name: this.data[x] });
+        config.lists[x] = current;
+        this.Session.create(this.defaultService.getServiceName(), config);
+      }
+    });
+  }
+
+  addSignature() {
+    const config = this.Session.read(this.defaultService.getServiceName());
+    config.isSignature = this.isSignature;
+    this.Session.create(this.defaultService.getServiceName(), config);
+  }
+
+  saveSignature() {
+    const config = this.Session.read(this.defaultService.getServiceName());
+    config.signature = this.signature;
+    this.Session.create(this.defaultService.getServiceName(), config);
+  }
+
+  getSignature() {
+    const config = this.Session.read(this.defaultService.getServiceName());
+    this.signature = config.signature;
+    this.isSignature = config.isSignature;
+  }
+
+  loadSenderIds() {
+    Object.assign(this, this.defaultService.loadConfig('senderId'));
+  }
+
   loadTemplates() {
-    //load templates on focus of message field
-    this.field = 'text';
-    this
-      .$http
-      .get('/templates')
-      .then(({ data: templates }) => (this.list = templates.items || templates));
+    Object.assign(this, this.defaultService.loadConfig('text'));
   }
 
   loadCampaigns() {
-    //load Campaigns on focus of message field
-    this.field = 'campaign';
-    this
-      .$http
-      .get('/campaigns')
-      .then(({ data: campaigns }) => (this.list = campaigns.items || campaigns));
-  }
-
-  loadGroups() {
-    //load initial Groups
-    this.field = 'groupId';
-    this
-      .$http
-      .get('/groups')
-      .then(({ data: groups }) => (this.list = groups.items || groups));
-  }
-
-  sendSms() {
-    this
-      .$http
-      .post('/sms', this.data)
-      .then(({ data: message }) => this.message = message);
+    Object.assign(this, this.defaultService.loadConfig('campaign'));
   }
 
   saveAsDraft() {
@@ -160,7 +201,6 @@ class SendSmsController {
         this.data[field] = item.name;
     }
   }
-
 }
 
 export default SendSmsController;

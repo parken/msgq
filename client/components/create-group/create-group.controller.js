@@ -1,26 +1,34 @@
 class CreateGroupController {
   /* @ngInject */
-  constructor($state, $http, Session) {
+  constructor($state, $http, Session, defaultService) {
     this.$state = $state;
     this.$http = $http;
     this.Session = Session;
+    this.defaultService = defaultService;
   }
 
   $onInit() {
     this.user = this.Session.read('userinfo');
-    this.$http.get('/groups')
-      .then(({ data }) => (this.groups = data));
+    this.groups = [];
+    this.getGroups();
+  }
+
+  getGroups() {
+    const config = this.Session.read(this.defaultService.getServiceName());
+    this.groups = config.groups || [];
   }
 
   createGroup(name) {
+    debugger;
     if (!name) return;
-    this.$http.post('/groups', { name })
-      .then(() => {
-        this.groupName = '';
-        this.isCreateGrp = false;
-        this.$http.get('/groups')
-          .then(({ data }) => (this.groups = data));
-      });
+    const config = this.Session.read(this.defaultService.getServiceName());
+    const id = (config.groups && config.groups.length) || 0;
+    this.groups.push({ id, name, count: 0, contact: [] });
+    config.groups = this.groups;
+    this.groupName = '';
+    this.isCreateGrp = false;
+    this.Session.create(this.defaultService.getServiceName(), config);
+    this.getGroups();
   }
 
   esc(event) {

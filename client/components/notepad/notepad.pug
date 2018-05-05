@@ -4,7 +4,7 @@ form.form.form-validation(name='notepadForm' ng-submit='$ctrl.sendSms()')
       | Check on No. in phonebook
     .form-group
       label.text-xs
-        textarea.form-control(rows='10' ng-model='$ctrl.contactsList')
+        textarea.form-control(rows='7' ng-model='$ctrl.contactsList' ng-change='$ctrl.saveContacts()')
     .wrapper-xs
       button.btm-sm.btn.btn-primary.text-u-c.m-r-xs(type='submit') Send SMS
       a.btm-sm.btn.btn-default.text-u-c(ng-click='$ctrl.contactsList = ""') Clear
@@ -12,5 +12,5 @@ form.form.form-validation(name='notepadForm' ng-submit='$ctrl.sendSms()')
       | Save anything temporary
     .form-group
       label
-        textarea.form-control(rows='10' ng-model='$ctrl.tempText')
+        textarea.form-control(rows='7' ng-model='$ctrl.tempText' ng-change='$ctrl.saveTemp()')
 
